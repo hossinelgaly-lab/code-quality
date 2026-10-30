@@ -76,6 +76,16 @@ header.top .wrap{display:flex;flex-direction:column;gap:6px;padding-block:10px 1
 @media (max-width:460px){#if{grid-template-columns:1fr!important}}
 a.btn{text-decoration:none;display:inline-block}
 @media (max-width:460px){.mem{grid-template-columns:auto 1fr}.mem .acts{grid-column:1/-1;justify-content:flex-start}}
+.docs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.doc{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:6px 10px;text-decoration:none;max-width:100%;font-size:13px}
+a.doc:hover{border-color:var(--accent)}
+.doc .di{font-family:var(--mono);font-size:10.5px;font-weight:700;background:var(--d);color:#fff;border-radius:4px;padding:1px 5px}
+.doc .dn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
+.doc .ds{color:var(--muted);font-size:11.5px;font-family:var(--mono)}
+.doc .ndel{margin:0}
+.dkv{margin:6px 0}.dkv small{display:block;font-size:11.5px;color:var(--muted)}
+.dtab{margin:8px 0}.dtab h4{font-size:12.5px;color:var(--muted);margin:0 0 4px}
+.tsel{padding:5px 8px;font-size:13.5px;border-radius:999px;width:auto;max-width:100%}
 .invcode{font-family:var(--mono);font-size:20px;letter-spacing:3px;background:var(--bg);border:1px dashed var(--accent);border-radius:10px;padding:8px 14px;display:inline-block;direction:ltr}
 [dir=ltr] .no,[dir=ltr] [style*="text-align:right"]{text-align:left!important}
 main{padding-block:16px 96px}
@@ -292,6 +302,10 @@ textarea{min-height:90px;resize:vertical}
 .sheet .sig .s{border-bottom:1px solid #000;height:9mm}
 .sheet .foot{display:flex;justify-content:space-between;font-size:9.5px;color:#444;margin-top:4px}
 .sheet tr{page-break-inside:avoid;break-inside:avoid}
+.sheet .dtab h4{font-size:11.5px;margin:6px 0 2px}
+.sheet .dtab table th{background:#e9e9e9}
+.sheet .dkv{margin:3px 0}.sheet .dkv small{display:inline;font-weight:700;margin-inline-end:6px}.sheet .dkv div{display:inline}
+.sheet .lwrap{overflow:visible;border:0}
 </style>
 <style id="repcss">
 .rep{background:#fff;color:#000;max-width:210mm;margin:0 auto;padding:8mm;font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:12px;line-height:1.5;box-shadow:0 1px 6px rgba(0,0,0,.15)}
@@ -350,7 +364,7 @@ const TYPES={
   RFI:{name:'طلب استفسار',en:'REQUEST FOR INFORMATION - RFI'},
   RR:{name:'طلب بدء الصب',en:'POURING REQUEST - RR'}
 };
-const DISC=['إنشائي','معماري','كهرباء','ميكانيكا','مساحة','أخرى'];
+const DISC=['إنشائي','معماري','كهرباء','ميكانيكا','صحي','مساحة','أخرى'];
 const CODES={A:{k:'أ',t:'معتمد'},B:{k:'ب',t:'معتمد مع ملاحظات'},C:{k:'ج',t:'يعاد التقديم بعد الملاحظات'},D:{k:'د',t:'مرفوض'}};
 let PRJ='', PRJ_NAME='', OWNER='', CONTRACTOR='', CONSULTANT='', SLA_DAYS=2, PID=null;
 
@@ -670,7 +684,230 @@ const EN={
 "المتصفح ده مش بيدعم إشعارات الموبايل. جرّب Chrome على أندرويد، أو Safari على آيفون بعد Add to Home Screen.":"This browser does not support mobile notifications. Try Chrome on Android, or Safari on iPhone after Add to Home Screen.",
 "اتفعلت الإشعارات على الجهاز ده":"Notifications turned on for this device",
 "مسمحتش بالإشعارات":"Notifications were not allowed",
-"اتوقفت الإشعارات على الجهاز ده":"Notifications turned off for this device"
+"اتوقفت الإشعارات على الجهاز ده":"Notifications turned off for this device",
+"قائمة فحص (Checklist)":"Checklist",
+"كروكي / لوحة":"Sketch / drawing",
+"نتائج اختبارات":"Test results",
+"المادة مطابقة للمادة / العينة المعتمدة (النوع، المنشأ، المواصفة)":"Material matches the approved material / sample (type, origin, spec)",
+"شهادات المنشأ والجودة مرفقة ومطابقة للشحنة":"Origin and quality certificates attached and match the shipment",
+"سلامة العبوات وعدم وجود تلف أو كسر أو رطوبة":"Packaging intact — no damage, breakage or moisture",
+"تاريخ الصلاحية ساري ومناسب لمدة الاستخدام":"Expiry date valid for the period of use",
+"التخزين بالموقع مطابق لتعليمات المصنع":"Site storage per manufacturer instructions",
+"أخذ عينات للاختبار (إن تطلب الأمر)":"Samples taken for testing (if required)",
+"قبل الصب: استلام حديد التسليح والأشاير (IR معتمد)":"Before pour: rebar and dowels inspected (approved IR)",
+"قبل الصب: استلام الشدات (الأبعاد، الرأسية، الإحكام، السند)":"Before pour: formwork inspected (dimensions, plumb, tightness, props)",
+"قبل الصب: تنظيف وتخشين أسطح الخرسانة القديمة":"Before pour: old concrete surfaces cleaned and roughened",
+"قبل الصب: دهان مادة الربط (إن وجدت) في حدود زمن الصلاحية":"Before pour: bonding agent applied (if any) within its open time",
+"قبل الصب: وضع البسكوت وضمان الغطاء الخرساني":"Before pour: spacers placed and concrete cover ensured",
+"قبل الصب: توفر الهزازات والمعدات الاحتياطية والإنارة":"Before pour: vibrators, standby equipment and lighting available",
+"قبل الصب: استلام الأعمال الكهروميكانيكية المدفونة":"Before pour: embedded MEP works inspected",
+"أثناء الصب: مطابقة بون التوريد (المقاومة، الكمية، وقت الخروج)":"During pour: delivery ticket checked (strength, quantity, batch time)",
+"أثناء الصب: اختبار الهبوط (Slump) / الانسياب":"During pour: slump / flow test",
+"أثناء الصب: أخذ مكعبات الاختبار وترقيمها":"During pour: test cubes taken and numbered",
+"أثناء الصب: الدمك الجيد وعدم حدوث انفصال حبيبي":"During pour: proper compaction, no segregation",
+"بعد الصب: بدء المعالجة وتحديد مدتها":"After pour: curing started and duration set",
+"بعد الصب: عدم فك الشدات / السند قبل المدة المحددة":"After pour: formwork / props not removed before the set time",
+"مقبول – يسمح بالبدء في المرحلة التالية":"Accepted – proceed to next stage",
+"مقبول مع ملاحظات – تستكمل قبل المرحلة التالية":"Accepted with comments – complete before next stage",
+"غير مقبول – يعاد الفحص بعد استيفاء الملاحظات":"Not accepted – re-inspect after comments",
+"طلب استلام أعمال":"Inspection request",
+"استلامات":"Inspections",
+"يقر المقاول بأن الأعمال المذكورة قد تم تنفيذها وفحصها داخلياً ومطابقتها للرسومات والمواصفات المعتمدة وهي جاهزة للاستلام.":"The contractor confirms the works listed were executed and internally inspected per the approved drawings and specifications and are ready for inspection.",
+"تاريخ ووقت الفحص المطلوب":"Requested inspection date & time",
+"المرجع (لوحة / MS معتمد)":"Reference (drawing / approved MS)",
+"الأعمال المطلوب استلامها":"Works to be inspected",
+"البيان / وصف الأعمال":"Description of works",
+"المحور / الموقع":"Grid / location",
+"الكمية":"Qty",
+"المرحلة":"Stage",
+"قبل البدء":"Before start",
+"أثناء التنفيذ":"During works",
+"قبل الصب / التغطية":"Before pour / covering",
+"استلام نهائي":"Final inspection",
+"طلب فحص واستلام مواد بالموقع":"Material inspection request",
+"يقر المقاول بأن المواد الموردة مطابقة للمواد المعتمدة وجاهزة للفحص.":"The contractor confirms the delivered materials match the approved materials and are ready for inspection.",
+"رقم اعتماد المادة (MAT)":"Material approval no. (MAT)",
+"رقم إذن التوريد / الفاتورة":"Delivery note / invoice no.",
+"المواد الموردة":"Delivered materials",
+"وصف المادة":"Material",
+"المنشأ / المصنع":"Origin / manufacturer",
+"الوحدة":"Unit",
+"الكمية الموردة":"Qty delivered",
+"رقم التشغيلة / تاريخ الإنتاج":"Batch no. / production date",
+"تاريخ الصلاحية":"Expiry date",
+"بنود الفحص":"Inspection items",
+"طلب تصريح صب خرسانة":"Concrete pour request",
+"يقر المقاول باستكمال جميع الأعمال التحضيرية وأن الموقع جاهز للصب.":"The contractor confirms all preparatory works are complete and the site is ready for pouring.",
+"رقم طلب استلام الحديد / الشدة (IR)":"Rebar / formwork IR no.",
+"العنصر":"Element",
+"قميص عمود":"Column jacket",
+"قميص كمرة":"Beam jacket",
+"بلاطة":"Slab",
+"قاعدة":"Footing",
+"مقاومة الخرسانة fcu (ن/مم²)":"Concrete strength fcu (N/mm²)",
+"الكمية التقديرية (م³)":"Estimated qty (m³)",
+"نوع الخرسانة":"Concrete type",
+"جاهزة":"Ready-mix",
+"موقع":"Site-mixed",
+"ذاتية الدمك SCC":"Self-compacting SCC",
+"جراوت":"Grout",
+"المورد / المحطة":"Supplier / plant",
+"نوع الأسمنت":"Cement type",
+"الإضافات":"Admixtures",
+"بداية الصب المتوقعة":"Expected pour start",
+"طريقة الصب":"Placing method",
+"مضخة":"Pump",
+"يدوي":"Manual",
+"ونش":"Crane",
+"طلب إجراء اختبار":"Test request",
+"مكان الاختبار":"Test location",
+"بالموقع":"On site",
+"معمل معتمد":"Approved lab",
+"اسم المعمل":"Lab name",
+"موعد الاختبار / أخذ العينات":"Test / sampling date",
+"الاختبارات":"Tests",
+"نوع الاختبار":"Test type",
+"العنصر / المادة":"Element / material",
+"عدد العينات":"No. of samples",
+"المواصفة القياسية":"Standard",
+"القيمة المطلوبة":"Required value",
+"ملاحظات / تعليمات الاستشاري (حضور أخذ العينات)":"Consultant comments / instructions (sampling attendance)",
+"طلب اعتماد مواد":"Material submittal",
+"اعتمادات":"Submittals",
+"يقر المقاول بأنه قد تمت مراجعة المستندات المقدمة ومطابقتها للرسومات والمواصفات الفنية وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.":"The contractor confirms the submitted documents were reviewed against the drawings, specifications and contract conditions and are ready for review and approval.",
+"المواد":"Materials",
+"اسم المادة / الصنف":"Material / item",
+"المنشأ / الشركة المصنعة":"Origin / manufacturer",
+"المورد":"Supplier",
+"بند المقايسة":"BOQ item",
+"مرجع المواصفات":"Spec reference",
+"النشرة الفنية":"Technical data sheet",
+"شهادة المنشأ":"Certificate of origin",
+"شهادة المطابقة / الجودة":"Conformity / quality certificate",
+"عينة":"Sample",
+"خطاب المورد":"Supplier letter",
+"سابقة أعمال":"Track record",
+"مدى المطابقة للمواصفات / الانحرافات (إن وجدت)":"Compliance with specs / deviations (if any)",
+"طلب اعتماد عينة":"Sample submittal",
+"تحفظ العينة المعتمدة بالموقع موقعة ومختومة من الاستشاري للمطابقة عليها عند التوريد.":"The approved sample is kept on site, signed and stamped by the consultant, for comparison on delivery.",
+"رقم اعتماد المادة":"Material approval no.",
+"العينات":"Samples",
+"وصف العينة":"Sample description",
+"المقاس / اللون":"Size / colour",
+"مكان حفظ العينة":"Sample storage location",
+"ملاحظات المقاول":"Contractor notes",
+"طلب اعتماد رسومات تنفيذية":"Shop drawing submittal",
+"يقر المقاول بأنه قد تمت مراجعة الرسومات المقدمة ومطابقتها للتصميم والمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.":"The contractor confirms the submitted drawings were checked against the design, specifications and contract and are ready for review and approval.",
+"اللوحات":"Drawings",
+"رقم اللوحة":"Drawing no.",
+"عنوان اللوحة":"Drawing title",
+"مقياس الرسم":"Scale",
+"المرجع (لوحة التصميم)":"Reference (design drawing)",
+"نسخ ورقية":"Hard copies",
+"نسخة إلكترونية (PDF/DWG)":"Electronic copy (PDF/DWG)",
+"حسابات إنشائية":"Structural calculations",
+"تقرير فني":"Technical report",
+"طلب اعتماد طريقة تنفيذ":"Method statement submittal",
+"يقر المقاول بأنه قد تمت مراجعة طريقة التنفيذ ومطابقتها للرسومات والمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.":"The contractor confirms the method statement was checked against the drawings, specifications and contract and is ready for review and approval.",
+"محتويات طريقة التنفيذ":"Method statement contents",
+"نطاق العمل":"Scope of work",
+"المواد والمعدات":"Materials & equipment",
+"العمالة والإشراف":"Labour & supervision",
+"خطوات التنفيذ":"Work sequence",
+"السند المؤقت":"Temporary support",
+"خطة الفحص والاختبار ITP":"Inspection & test plan (ITP)",
+"تقييم المخاطر والسلامة":"Risk assessment & safety",
+"الجدول الزمني":"Schedule",
+"الأعمال اللي تغطيها طريقة التنفيذ":"Works covered by the method statement",
+"بيان الأعمال":"Works",
+"المرجع (لوحات / مواصفات)":"Reference (drawings / specs)",
+"ملخص خطوات التنفيذ":"Summary of work steps",
+"طلب اعتماد مستندات فنية":"Technical documents submittal",
+"يقر المقاول بأنه قد تمت مراجعة المستندات المقدمة ومطابقتها للمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.":"The contractor confirms the submitted documents were checked against the specifications and contract and are ready for review and approval.",
+"المستندات":"Documents",
+"البيان / وصف المستند":"Document description",
+"نوع المستند (SD/MS/MAT/TD/CER/TR/CAL/QS/O)":"Document type (SD/MS/MAT/TD/CER/TR/CAL/QS/O)",
+"عدد النسخ":"Copies",
+"طلب اعتماد مقاول باطن / مورد":"Subcontractor / supplier approval",
+"يقر المقاول بمسؤوليته الكاملة عن أعمال مقاول الباطن / المورد أمام المالك طبقاً لشروط التعاقد.":"The contractor accepts full responsibility to the owner for the subcontractor / supplier works per the contract.",
+"مقاول باطن":"Subcontractor",
+"مورد":"Supplier",
+"معمل اختبارات":"Testing lab",
+"اسم الشركة":"Company name",
+"العنوان / التليفون":"Address / phone",
+"نطاق الأعمال المسندة":"Scope of assigned works",
+"السجل التجاري والبطاقة الضريبية":"Commercial register & tax card",
+"شهادة الاتحاد المصري للمقاولين":"Egyptian Federation of Contractors certificate",
+"سابقة الأعمال":"Previous works",
+"شهادات الأيزو":"ISO certificates",
+"السير الذاتية للفنيين":"Staff CVs",
+"المعدات المتاحة":"Available equipment",
+"مشروعات مماثلة سابقة":"Similar previous projects",
+"الجهة المالكة":"Owner",
+"السنة":"Year",
+"القيمة":"Value",
+"طلب اعتماد حصر كميات":"Quantity survey submittal",
+"مالية":"Financial",
+"يقر المقاول بأن الكميات الموضحة تم حصرها فعلياً من الطبيعة وطبقاً للأعمال المستلمة.":"The contractor confirms the quantities were measured on site per the accepted works.",
+"رقم المستخلص":"Payment certificate no.",
+"البنود":"Items",
+"رقم البند":"Item no.",
+"وصف البند":"Item description",
+"الموقع / الدور":"Location / floor",
+"رقم IR المرجعي":"Reference IR no.",
+"كروكي حصر":"Measurement sketch",
+"طلبات الاستلام المعتمدة":"Approved inspection requests",
+"محاضر قياس":"Measurement records",
+"طلب أعمال إضافية / أمر تغيير":"Variation order request",
+"سبب التغيير":"Reason for change",
+"تعليمات الاستشاري / المالك":"Consultant / owner instruction",
+"ظروف موقع غير متوقعة":"Unforeseen site conditions",
+"تعديل تصميم":"Design change",
+"المرجع (SI / RFI)":"Reference (SI / RFI)",
+"وصف الأعمال الإضافية / التغيير":"Description of additional works / change",
+"سعر الوحدة":"Unit rate",
+"الإجمالي":"Total",
+"مصدر السعر":"Rate source",
+"إجمالي القيمة التقديرية":"Estimated total value",
+"الأثر على المدة (يوم)":"Time impact (days)",
+"توصية الاستشاري":"Consultant recommendation",
+"طلب استفسار فني":"Request for information",
+"المرجع (لوحة / بند مواصفات)":"Reference (drawing / spec clause)",
+"الرد مطلوب قبل":"Reply required by",
+"الاستفسار / وصف المشكلة":"Query / problem description",
+"الحل المقترح من المقاول (إن وجد)":"Contractor proposed solution (if any)",
+"التأثير المتوقع":"Expected impact",
+"على التكلفة":"Cost",
+"على البرنامج الزمني":"Schedule",
+"على التصميم":"Design",
+"مالية واستفسارات":"Financial & queries",
+"تم الرد":"Answered",
+"مطابق":"Compliant",
+"غير مطابق":"Non-compliant",
+"لا ينطبق":"N/A",
+"البند":"Item",
+"النتيجة":"Result",
+"مستند":"Document",
+"الملف لازم يكون PDF":"The file must be a PDF",
+"أكبر من 25 ميجا":"larger than 25 MB",
+"رد الاستشاري":"Consultant reply",
+"اكتب الرد على الاستفسار":"Write the reply to the query",
+"اكتب الرد الأول":"Write the reply first",
+"نقر بأن الأعمال المطلوب استلامها تم تنفيذها ومراجعتها طبقًا للرسومات المعتمدة والمواصفات وشروط العقد.":"We confirm the works for inspection have been executed and checked per the approved drawings, specifications and contract conditions.",
+"صحي":"Plumbing",
+"العنصر / المنطقة":"Element / area",
+"ملاحظات / وصف إضافي":"Notes / additional description",
+"بيانات النموذج":"Form details",
+"المستندات والرسومات (PDF)":"Documents & drawings (PDF)",
+"المستندات مرفقة كـ PDF فوق":"Documents are attached as PDF above",
+"رسومات ومستندات الاعتماد بصيغة PDF — حتى 25 ميجا للملف":"Submittal drawings and documents as PDF — up to 25 MB per file",
+"📄 إضافة PDF":"📄 Add PDF",
+"+ سطر":"+ Row",
+"مستندات / رسومات معدّلة (PDF)":"Revised documents / drawings (PDF)",
+"تعديل بيانات النموذج":"Edit form details",
+"مستندات PDF":"PDF documents",
+"🖼 صور":"🖼 Photos",
+"حذف":"Delete"
 };
 let RX=null;
 function buildRx(){const ks=Object.keys(EN).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));RX=new RegExp('(?<![\\u0600-\\u06FF])('+ks.join('|')+')(?![\\u0600-\\u06FF])','g');}
@@ -679,7 +916,7 @@ const EXACT={'م':'#','ي':'d'};
 function tr(s){if(LANG!=='en'||!s||!/[؀-ۿ]/.test(s))return s;const k=s.trim();if(EXACT[k])return s.replace(k,EXACT[k]);if(!RX)buildRx();
   return s.replace(RX,m=>EN[m]).replace(/(^|[^؀-ۿ])([أبجد])(?![؀-ۿ])/g,(m,a,b)=>a+AR_CODE[b]).replace(/،/g,',');}
 const ORIG=new WeakMap(), ORIGA=new WeakMap();
-const ATTRS=['placeholder','title','aria-label','alt'];
+const ATTRS=['placeholder','title','aria-label','alt','label'];
 function trDom(root){
   const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentNode&&(/^(TEXTAREA|SCRIPT|STYLE)$/.test(n.parentNode.nodeName)||(n.parentNode.closest&&n.parentNode.closest('[data-raw]')))?2:1});
   const L=[];let n;while((n=w.nextNode()))L.push(n);
@@ -767,6 +1004,128 @@ function zoom(src,cap){const b=document.createElement('div');b.className='lightb
 function shrink(file,max){return new Promise(res=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');const sc=Math.min(1,max/Math.max(im.width,im.height));c.width=im.width*sc;c.height=im.height*sc;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.72));};im.onerror=()=>res(null);im.src=fr.result;};fr.readAsDataURL(file);});}
 async function readImgs(list,arr,box){for(const f of [...list]){const u=await shrink(f,1000);if(u)arr.push(u);}box.innerHTML=arr.map(u=>`<img src="${u}" alt="مرفق">`).join('');}
 
+/* ---------- نماذج الاعتمادات (طبقًا لنماذج QC) ---------- */
+const ATT_STD=['قائمة فحص (Checklist)','كروكي / لوحة','نتائج اختبارات','صور'];
+const MIR_CHK=['المادة مطابقة للمادة / العينة المعتمدة (النوع، المنشأ، المواصفة)','شهادات المنشأ والجودة مرفقة ومطابقة للشحنة','سلامة العبوات وعدم وجود تلف أو كسر أو رطوبة','تاريخ الصلاحية ساري ومناسب لمدة الاستخدام','التخزين بالموقع مطابق لتعليمات المصنع','أخذ عينات للاختبار (إن تطلب الأمر)'];
+const RR_CHK=['قبل الصب: استلام حديد التسليح والأشاير (IR معتمد)','قبل الصب: استلام الشدات (الأبعاد، الرأسية، الإحكام، السند)','قبل الصب: تنظيف وتخشين أسطح الخرسانة القديمة','قبل الصب: دهان مادة الربط (إن وجدت) في حدود زمن الصلاحية','قبل الصب: وضع البسكوت وضمان الغطاء الخرساني','قبل الصب: توفر الهزازات والمعدات الاحتياطية والإنارة','قبل الصب: استلام الأعمال الكهروميكانيكية المدفونة','أثناء الصب: مطابقة بون التوريد (المقاومة، الكمية، وقت الخروج)','أثناء الصب: اختبار الهبوط (Slump) / الانسياب','أثناء الصب: أخذ مكعبات الاختبار وترقيمها','أثناء الصب: الدمك الجيد وعدم حدوث انفصال حبيبي','بعد الصب: بدء المعالجة وتحديد مدتها','بعد الصب: عدم فك الشدات / السند قبل المدة المحددة'];
+const CODES_INSP={A:'مقبول – يسمح بالبدء في المرحلة التالية',B:'مقبول مع ملاحظات – تستكمل قبل المرحلة التالية',C:'غير مقبول – يعاد الفحص بعد استيفاء الملاحظات',D:'مرفوض'};
+const FORMS={
+  IR:{name:'طلب استلام أعمال',en:'INSPECTION REQUEST - IR',g:'استلامات',codes:CODES_INSP,decl:'يقر المقاول بأن الأعمال المذكورة قد تم تنفيذها وفحصها داخلياً ومطابقتها للرسومات والمواصفات المعتمدة وهي جاهزة للاستلام.',fields:[
+    {k:'when',l:'تاريخ ووقت الفحص المطلوب',t:'datetime'},{k:'ref',l:'المرجع (لوحة / MS معتمد)',t:'text'},
+    {k:'items',l:'الأعمال المطلوب استلامها',t:'table',cols:['البيان / وصف الأعمال','المحور / الموقع','الكمية','ملاحظات'],rows:2},
+    {k:'stage',l:'المرحلة',t:'radio',opts:['قبل البدء','أثناء التنفيذ','قبل الصب / التغطية','استلام نهائي']},
+    {k:'att',l:'المرفقات',t:'checks',opts:ATT_STD}]},
+  MIR:{name:'طلب فحص واستلام مواد بالموقع',en:'MATERIAL INSPECTION REQUEST - MIR',g:'استلامات',codes:CODES_INSP,decl:'يقر المقاول بأن المواد الموردة مطابقة للمواد المعتمدة وجاهزة للفحص.',fields:[
+    {k:'mat',l:'رقم اعتماد المادة (MAT)',t:'text'},{k:'when',l:'تاريخ ووقت الفحص المطلوب',t:'datetime'},{k:'inv',l:'رقم إذن التوريد / الفاتورة',t:'text'},
+    {k:'items',l:'المواد الموردة',t:'table',cols:['وصف المادة','المنشأ / المصنع','الوحدة','الكمية الموردة','رقم التشغيلة / تاريخ الإنتاج','تاريخ الصلاحية'],rows:2},
+    {k:'chk',l:'بنود الفحص',t:'checklist',items:MIR_CHK}]},
+  RR:{name:'طلب تصريح صب خرسانة',en:'POURING REQUEST - RR',g:'استلامات',codes:CODES_INSP,decl:'يقر المقاول باستكمال جميع الأعمال التحضيرية وأن الموقع جاهز للصب.',fields:[
+    {k:'ir',l:'رقم طلب استلام الحديد / الشدة (IR)',t:'text'},
+    {k:'elem',l:'العنصر',t:'radio',opts:['قميص عمود','قميص كمرة','بلاطة','قاعدة','أخرى']},
+    {k:'fcu',l:'مقاومة الخرسانة fcu (ن/مم²)',t:'number'},{k:'qty',l:'الكمية التقديرية (م³)',t:'number'},
+    {k:'ctype',l:'نوع الخرسانة',t:'radio',opts:['جاهزة','موقع','ذاتية الدمك SCC','جراوت']},{k:'supplier',l:'المورد / المحطة',t:'text'},
+    {k:'cement',l:'نوع الأسمنت',t:'text'},{k:'admix',l:'الإضافات',t:'text'},
+    {k:'start',l:'بداية الصب المتوقعة',t:'datetime'},{k:'method',l:'طريقة الصب',t:'radio',opts:['مضخة','يدوي','ونش']},
+    {k:'chk',l:'بنود الفحص',t:'checklist',items:RR_CHK}]},
+  TR:{name:'طلب إجراء اختبار',en:'TEST REQUEST - TR',g:'استلامات',decl:'',fields:[
+    {k:'place',l:'مكان الاختبار',t:'radio',opts:['بالموقع','معمل معتمد']},{k:'lab',l:'اسم المعمل',t:'text'},
+    {k:'when',l:'موعد الاختبار / أخذ العينات',t:'datetime'},
+    {k:'items',l:'الاختبارات',t:'table',cols:['نوع الاختبار','العنصر / المادة','عدد العينات','المواصفة القياسية','القيمة المطلوبة'],rows:2}],reviewLabel:'ملاحظات / تعليمات الاستشاري (حضور أخذ العينات)'},
+  MAT:{name:'طلب اعتماد مواد',en:'MATERIAL SUBMITTAL - MAT',g:'اعتمادات',decl:'يقر المقاول بأنه قد تمت مراجعة المستندات المقدمة ومطابقتها للرسومات والمواصفات الفنية وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.',fields:[
+    {k:'items',l:'المواد',t:'table',cols:['اسم المادة / الصنف','المنشأ / الشركة المصنعة','المورد','بند المقايسة','مرجع المواصفات'],rows:2},
+    {k:'att',l:'المرفقات',t:'checks',opts:['النشرة الفنية','شهادة المنشأ','شهادة المطابقة / الجودة','نتائج اختبارات','عينة','خطاب المورد','سابقة أعمال','MSDS']},
+    {k:'dev',l:'مدى المطابقة للمواصفات / الانحرافات (إن وجدت)',t:'textarea'}]},
+  SMP:{name:'طلب اعتماد عينة',en:'SAMPLE SUBMITTAL - SMP',g:'اعتمادات',decl:'تحفظ العينة المعتمدة بالموقع موقعة ومختومة من الاستشاري للمطابقة عليها عند التوريد.',fields:[
+    {k:'mat',l:'رقم اعتماد المادة',t:'text'},
+    {k:'items',l:'العينات',t:'table',cols:['وصف العينة','المنشأ / المصنع','المقاس / اللون','مكان حفظ العينة','ملاحظات'],rows:2},
+    {k:'cnotes',l:'ملاحظات المقاول',t:'textarea'}]},
+  SD:{name:'طلب اعتماد رسومات تنفيذية',en:'SHOP DRAWING SUBMITTAL - SD',g:'اعتمادات',decl:'يقر المقاول بأنه قد تمت مراجعة الرسومات المقدمة ومطابقتها للتصميم والمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.',fields:[
+    {k:'items',l:'اللوحات',t:'table',cols:['رقم اللوحة','الإصدار','عنوان اللوحة','مقياس الرسم','المرجع (لوحة التصميم)'],rows:3},
+    {k:'att',l:'المرفقات',t:'checks',opts:['نسخ ورقية','نسخة إلكترونية (PDF/DWG)','حسابات إنشائية','تقرير فني']}]},
+  MS:{name:'طلب اعتماد طريقة تنفيذ',en:'METHOD STATEMENT - MS',g:'اعتمادات',decl:'يقر المقاول بأنه قد تمت مراجعة طريقة التنفيذ ومطابقتها للرسومات والمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.',fields:[
+    {k:'cont',l:'محتويات طريقة التنفيذ',t:'checks',opts:['نطاق العمل','المواد والمعدات','العمالة والإشراف','خطوات التنفيذ','السند المؤقت','خطة الفحص والاختبار ITP','تقييم المخاطر والسلامة','الجدول الزمني']},
+    {k:'items',l:'الأعمال اللي تغطيها طريقة التنفيذ',t:'table',cols:['بيان الأعمال','المرجع (لوحات / مواصفات)','ملاحظات'],rows:2},
+    {k:'steps',l:'ملخص خطوات التنفيذ',t:'textarea'}]},
+  TOD:{name:'طلب اعتماد مستندات فنية',en:'TECHNICAL DOCUMENTS - TOD',g:'اعتمادات',decl:'يقر المقاول بأنه قد تمت مراجعة المستندات المقدمة ومطابقتها للمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.',fields:[
+    {k:'items',l:'المستندات',t:'table',cols:['البيان / وصف المستند','نوع المستند (SD/MS/MAT/TD/CER/TR/CAL/QS/O)','عدد النسخ','ملاحظات'],rows:3}]},
+  SUB:{name:'طلب اعتماد مقاول باطن / مورد',en:'SUBCONTRACTOR / SUPPLIER APPROVAL - SUB',g:'اعتمادات',decl:'يقر المقاول بمسؤوليته الكاملة عن أعمال مقاول الباطن / المورد أمام المالك طبقاً لشروط التعاقد.',fields:[
+    {k:'kind',l:'النوع',t:'radio',opts:['مقاول باطن','مورد','معمل اختبارات']},{k:'company',l:'اسم الشركة',t:'text'},{k:'contact',l:'العنوان / التليفون',t:'text'},
+    {k:'scope',l:'نطاق الأعمال المسندة',t:'textarea'},
+    {k:'att',l:'المرفقات',t:'checks',opts:['السجل التجاري والبطاقة الضريبية','شهادة الاتحاد المصري للمقاولين','سابقة الأعمال','شهادات الأيزو','السير الذاتية للفنيين','المعدات المتاحة']},
+    {k:'prev',l:'مشروعات مماثلة سابقة',t:'table',cols:['المشروع','الجهة المالكة','السنة','القيمة'],rows:2}]},
+  QS:{name:'طلب اعتماد حصر كميات',en:'QUANTITY SURVEY - QS',g:'مالية',decl:'يقر المقاول بأن الكميات الموضحة تم حصرها فعلياً من الطبيعة وطبقاً للأعمال المستلمة.',fields:[
+    {k:'ipc',l:'رقم المستخلص',t:'text'},
+    {k:'items',l:'البنود',t:'table',cols:['رقم البند','وصف البند','الوحدة','الموقع / الدور','الكمية','رقم IR المرجعي','ملاحظات'],rows:3},
+    {k:'att',l:'المرفقات',t:'checks',opts:['كروكي حصر','طلبات الاستلام المعتمدة','صور','محاضر قياس']}]},
+  VO:{name:'طلب أعمال إضافية / أمر تغيير',en:'VARIATION ORDER REQUEST - VO',g:'مالية',decl:'',fields:[
+    {k:'reason',l:'سبب التغيير',t:'radio',opts:['تعليمات الاستشاري / المالك','ظروف موقع غير متوقعة','تعديل تصميم','أخرى']},{k:'ref',l:'المرجع (SI / RFI)',t:'text'},
+    {k:'what',l:'وصف الأعمال الإضافية / التغيير',t:'textarea'},
+    {k:'items',l:'البنود',t:'table',cols:['وصف البند','الوحدة','الكمية','سعر الوحدة','الإجمالي','مصدر السعر'],rows:2,calc:[2,3,4]},
+    {k:'total',l:'إجمالي القيمة التقديرية',t:'number'},{k:'days',l:'الأثر على المدة (يوم)',t:'number'}],reviewLabel:'توصية الاستشاري'},
+  RFI:{name:'طلب استفسار فني',en:'REQUEST FOR INFORMATION - RFI',g:'مالية',answer:true,decl:'',fields:[
+    {k:'ref',l:'المرجع (لوحة / بند مواصفات)',t:'text'},{k:'due',l:'الرد مطلوب قبل',t:'date'},
+    {k:'q',l:'الاستفسار / وصف المشكلة',t:'textarea'},{k:'prop',l:'الحل المقترح من المقاول (إن وجد)',t:'textarea'},
+    {k:'impact',l:'التأثير المتوقع',t:'checks',opts:['لا يوجد','على التكلفة','على البرنامج الزمني','على التصميم']}]}
+};
+const FORM_GROUPS=[['استلامات',['IR','MIR','RR','TR']],['اعتمادات',['MAT','SMP','SD','MS','TOD','SUB']],['مالية واستفسارات',['QS','VO','RFI']]];
+const codeText=(type,c)=>{const F=FORMS[type];if(F&&F.answer&&c==='A')return 'تم الرد';return (F&&F.codes&&F.codes[c])||CODES[c].t;};
+
+function fieldHTML(f,v,pre){
+  const id=pre+f.k;
+  if(f.t==='text'||f.t==='number'||f.t==='date'||f.t==='datetime'){const ty=f.t==='datetime'?'datetime-local':f.t;
+    return `<label for="${id}">${f.l}<input id="${id}" data-fk="${f.k}" type="${ty}" value="${esc(v||'')}" ${ty!=='text'?'style="direction:ltr"':''}></label>`;}
+  if(f.t==='textarea')return `<label class="full" for="${id}">${f.l}<textarea id="${id}" data-fk="${f.k}" style="min-height:70px">${esc(v||'')}</textarea></label>`;
+  if(f.t==='radio')return `<div class="full"><label>${f.l}</label><div class="disc">${f.opts.map((o,i)=>`<label><input type="radio" name="${id}" data-fk="${f.k}" value="${esc(o)}" ${v===o?'checked':''}>${o}</label>`).join('')}</div></div>`;
+  if(f.t==='checks'){const a=v||[];return `<div class="full"><label>${f.l}</label><div class="disc">${f.opts.map(o=>`<label><input type="checkbox" data-fk="${f.k}" value="${esc(o)}" ${a.includes(o)?'checked':''}>${o}</label>`).join('')}</div></div>`;}
+  if(f.t==='table'){const rows=(v&&v.length?v:Array.from({length:f.rows||2},()=>[]));
+    return `<div class="full ftab" data-tk="${f.k}"><label>${f.l}</label><div class="lwrap" style="margin-top:4px"><table class="ltbl" style="min-width:${Math.max(480,f.cols.length*120)}px"><thead><tr><th>م</th>${f.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map((r,i)=>`<tr><td class="mono">${i+1}</td>${f.cols.map((c,j)=>`<td style="padding:3px"><input data-c="${j}" value="${esc(r[j]||'')}" style="padding:5px 6px;font-size:13px;min-width:70px"></td>`).join('')}</tr>`).join('')}</tbody></table></div>
+      <button type="button" class="btn sm" data-addrow="${f.k}" style="margin-top:6px">+ سطر</button></div>`;}
+  if(f.t==='checklist'){const a=v||[];return `<div class="full"><label>${f.l}</label><div class="lwrap" style="margin-top:4px"><table class="ltbl" style="min-width:560px"><thead><tr><th>م</th><th>البند</th><th>مطابق</th><th>غير مطابق</th><th>لا ينطبق</th><th>ملاحظات</th></tr></thead><tbody>
+    ${f.items.map((it,i)=>{const s=(a[i]||{}).s||'',n=(a[i]||{}).n||'';return `<tr data-ci="${i}"><td class="mono">${i+1}</td><td class="s" style="min-width:220px">${it}</td>${['M','N','X'].map(x=>`<td style="text-align:center"><input type="radio" name="${id}-${i}" value="${x}" ${s===x?'checked':''} style="width:auto"></td>`).join('')}<td style="padding:3px"><input data-cn="1" value="${esc(n)}" style="padding:5px 6px;font-size:13px"></td></tr>`;}).join('')}</tbody></table></div></div>`;}
+  return '';
+}
+function formHTML(type,data,pre){const F=FORMS[type];if(!F)return '';return F.fields.map(f=>fieldHTML(f,(data||{})[f.k],pre||'ff-')).join('');}
+function bindForm(box,type){
+  box.querySelectorAll('[data-addrow]').forEach(b=>b.onclick=()=>{const f=FORMS[type].fields.find(x=>x.k===b.dataset.addrow);const tb=b.closest('.ftab').querySelector('tbody');const n=tb.rows.length+1;
+    const tr=document.createElement('tr');tr.innerHTML=`<td class="mono">${n}</td>${f.cols.map((c,j)=>`<td style="padding:3px"><input data-c="${j}" style="padding:5px 6px;font-size:13px;min-width:70px"></td>`).join('')}`;tb.appendChild(tr);bindCalc(box,type);});
+  bindCalc(box,type);
+}
+function bindCalc(box,type){const f=FORMS[type].fields.find(x=>x.calc);if(!f)return;const [q,p,t]=f.calc;
+  box.querySelectorAll(`.ftab[data-tk="${f.k}"] tbody tr`).forEach(tr=>{const g=j=>tr.querySelector(`[data-c="${j}"]`);const upd=()=>{const a=parseFloat(g(q).value),b=parseFloat(g(p).value);if(!isNaN(a)&&!isNaN(b)){g(t).value=(a*b).toFixed(2);}
+      const tot=[...box.querySelectorAll(`.ftab[data-tk="${f.k}"] tbody tr`)].reduce((s,r)=>s+(parseFloat(r.querySelector(`[data-c="${t}"]`).value)||0),0);const ti=box.querySelector('[data-fk="total"]');if(ti&&tot)ti.value=tot.toFixed(2);};
+    g(q).oninput=g(p).oninput=upd;});}
+function collectForm(box,type){const F=FORMS[type];const d={};if(!F)return d;
+  F.fields.forEach(f=>{
+    if(f.t==='radio'){const x=box.querySelector(`input[type=radio][data-fk="${f.k}"]:checked`);if(x)d[f.k]=x.value;}
+    else if(f.t==='checks'){const a=[...box.querySelectorAll(`input[type=checkbox][data-fk="${f.k}"]:checked`)].map(x=>x.value);if(a.length)d[f.k]=a;}
+    else if(f.t==='table'){const rows=[...box.querySelectorAll(`.ftab[data-tk="${f.k}"] tbody tr`)].map(tr=>[...tr.querySelectorAll('[data-c]')].map(i=>i.value.trim())).filter(r=>r.some(Boolean));if(rows.length)d[f.k]=rows;}
+    else if(f.t==='checklist'){const a=f.items.map((_,i)=>{const tr=box.querySelector(`tr[data-ci="${i}"]`);if(!tr)return null;const s=(tr.querySelector('input[type=radio]:checked')||{}).value||'';const n=tr.querySelector('[data-cn]').value.trim();return (s||n)?{s,n}:null;});if(a.some(Boolean))d[f.k]=a;}
+    else{const x=box.querySelector(`[data-fk="${f.k}"]`);if(x&&x.value.trim())d[f.k]=x.value.trim();}
+  });return d;}
+const fmtDT=v=>v?String(v).replace('T',' '):'';
+function dataHTML(type,data,print){const F=FORMS[type];if(!F||!data)return '';const out=[];const MK={M:'مطابق',N:'غير مطابق',X:'لا ينطبق'};
+  F.fields.forEach(f=>{const v=data[f.k];if(v==null||v===''||(Array.isArray(v)&&!v.length))return;
+    if(f.t==='table')out.push(`<div class="dtab"><h4>${f.l}</h4><div class="lwrap"><table class="${print?'':'ltbl'}" style="${print?'':'min-width:420px'}"><thead><tr><th>م</th>${f.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${v.map((r,i)=>`<tr><td>${i+1}</td>${f.cols.map((c,j)=>`<td>${raw(r[j]||'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`);
+    else if(f.t==='checklist')out.push(`<div class="dtab"><h4>${f.l}</h4><div class="lwrap"><table class="${print?'':'ltbl'}" style="${print?'':'min-width:420px'}"><thead><tr><th>م</th><th>البند</th><th>النتيجة</th><th>ملاحظات</th></tr></thead><tbody>${f.items.map((it,i)=>{const x=v[i]||{};return `<tr><td>${i+1}</td><td style="white-space:normal">${it}</td><td>${x.s?MK[x.s]:'—'}</td><td>${raw(x.n||'')}</td></tr>`;}).join('')}</tbody></table></div></div>`);
+    else if(f.t==='checks')out.push(`<div class="dkv"><small>${f.l}</small><div>${print?f.opts.map(o=>`<span class="o">${cb(v.includes(o))}${o}</span>`).join(''):v.map(o=>`<span class="tagb" style="margin:2px">${o}</span>`).join('')}</div></div>`);
+    else if(f.t==='radio')out.push(`<div class="dkv"><small>${f.l}</small><div>${print?f.opts.map(o=>`<span class="o">${cb(v===o)}${o}</span>`).join(''):`<b>${v}</b>`}</div></div>`);
+    else out.push(`<div class="dkv"><small>${f.l}</small><div>${f.t==='textarea'?raw(v):`<b>${raw(f.t==='datetime'?fmtDT(v):v)}</b>`}</div></div>`);
+  });return out.join('');}
+
+/* الملفات: صور + PDF */
+const isPdf=x=>x&&(x.mime==='application/pdf'||/\.pdf$/i.test(x.name||''));
+const fsize=n=>n?(n>1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB'):'';
+function docsHTML(list){return list&&list.length?`<div class="docs">${list.map(d=>`<a class="doc" href="${d.url||'#'}" target="_blank" rel="noopener"><span class="di">PDF</span><span class="dn">${raw(d.name||'مستند')}</span><span class="ds">${fsize(d.size)}</span></a>`).join('')}</div>`:'';}
+function pdfPicker(list,id){return `<label class="btn sm" style="position:relative;display:inline-flex;flex-direction:row;gap:6px;align-items:center;cursor:pointer;color:var(--ink)">📄 إضافة PDF<input type="file" accept="application/pdf" multiple data-pdf="${id}" style="position:absolute;inset:0;opacity:0;width:100%"></label>
+  <div class="docs" id="${id}">${list.map((d,i)=>`<span class="doc"><span class="di">PDF</span><span class="dn">${raw(d.name)}</span><span class="ds">${fsize(d.size)}</span><button type="button" class="ndel" data-rmpdf="${i}" aria-label="حذف">✕</button></span>`).join('')}</div>`;}
+function bindPdf(list,id){const inp=app.querySelector(`[data-pdf="${id}"]`);if(!inp)return;const draw=()=>{const box=document.getElementById(id);box.innerHTML=list.map((d,i)=>`<span class="doc"><span class="di">PDF</span><span class="dn">${raw(d.name)}</span><span class="ds">${fsize(d.size)}</span><button type="button" class="ndel" data-rmpdf="${i}" aria-label="حذف">✕</button></span>`).join('');box.querySelectorAll('[data-rmpdf]').forEach(b=>b.onclick=()=>{list.splice(+b.dataset.rmpdf,1);draw();});};
+  inp.onchange=()=>{for(const f of [...inp.files]){if(f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name)){toast('الملف لازم يكون PDF');continue;}if(f.size>25*1048576){toast(f.name+' — '+tr('أكبر من 25 ميجا'));continue;}list.push({file:f,name:f.name,size:f.size});}inp.value='';draw();};draw();}
+async function uploadPdf(d){const path=`${PID}/${(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2))}.pdf`;
+  const {error}=await sb.storage.from('photos').upload(path,d.file,{contentType:'application/pdf',upsert:false});if(error)throw error;return {path,name:d.name,mime:'application/pdf',size:d.size};}
+async function uploadAll(imgs,pdfs){const out=[];for(const u of imgs){const p=await upload(u);if(p)out.push({path:p,name:'photo.jpg',mime:'image/jpeg'});}for(const d of pdfs)out.push(await uploadPdf(d));return out;}
+
+Object.keys(TYPES).forEach(k=>delete TYPES[k]);Object.keys(FORMS).forEach(k=>TYPES[k]={name:FORMS[k].name,en:FORMS[k].en});
 /* ---------- السجل ---------- */
 function renderLog(){
   const all=S.reqs;
@@ -782,7 +1141,7 @@ function renderLog(){
   <div class="demo"><span>${esc(who)}</span><button id="reset" type="button">↻ تحديث</button></div>
   <h2>سجل الطلبات</h2>
   <div class="stats">${Object.keys(cnt).map(k=>`<button class="stat" type="button" data-f="${k}" aria-pressed="${view.filter===k}"><b>${cnt[k]}</b><span>${lab[k]}</span></button>`).join('')}</div>
-  <div class="chips">${['ALL','IR','RFI','RR'].map(t=>`<button class="chip" type="button" data-t="${t}" aria-pressed="${view.type===t}">${t==='ALL'?'كل الأنواع':t+' · '+TYPES[t].name}</button>`).join('')}</div>
+  <div class="chips"><select class="tsel" id="tsel" aria-label="نوع الطلب"><option value="ALL">كل الأنواع</option>${FORM_GROUPS.map(([g,ks])=>`<optgroup label="${g}">${ks.map(k=>`<option value="${k}" ${view.type===k?'selected':''}>${k} · ${TYPES[k].name}</option>`).join('')}</optgroup>`).join('')}</select></div>
   <div class="list">${rows.length?rows.map(r=>{const L=last(r);return `
     <button class="row" type="button" data-id="${r.id}">
       <span class="type">${r.type}</span>
@@ -791,49 +1150,59 @@ function renderLog(){
       ${badgeOf(L.code)}
     </button>`}).join(''):`<div class="empty">مفيش طلبات بالفلتر ده.</div>`}</div>`;
   app.querySelectorAll('.stat').forEach(b=>b.onclick=()=>{view.filter=b.dataset.f;renderLog();});
-  app.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{view.type=b.dataset.t;renderLog();});
+  document.getElementById('tsel').onchange=e=>{view.type=e.target.value;renderLog();};
   app.querySelectorAll('.row').forEach(b=>b.onclick=()=>open(b.dataset.id));
   document.getElementById('reset').onclick=()=>refresh();
 }
 
 /* ---------- طلب جديد ---------- */
 function renderNew(){
-  if(role!=='C'){toast('تقديم الطلبات من حساب المقاول — بدّل فوق');role='C';syncRole();}
-  const t='IR';
+  if(role!=='C'){go('log');return;}
+  let t=view.newType||'IR';
   app.innerHTML=`
   <button class="back" type="button" id="bk">→ رجوع للسجل</button>
   <h2>طلب جديد</h2>
   <form class="card" id="f" novalidate>
     <div class="grid">
-      <label for="f-type">نوع الطلب<select id="f-type">${Object.keys(TYPES).map(k=>`<option value="${k}" ${k===t?'selected':''}>${k} — ${TYPES[k].name}</option>`).join('')}</select></label>
+      <label for="f-type">نوع الطلب<select id="f-type">${FORM_GROUPS.map(([g,ks])=>`<optgroup label="${g}">${ks.map(k=>`<option value="${k}" ${k===t?'selected':''}>${k} — ${TYPES[k].name}</option>`).join('')}</optgroup>`).join('')}</select></label>
       <label>رقم الطلب<input id="f-no" value="${PRJ}-${t}-${pad((S.seq[t]||0)+1)}-REV00" readonly style="font-family:var(--mono);direction:ltr;text-align:right"><span class="hint">بيتولد لوحده</span></label>
       <label class="full" for="f-subj">الموضوع<input id="f-subj" required placeholder="مثال: تسليم حديد تسليح سقف الدور الأول"></label>
       <div class="full"><label>نوع الأعمال</label><div class="disc">${DISC.map((x,i)=>`<label><input type="radio" name="disc" id="f-d${i}" value="${x}" ${i===0?'checked':''}>${x}</label>`).join('')}</div></div>
-      <label for="f-area">المنطقة<input id="f-area" placeholder="المبنى الرئيسي"></label>
-      <label for="f-floor">الدور<input id="f-floor" placeholder="الدور الأول"></label>
-      <label for="f-item">كود البند في المقايسة<input id="f-item" placeholder="03-02-010" style="direction:ltr;text-align:right"><span class="hint">هيربط الطلب بالحصر والمستخلص في النسخة الجاية</span></label>
-      <label for="f-files">صور / رسومات<input id="f-files" type="file" accept="image/*" multiple></label>
-      <div class="full thumbs" id="f-thumbs"></div>
-      <label class="full" for="f-desc">البيان / الوصف<textarea id="f-desc" placeholder="وصف الأعمال المطلوب استلامها"></textarea></label>
+      <label for="f-floor">الموقع / الدور<input id="f-floor" placeholder="الدور الأول"></label>
+      <label for="f-area">العنصر / المنطقة<input id="f-area" placeholder="المبنى الرئيسي"></label>
+      <label for="f-item">كود البند في المقايسة<input id="f-item" placeholder="03-02-010" style="direction:ltr;text-align:right"></label>
     </div>
-    <p class="hint">تعهد المقاول: المستندات المرفقة تمت مراجعتها وتنسيقها ومطابقتها للعقد.</p>
+    <div class="grid" id="f-form" style="margin-top:12px"></div>
+    <div class="grid" style="margin-top:12px">
+      <label class="full" for="f-desc">ملاحظات / وصف إضافي<textarea id="f-desc" style="min-height:60px"></textarea></label>
+      <div class="full"><label>المرفقات</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px"><label class="btn sm" style="position:relative;display:inline-flex;flex-direction:row;gap:6px;cursor:pointer;color:var(--ink)">🖼 صور<input id="f-files" type="file" accept="image/*" multiple style="position:absolute;inset:0;opacity:0;width:100%"></label><button type="button" class="pb" data-cam1="1">📷 تصوير</button></div>
+        <div class="thumbs" id="f-thumbs"></div>
+        <div style="margin-top:8px">${pdfPicker([],'f-pdfs')}</div>
+        <span class="hint">رسومات ومستندات الاعتماد بصيغة PDF — حتى 25 ميجا للملف</span></div>
+    </div>
+    <p class="hint" id="f-decl"></p>
     <div class="btns"><button class="btn primary" type="submit">تقديم الطلب</button><button class="btn" type="button" id="cn">إلغاء</button></div>
   </form>`;
-  const files=[];
-  document.getElementById('f-type').onchange=e=>{const k=e.target.value;document.getElementById('f-no').value=`${PRJ}-${k}-${pad((S.seq[k]||0)+1)}-REV00`;};
+  const files=[],pdfs=[];
+  const box=document.getElementById('f-form');
+  const drawType=()=>{box.innerHTML=`<div class="full" style="border-top:1px solid var(--line);padding-top:10px"><b>${TYPES[t].name}</b> <span class="hint">${TYPES[t].en}</span></div>`+formHTML(t,{},'ff-');bindForm(box,t);
+    document.getElementById('f-decl').textContent=tr(FORMS[t].decl||'');document.getElementById('f-no').value=`${PRJ}-${t}-${pad((S.seq[t]||0)+1)}-REV00`;};
+  drawType();bindPdf(pdfs,'f-pdfs');
+  document.getElementById('f-type').onchange=e=>{t=e.target.value;view.newType=t;drawType();};
   document.getElementById('f-files').onchange=e=>readImgs(e.target.files,files,document.getElementById('f-thumbs'));
+  app.querySelector('[data-cam1]').onclick=()=>pickPhoto(true,u=>{files.push(u);document.getElementById('f-thumbs').innerHTML=files.map(x=>`<img src="${x}" alt="مرفق">`).join('');});
   document.getElementById('bk').onclick=document.getElementById('cn').onclick=()=>go('log');
   document.getElementById('f').onsubmit=e=>{e.preventDefault();
     const subj=document.getElementById('f-subj').value.trim();
     if(!subj){toast('اكتب موضوع الطلب الأول');document.getElementById('f-subj').focus();return;}
-    const type=document.getElementById('f-type').value;
+    const type=t, data=collectForm(box,t);
     (async()=>{busy(true,'جاري الرفع…');try{
-      const paths=[];for(const u of files){paths.push(await upload(u));}
-      const {data:rid,error}=await sb.rpc('submit_request',{p_project:PID,p_type:type,p_subject:subj,p_discipline:(document.querySelector('input[name=disc]:checked')||{}).value||'',p_area:document.getElementById('f-area').value,p_floor:document.getElementById('f-floor').value,p_boq:document.getElementById('f-item').value,p_description:document.getElementById('f-desc').value,p_files:paths});
+      const fl=await uploadAll(files,pdfs);
+      const {data:rid,error}=await sb.rpc('submit_request_v2',{p_project:PID,p_type:type,p_subject:subj,p_discipline:(document.querySelector('input[name=disc]:checked')||{}).value||'',p_area:document.getElementById('f-area').value,p_floor:document.getElementById('f-floor').value,p_boq:document.getElementById('f-item').value,p_description:document.getElementById('f-desc').value,p_data:data,p_files:fl});
       if(error)throw error; await loadAll(); busy(false); const r=S.reqs.find(x=>x.id===rid); toast(`اتقدم ${num(r,0)}`); open(rid);
     }catch(err){busy(false);toast(errMsg(err));}})();};
 }
-
 /* ---------- تفاصيل الطلب ---------- */
 let cur=null, revIdx=0, draft=null, showAll=false, rsDraft=null;
 function open(id){cur=S.reqs.find(r=>r.id===id);revIdx=cur.revs.length-1;draft=null;rsDraft=null;showAll=false;view.name='detail';renderDetail();window.scrollTo(0,0);}
@@ -859,7 +1228,7 @@ function renderDetail(){
   const canReview=role==='K'&&isLast&&!R.code;
   const canResubmit=role==='C'&&isLast&&R.code==='C';
   if(canReview&&!draft)draft={notes:[],code:'',comment:''};
-  if(canResubmit&&!rsDraft)rsDraft={att:[],resp:notesOf(R).map(n=>({t:n.t,before:n.img||null,after:null,note_id:n.id}))};
+  if(canResubmit&&!rsDraft)rsDraft={att:[],pdfs:[],resp:notesOf(R).map(n=>({t:n.t,before:n.img||null,after:null,note_id:n.id}))};
   const notes=canReview?draft.notes:notesOf(R);
   const pinned=notes.map((n,j)=>({n,j})).filter(o=>o.n.x!=null);
   const lib=canReview?libList(r.disc):[];
@@ -867,18 +1236,20 @@ function renderDetail(){
   app.innerHTML=`
   <div class="toprow"><button class="back" type="button" id="bk">→ رجوع للسجل</button><button class="btn sm" type="button" id="prt">🖨 طباعة النموذج</button></div>
   <div class="paper">
-    <div class="ph"><div><div class="t">${T.name}</div><div class="en">${T.en}</div></div><div>${badgeOf(R.code)}</div></div>
+    <div class="ph"><div><div class="t">${T.name}</div><div class="en">${T.en}</div></div><div>${R.code?`<span class="code c-${R.code}">${FORMS[r.type]&&FORMS[r.type].answer?'':`<span class="k">${CODES[R.code].k}</span>`}${codeText(r.type,R.code)}</span>`:badgeOf(R.code)}</div></div>
     <div class="kv"><div><small>رقم الطلب</small><strong style="font-family:var(--mono);direction:ltr;display:block;text-align:right">${num(r,revIdx)}</strong></div><div><small>الإصدار</small><strong>${revIdx}</strong></div><div><small>تاريخ التقديم</small><strong>${fmt(R.at)}</strong></div></div>
     <div class="kv"><div><small>الموضوع</small><strong>${raw(r.subject)}</strong></div><div><small>نوع الأعمال</small><strong>${esc(r.disc)}</strong></div><div><small>المنطقة / الدور</small><strong>${raw(r.area)} · ${raw(r.floor)}</strong></div></div>
     ${r.revs.length>1?`<div class="sec"><h3>الإصدارات</h3><div class="revs">${r.revs.map((x,i)=>`<button type="button" data-rev="${i}" aria-pressed="${i===revIdx}">${rv(i)}${x.code?' · '+CODES[x.code].k:''}</button>`).join('')}</div></div>`:''}
-    <div class="sec"><h3>البيان / الوصف${r.item?` · كود البند <span style="font-family:var(--mono)">${esc(r.item)}</span>`:''}</h3><div>${esc(r.desc)||'—'}</div></div>
+    ${(()=>{const dh=dataHTML(r.type,r.data);return dh?`<div class="sec"><h3>بيانات النموذج${r.item?` · كود البند <span style="font-family:var(--mono)">${esc(r.item)}</span>`:''}</h3>${dh}</div>`:'';})()}
+    ${r.desc?`<div class="sec"><h3>ملاحظات / وصف إضافي</h3><div>${raw(r.desc)}</div></div>`:''}
+    ${R.docs&&R.docs.length?`<div class="sec"><h3>المستندات والرسومات (PDF)</h3>${docsHTML(R.docs)}</div>`:''}
     ${R.resp&&R.resp.length?`<div class="sec"><h3>معالجة ملاحظات ${rv(revIdx-1)}</h3><ul class="nlist">${R.resp.map((x,j)=>`<li class="nitem" style="grid-template-columns:auto 1fr"><span class="n" style="background:var(--a)">${j+1}</span><div class="txt"><div>${esc(x.t)}</div>
       <div class="ba" style="margin-top:6px">${x.before?`<figure><img src="${x.before}" alt="قبل" data-cap="قبل — ${esc(x.t)}">قبل</figure>`:''}${x.after?`<figure><img src="${x.after}" alt="بعد" data-cap="بعد — ${esc(x.t)}">بعد التنفيذ</figure>`:'<span class="hint">بدون صورة بعد التنفيذ</span>'}</div></div></li>`).join('')}</ul></div>`:''}
     <div class="sec"><h3>المرفقات ${canReview?'<span class="hint">— دوس على الصورة عشان تحط ملاحظة في مكانها</span>':''}</h3>
-      ${R.att.length?R.att.map((u,i)=>`<div class="shot ${canReview?'annot':''}" data-i="${i}" style="margin-top:${i?8:0}px"><img src="${u}" alt="مرفق ${i+1}">${i===0?pinned.map(o=>`<span class="pin" style="right:${100-o.n.x}%;top:${o.n.y}%">${o.j+1}</span>`).join(''):''}</div>`).join(''):'<div class="hint">لا توجد مرفقات</div>'}
+      ${R.att.length?R.att.map((u,i)=>`<div class="shot ${canReview?'annot':''}" data-i="${i}" style="margin-top:${i?8:0}px"><img src="${u}" alt="مرفق ${i+1}">${i===0?pinned.map(o=>`<span class="pin" style="right:${100-o.n.x}%;top:${o.n.y}%">${o.j+1}</span>`).join(''):''}</div>`).join(''):(R.docs&&R.docs.length?'<div class="hint">المستندات مرفقة كـ PDF فوق</div>':'<div class="hint">لا توجد مرفقات</div>')}
     </div>
     ${!canReview&&notes.length?`<div class="sec"><h3>ملاحظات الاستشاري</h3><ul class="nlist">${notes.map((n,j)=>`<li class="nitem" style="grid-template-columns:auto 1fr auto"><span class="n">${j+1}</span><div class="txt">${esc(n.t)}${n.x!=null?'<div class="tag">📍 محددة على صورة المرفق</div>':''}</div>${n.img?`<div class="nphoto has"><img src="${n.img}" alt="صورة الملاحظة"><button type="button" class="view" data-zoom="1" aria-label="تكبير"></button></div>`:''}</li>`).join('')}</ul></div>`:''}
-    ${R.code&&!canReview?`<div class="sec"><h3>قرار الاستشاري</h3><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="stamp code c-${R.code}">${CODES[R.code].k} — ${CODES[R.code].t}</span><span class="hint">${fmt(R.decAt)} · ${raw(R.decBy||CONSULTANT)}</span></div>${R.comment?`<p style="margin:8px 0 0">${raw(R.comment)}</p>`:''}</div>`:''}
+    ${R.code&&!canReview?`<div class="sec"><h3>قرار الاستشاري</h3><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="stamp code c-${R.code}">${FORMS[r.type]&&FORMS[r.type].answer?'':CODES[R.code].k+' — '}${codeText(r.type,R.code)}</span><span class="hint">${fmt(R.decAt)} · ${raw(R.decBy||CONSULTANT)}</span></div>${R.comment?`<p style="margin:8px 0 0">${raw(R.comment)}</p>`:''}</div>`:''}
     ${canReview?`<div class="sec"><h3>مراجعة الاستشاري — الملاحظات (${notes.length})</h3>
       <div id="pinbox" hidden class="lib" style="margin:0 0 10px"><label for="pin-t">ملاحظة رقم <span id="pin-n"></span> على الصورة<input id="pin-t" placeholder="اكتب الملاحظة أو اختار من الشائعة تحت"></label><div class="btns" style="margin-top:8px"><button class="btn primary sm" type="button" id="pin-ok">إضافة</button><button class="btn sm" type="button" id="pin-x">إلغاء</button></div></div>
       ${notes.length?`<ul class="nlist">${notes.map((n,j)=>`<li class="nitem"><span class="n">${j+1}</span><div class="txt"><input data-nt="${j}" value="${esc(tr(n.t))}" aria-label="نص الملاحظة ${j+1}">${n.x!=null?'<div class="tag">📍 محددة على صورة المرفق</div>':''}<button class="ndel" type="button" data-del="${j}">حذف الملاحظة</button></div><div>${photoSlot(n.img,'np'+j,'أضف صورة')}</div></li>`).join('')}</ul>`:'<p class="hint" style="margin:0">لسه مفيش ملاحظات. اختار من الملاحظات الشائعة، أو اكتب ملاحظة جديدة، أو دوس على صورة المرفق.</p>'}
@@ -890,14 +1261,16 @@ function renderDetail(){
         <label class="chk"><input type="checkbox" id="new-save" checked>احفظها في الملاحظات الشائعة لـ ${esc(r.disc)}</label>
       </div>
       <h3 style="margin-top:14px">الكود</h3>
-      <div class="codes">${Object.keys(CODES).map(k=>`<label><input type="radio" name="code" id="code-${k}" value="${k}" ${draft.code===k?'checked':''}><span><b class="code c-${k}" style="padding:1px 8px"><span class="k">${CODES[k].k}</span></b> ${CODES[k].t}</span></label>`).join('')}</div>
-      <label for="cm" style="margin-top:10px">ملاحظات عامة<textarea id="cm" placeholder="ملاحظات عامة على الطلب">${esc(draft.comment)}</textarea></label>
+      ${FORMS[r.type]&&FORMS[r.type].answer?'':`<div class="codes">${Object.keys(CODES).map(k=>`<label><input type="radio" name="code" id="code-${k}" value="${k}" ${draft.code===k?'checked':''}><span><b class="code c-${k}" style="padding:1px 8px"><span class="k">${CODES[k].k}</span></b> ${codeText(r.type,k)}</span></label>`).join('')}</div>`}
+      <label for="cm" style="margin-top:10px">${FORMS[r.type]&&FORMS[r.type].answer?'رد الاستشاري':(FORMS[r.type]&&FORMS[r.type].reviewLabel)||'ملاحظات عامة'}<textarea id="cm" placeholder="${FORMS[r.type]&&FORMS[r.type].answer?'اكتب الرد على الاستفسار':'ملاحظات عامة على الطلب'}" ${FORMS[r.type]&&FORMS[r.type].answer?'style="min-height:120px"':''}>${esc(draft.comment)}</textarea></label>
       <div class="btns"><button class="btn primary" type="button" id="send">اعتماد القرار وإرسال للمقاول</button></div></div>`:''}
     ${canResubmit?`<div class="sec"><h3>إعادة التقديم — ${rv(r.revs.length)}</h3><p class="hint" style="margin:0 0 8px">ارفع صورة بعد التنفيذ قدام كل ملاحظة، وهيتعمل إصدار جديد على نفس رقم الطلب.</p>
       ${rsDraft.resp.length?`<ul class="nlist">${rsDraft.resp.map((x,j)=>`<li class="nitem"><span class="n">${j+1}</span><div class="txt">${esc(x.t)}${x.before?`<div class="ba" style="margin-top:6px"><figure><img src="${x.before}" alt="صورة الاستشاري" data-cap="${esc(x.t)}">صورة الاستشاري</figure></div>`:''}</div><div>${photoSlot(x.after,'rp'+j,'صورة بعد التنفيذ')}</div></li>`).join('')}</ul>`:''}
       <label for="rs-files" style="margin-top:10px">صور عامة إضافية (اختياري)<input id="rs-files" type="file" accept="image/*" multiple></label><div class="thumbs" id="rs-thumbs">${rsDraft.att.map(u=>`<img src="${u}" alt="مرفق">`).join('')}</div>
+      <div style="margin-top:10px"><label>مستندات / رسومات معدّلة (PDF)</label>${pdfPicker(rsDraft.pdfs,'rs-pdfs')}</div>
+      ${FORMS[r.type]?`<details style="margin-top:10px"><summary style="cursor:pointer;font-weight:600">تعديل بيانات النموذج</summary><div class="grid" id="rs-form" style="margin-top:8px">${formHTML(r.type,r.data,'rf-')}</div></details>`:''}
       <div class="btns"><button class="btn primary" type="button" id="resub">إعادة التقديم</button></div></div>`:''}
-    <div class="sec" style="border-bottom:0"><h3>سجل الطلب</h3><div class="timeline">${r.revs.map((x,i)=>`<div><span>تقديم ${rv(i)}${x.by?' · '+esc(x.by):''}</span><span>${fmt(x.at)}</span></div>${x.code?`<div><span>قرار الاستشاري: ${CODES[x.code].k} ${CODES[x.code].t}${x.decBy?' · '+esc(x.decBy):''}</span><span>${fmt(x.decAt)}</span></div>`:''}`).join('')}</div></div>
+    <div class="sec" style="border-bottom:0"><h3>سجل الطلب</h3><div class="timeline">${r.revs.map((x,i)=>`<div><span>تقديم ${rv(i)}${x.by?' · '+esc(x.by):''}</span><span>${fmt(x.at)}</span></div>${x.code?`<div><span>قرار الاستشاري: ${FORMS[r.type]&&FORMS[r.type].answer?'':CODES[x.code].k+' '}${codeText(r.type,x.code)}${x.decBy?' · '+esc(x.decBy):''}</span><span>${fmt(x.decAt)}</span></div>`:''}`).join('')}</div></div>
   </div>
   ${role==='C'&&isLast&&!R.code?'<p class="hint">الطلب عند الاستشاري. بدّل لـ "الاستشاري" فوق عشان تجرب المراجعة.</p>':''}`;
   document.getElementById('bk').onclick=()=>go('log');
@@ -924,7 +1297,7 @@ function renderDetail(){
       renderDetail();};
     app.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{syncDraft();draft.notes.splice(+b.dataset.del,1);renderDetail();});
     app.querySelectorAll('[data-pick^="np"]').forEach(b=>b.onclick=()=>{const j=+b.dataset.pick.slice(2);syncDraft();pickPhoto(!!b.dataset.cam,u=>{if(!draft||!draft.notes[j])return;draft.notes[j].img=u;renderDetail();});});
-    document.getElementById('send').onclick=()=>{syncDraft();if(!draft.code){toast('اختار كود القرار (أ / ب / ج / د)');return;}
+    document.getElementById('send').onclick=()=>{syncDraft();if(FORMS[r.type]&&FORMS[r.type].answer){if(!draft.comment.trim()){toast('اكتب الرد الأول');return;}draft.code='A';}if(!draft.code){toast('اختار كود القرار (أ / ب / ج / د)');return;}
       if((draft.code==='C'||draft.code==='D')&&!draft.notes.length&&!draft.comment.trim()){toast('كود ج / د محتاج ملاحظة واحدة على الأقل');return;}
       const c=draft.code;(async()=>{busy(true,'جاري الحفظ…');try{
         const ns=[];for(const n of draft.notes.filter(n=>n.t.trim())){ns.push({body:n.t.trim(),x:n.x==null?null:n.x,y:n.y==null?null:n.y,photo_path:n.img?await upload(n.img):null});}
@@ -935,13 +1308,15 @@ function renderDetail(){
   }
   if(canResubmit){
     document.getElementById('rs-files').onchange=e=>readImgs(e.target.files,rsDraft.att,document.getElementById('rs-thumbs'));
+    bindPdf(rsDraft.pdfs,'rs-pdfs');const rsf=document.getElementById('rs-form');if(rsf)bindForm(rsf,r.type);
     app.querySelectorAll('[data-pick^="rp"]').forEach(b=>b.onclick=()=>{const j=+b.dataset.pick.slice(2);pickPhoto(!!b.dataset.cam,u=>{if(!rsDraft||!rsDraft.resp[j])return;rsDraft.resp[j].after=u;renderDetail();});});
     document.getElementById('resub').onclick=()=>{
       const missing=rsDraft.resp.filter(x=>!x.after).length;
       (async()=>{busy(true,'جاري الرفع…');try{
-        const paths=[];for(const u of rsDraft.att){paths.push(await upload(u));}
+        const fl=await uploadAll(rsDraft.att,rsDraft.pdfs);
         const resp=[];for(const x of rsDraft.resp){resp.push({note_id:x.note_id,after_path:x.after?await upload(x.after):null});}
-        const {error}=await sb.rpc('resubmit',{p_request:r.id,p_files:paths,p_responses:resp});if(error)throw error;
+        const rsf=document.getElementById('rs-form');const nd=rsf&&rsf.closest('details').open?collectForm(rsf,r.type):null;
+        const {error}=await sb.rpc('resubmit_v2',{p_request:r.id,p_files:fl,p_responses:resp,p_data:nd});if(error)throw error;
         rsDraft=null;await loadAll();cur=S.reqs.find(x=>x.id===r.id)||cur;revIdx=cur.revs.length-1;busy(false);
         toast(`اتقدم ${num(cur,revIdx)}${missing?` — ${missing} ملاحظة من غير صورة`:''}`);renderDetail();
       }catch(err){busy(false);toast(errMsg(err));}})();};
@@ -972,9 +1347,11 @@ function sheetHTML(r,i){
     <tr><td class="lbl">الموضوع</td><td colspan="5">${raw(r.subject)}</td></tr>
     <tr><td class="lbl">المنطقة</td><td>${esc(r.area)||'&nbsp;'}</td><td class="lbl">الدور</td><td>${esc(r.floor)||'&nbsp;'}</td><td class="lbl">كود البند</td><td class="mono">${esc(r.item)||'&nbsp;'}</td></tr>
     <tr><td class="lbl">نوع الأعمال</td><td colspan="5" class="opts">${DISC.map(x=>`<span class="o">${cb(x===r.disc)}${x}</span>`).join('')}</td></tr>
-    <tr><td class="lbl">البيان</td><td colspan="5"><div class="big">${raw(r.desc)}</div></td></tr>
+    ${(()=>{const dh=dataHTML(r.type,r.data,true);return dh?`<tr><td colspan="6">${dh}</td></tr>`:'';})()}
+    ${r.desc?`<tr><td class="lbl">ملاحظات</td><td colspan="5">${raw(r.desc)}</td></tr>`:''}
+    ${R.docs&&R.docs.length?`<tr><td class="lbl">مستندات PDF</td><td colspan="5">${R.docs.map((d,k)=>`${k+1}. ${raw(d.name||'مستند')}`).join('<br>')}</td></tr>`:''}
     <tr><td class="lbl">المرفقات</td><td colspan="5">${R.att.length?`${R.att.length} صورة / رسم<br>`+R.att.slice(0,2).map((u,k)=>`<span class="ph"><img src="${u}" alt="">${k===0?pinned.map(o=>`<span class="p" style="right:${100-o.n.x}%;top:${o.n.y}%">${o.j+1}</span>`).join(''):''}</span>`).join(''):'لا يوجد'}</td></tr>
-    <tr><td colspan="6"><b>تعهد المقاول:</b> نقر بأن الأعمال المطلوب استلامها تم تنفيذها ومراجعتها طبقًا للرسومات المعتمدة والمواصفات وشروط العقد.
+    <tr><td colspan="6"><b>تعهد المقاول:</b> ${(FORMS[r.type]&&FORMS[r.type].decl)||'نقر بأن الأعمال المطلوب استلامها تم تنفيذها ومراجعتها طبقًا للرسومات المعتمدة والمواصفات وشروط العقد.'}
       <div class="sig"><div>مهندس المقاول:<div class="s"></div></div><div>التوقيع:<div class="s"></div></div><div>التاريخ:<div class="s"></div></div></div></td></tr>
   </table>
   ${R.resp&&R.resp.length?`<table><tr><th style="width:6%">م</th><th>معالجة ملاحظات ${rv(i-1)}</th><th style="width:36mm">قبل</th><th style="width:36mm">بعد التنفيذ</th></tr>
@@ -984,8 +1361,8 @@ function sheetHTML(r,i){
       :[1,2,3,4].map(j=>`<tr><td>${j}</td><td><div class="line" style="border:0"></div></td><td></td></tr>`).join('')}
   </table>
   <table>
-    <tr><td class="lbl">الكود</td><td class="opts">${Object.keys(CODES).map(k=>`<span class="o">${cb(code===k)}${CODES[k].k} — ${CODES[k].t}</span>`).join('')}</td></tr>
-    <tr><td class="lbl">ملاحظات عامة</td><td>${comment?esc(comment):lines(2)}</td></tr>
+    ${FORMS[r.type]&&FORMS[r.type].answer?'':`<tr><td class="lbl">الكود</td><td class="opts">${Object.keys(CODES).map(k=>`<span class="o">${cb(code===k)}${CODES[k].k} — ${codeText(r.type,k)}</span>`).join('')}</td></tr>`}
+    <tr><td class="lbl">${FORMS[r.type]&&FORMS[r.type].answer?'رد الاستشاري':'ملاحظات عامة'}</td><td>${comment?esc(comment):lines(2)}</td></tr>
     <tr><td colspan="2"><div class="sig"><div>مهندس الاستشاري:<div class="s"></div></div><div>التوقيع:<div class="s"></div></div><div>التاريخ:<div class="s">${code&&R.decAt?`<span class="mono">${fmt(R.decAt)}</span>`:''}</div></div><div>الختم:<div class="s"></div></div></div></td></tr>
     <tr><td class="lbl">التوزيع</td><td class="opts"><span class="o">${cb()}المالك</span><span class="o">${cb()}الاستشاري</span><span class="o">${cb()}المقاول</span><span class="o">${cb()}الملف</span></td></tr>
   </table>
@@ -1116,7 +1493,7 @@ function renderALog(){
   app.innerHTML=`
   <div class="noprint">
     <h2>لوج الاعتمادات</h2>
-    <div class="chips" style="margin-top:0">${['ALL','IR','RFI','RR'].map(t=>`<button class="chip" type="button" data-t="${t}" aria-pressed="${f.t===t}">${t==='ALL'?'كل الأنواع':t+' · '+TYPES[t].name}</button>`).join('')}</div>
+    <div class="chips" style="margin-top:0"><select class="tsel" id="tsel" aria-label="نوع الطلب"><option value="ALL">كل الأنواع</option>${FORM_GROUPS.map(([g,ks])=>`<optgroup label="${g}">${ks.map(k=>`<option value="${k}" ${f.t===k?'selected':''}>${k} · ${TYPES[k].name}</option>`).join('')}</optgroup>`).join('')}</select></div>
     <div class="lfil" style="margin-top:8px">
       <label>نوع الأعمال<select id="lf-d"><option value="ALL">الكل</option>${DISC.map(x=>`<option ${f.d===x?'selected':''}>${x}</option>`).join('')}</select></label>
       <label>الكود<select id="lf-c"><option value="ALL">الكل</option>${Object.keys(CODES).map(k=>`<option value="${k}" ${f.c===k?'selected':''}>${CODES[k].k} — ${CODES[k].t}</option>`).join('')}<option value="P" ${f.c==='P'?'selected':''}>بانتظار الرد</option></select></label>
@@ -1138,7 +1515,7 @@ function renderALog(){
     app.querySelectorAll('#lbody tr[data-id]').forEach(t=>t.onclick=()=>{open(t.dataset.id);revIdx=+t.dataset.rev;renderDetail();});
     return rows;};
   body();
-  app.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{f.t=b.dataset.t;renderALog();});
+  document.getElementById('tsel').onchange=e=>{f.t=e.target.value;renderALog();};
   document.getElementById('lf-d').onchange=e=>{f.d=e.target.value;body();};
   document.getElementById('lf-c').onchange=e=>{f.c=e.target.value;body();};
   document.getElementById('lf-q').oninput=e=>{f.q=e.target.value.trim();body();};
@@ -1464,13 +1841,13 @@ async function loadAll(){
   const NM={};mb.data.forEach(m=>NM[m.user_id]=m.full_name);
   const notesBy={},noteById={},filesBy={},respBy={};
   nt.data.forEach(n=>{const o={id:n.id,t:n.body,x:n.x==null?null:+n.x,y:n.y==null?null:+n.y,img:U(n.photo_path)};noteById[n.id]=o;(notesBy[n.revision_id]=notesBy[n.revision_id]||[]).push(o);});
-  fl.data.forEach(f=>(filesBy[f.revision_id]=filesBy[f.revision_id]||[]).push(U(f.path)));
+  fl.data.forEach(f=>(filesBy[f.revision_id]=filesBy[f.revision_id]||[]).push({url:U(f.path),name:f.name,mime:f.mime,size:f.size}));
   rs.data.forEach(r=>{const n=noteById[r.note_id]||{};(respBy[r.revision_id]=respBy[r.revision_id]||[]).push({t:n.t||'',before:n.img||null,after:U(r.after_path),note_id:r.note_id});});
   const revBy={};rv.data.forEach(v=>(revBy[v.request_id]=revBy[v.request_id]||[]).push(v));
-  S.reqs=rq.data.map(q=>({id:q.id,type:q.type,n:q.seq,subject:q.subject,disc:q.discipline,area:q.area||'',floor:q.floor||'',item:q.boq_item||'',desc:q.description||'',
-    revs:(revBy[q.id]||[]).sort((a,b)=>a.rev-b.rev).map(v=>({id:v.id,at:v.submitted_at,by:NM[v.submitted_by]||'',att:(filesBy[v.id]||[]).filter(Boolean),notes:notesBy[v.id]||[],resp:respBy[v.id]||[],
+  S.reqs=rq.data.map(q=>({id:q.id,type:q.type,n:q.seq,data:q.data||{},subject:q.subject,disc:q.discipline,area:q.area||'',floor:q.floor||'',item:q.boq_item||'',desc:q.description||'',
+    revs:(revBy[q.id]||[]).sort((a,b)=>a.rev-b.rev).map(v=>({id:v.id,at:v.submitted_at,by:NM[v.submitted_by]||'',att:(filesBy[v.id]||[]).filter(x=>x.url&&!isPdf(x)).map(x=>x.url),docs:(filesBy[v.id]||[]).filter(isPdf),notes:notesBy[v.id]||[],resp:respBy[v.id]||[],
       code:v.code||undefined,comment:v.comment||'',decAt:v.decided_at,decBy:NM[v.decided_by]||''}))})).filter(r=>r.revs.length);
-  S.seq={IR:0,RFI:0,RR:0};S.reqs.forEach(r=>S.seq[r.type]=Math.max(S.seq[r.type]||0,r.n));
+  S.seq={};S.reqs.forEach(r=>S.seq[r.type]=Math.max(S.seq[r.type]||0,r.n));
   const ifBy={},ifEv={};ifl.data.forEach(f=>{if(f.event_id)(ifEv[f.event_id]=ifEv[f.event_id]||[]).push(U(f.path));else (ifBy[f.instruction_id]=ifBy[f.instruction_id]||[]).push(U(f.path));});
   const evBy={};iev.data.forEach(e=>(evBy[e.instruction_id]=evBy[e.instruction_id]||[]).push({action:e.action,body:e.body||'',cause:e.cause||'',corrective:e.corrective||'',by:NM[e.by_user]||'',at:e.at,files:(ifEv[e.id]||[]).filter(Boolean)}));
   S.ins=ins.data.map(i=>({id:i.id,kind:i.kind,n:i.seq,subject:i.subject,disc:i.discipline,area:i.area||'',floor:i.floor||'',desc:i.description||'',due:i.due_date,status:i.status,issuerTeam:i.issuer_team,by:NM[i.issued_by]||'',at:i.created_at,closedAt:i.closed_at,att:(ifBy[i.id]||[]).filter(Boolean),events:evBy[i.id]||[]}));
