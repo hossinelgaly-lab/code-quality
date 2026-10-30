@@ -907,7 +907,13 @@ const EN={
 "تعديل بيانات النموذج":"Edit form details",
 "مستندات PDF":"PDF documents",
 "🖼 صور":"🖼 Photos",
-"حذف":"Delete"
+"حذف":"Delete",
+"PDF بتعليقات الاستشاري (اختياري)":"Consultant marked-up PDF (optional)",
+"علّم على الرسومات أو المستندات في أي برنامج (Acrobat / Bluebeam / Edge) واحفظها، وارفعها هنا عشان توصل للمقاول مع القرار.":"Mark up the drawings or documents in any app (Acrobat / Bluebeam / Edge), save, and upload here so the contractor receives them with the decision.",
+"📎 PDF بتعليقات الاستشاري":"📎 Consultant marked-up PDF",
+"افتح الملف وشوف العلامات على الرسومات / المستندات.":"Open the file to see the mark-ups on the drawings / documents.",
+"التعليقات في ملف الـ PDF المرفق":"Comments are in the attached PDF",
+"PDF بالتعليقات":"Marked-up PDF"
 };
 let RX=null;
 function buildRx(){const ks=Object.keys(EN).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));RX=new RegExp('(?<![\\u0600-\\u06FF])('+ks.join('|')+')(?![\\u0600-\\u06FF])','g');}
@@ -1227,7 +1233,7 @@ function renderDetail(){
   const r=cur, R=r.revs[revIdx], isLast=revIdx===r.revs.length-1, T=TYPES[r.type];
   const canReview=role==='K'&&isLast&&!R.code;
   const canResubmit=role==='C'&&isLast&&R.code==='C';
-  if(canReview&&!draft)draft={notes:[],code:'',comment:''};
+  if(canReview&&!draft)draft={notes:[],code:'',comment:'',rpdfs:[]};
   if(canResubmit&&!rsDraft)rsDraft={att:[],pdfs:[],resp:notesOf(R).map(n=>({t:n.t,before:n.img||null,after:null,note_id:n.id}))};
   const notes=canReview?draft.notes:notesOf(R);
   const pinned=notes.map((n,j)=>({n,j})).filter(o=>o.n.x!=null);
@@ -1249,6 +1255,7 @@ function renderDetail(){
       ${R.att.length?R.att.map((u,i)=>`<div class="shot ${canReview?'annot':''}" data-i="${i}" style="margin-top:${i?8:0}px"><img src="${u}" alt="مرفق ${i+1}">${i===0?pinned.map(o=>`<span class="pin" style="right:${100-o.n.x}%;top:${o.n.y}%">${o.j+1}</span>`).join(''):''}</div>`).join(''):(R.docs&&R.docs.length?'<div class="hint">المستندات مرفقة كـ PDF فوق</div>':'<div class="hint">لا توجد مرفقات</div>')}
     </div>
     ${!canReview&&notes.length?`<div class="sec"><h3>ملاحظات الاستشاري</h3><ul class="nlist">${notes.map((n,j)=>`<li class="nitem" style="grid-template-columns:auto 1fr auto"><span class="n">${j+1}</span><div class="txt">${esc(n.t)}${n.x!=null?'<div class="tag">📍 محددة على صورة المرفق</div>':''}</div>${n.img?`<div class="nphoto has"><img src="${n.img}" alt="صورة الملاحظة"><button type="button" class="view" data-zoom="1" aria-label="تكبير"></button></div>`:''}</li>`).join('')}</ul></div>`:''}
+    ${R.code&&!canReview&&R.rdocs&&R.rdocs.length?`<div class="sec" style="background:var(--c-soft)"><h3>📎 PDF بتعليقات الاستشاري</h3>${docsHTML(R.rdocs)}<p class="hint" style="margin:6px 0 0">افتح الملف وشوف العلامات على الرسومات / المستندات.</p></div>`:''}
     ${R.code&&!canReview?`<div class="sec"><h3>قرار الاستشاري</h3><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="stamp code c-${R.code}">${FORMS[r.type]&&FORMS[r.type].answer?'':CODES[R.code].k+' — '}${codeText(r.type,R.code)}</span><span class="hint">${fmt(R.decAt)} · ${raw(R.decBy||CONSULTANT)}</span></div>${R.comment?`<p style="margin:8px 0 0">${raw(R.comment)}</p>`:''}</div>`:''}
     ${canReview?`<div class="sec"><h3>مراجعة الاستشاري — الملاحظات (${notes.length})</h3>
       <div id="pinbox" hidden class="lib" style="margin:0 0 10px"><label for="pin-t">ملاحظة رقم <span id="pin-n"></span> على الصورة<input id="pin-t" placeholder="اكتب الملاحظة أو اختار من الشائعة تحت"></label><div class="btns" style="margin-top:8px"><button class="btn primary sm" type="button" id="pin-ok">إضافة</button><button class="btn sm" type="button" id="pin-x">إلغاء</button></div></div>
@@ -1263,6 +1270,7 @@ function renderDetail(){
       <h3 style="margin-top:14px">الكود</h3>
       ${FORMS[r.type]&&FORMS[r.type].answer?'':`<div class="codes">${Object.keys(CODES).map(k=>`<label><input type="radio" name="code" id="code-${k}" value="${k}" ${draft.code===k?'checked':''}><span><b class="code c-${k}" style="padding:1px 8px"><span class="k">${CODES[k].k}</span></b> ${codeText(r.type,k)}</span></label>`).join('')}</div>`}
       <label for="cm" style="margin-top:10px">${FORMS[r.type]&&FORMS[r.type].answer?'رد الاستشاري':(FORMS[r.type]&&FORMS[r.type].reviewLabel)||'ملاحظات عامة'}<textarea id="cm" placeholder="${FORMS[r.type]&&FORMS[r.type].answer?'اكتب الرد على الاستفسار':'ملاحظات عامة على الطلب'}" ${FORMS[r.type]&&FORMS[r.type].answer?'style="min-height:120px"':''}>${esc(draft.comment)}</textarea></label>
+      <div style="margin-top:10px"><label>PDF بتعليقات الاستشاري (اختياري)</label>${pdfPicker(draft.rpdfs,'rv-pdfs')}<span class="hint">علّم على الرسومات أو المستندات في أي برنامج (Acrobat / Bluebeam / Edge) واحفظها، وارفعها هنا عشان توصل للمقاول مع القرار.</span></div>
       <div class="btns"><button class="btn primary" type="button" id="send">اعتماد القرار وإرسال للمقاول</button></div></div>`:''}
     ${canResubmit?`<div class="sec"><h3>إعادة التقديم — ${rv(r.revs.length)}</h3><p class="hint" style="margin:0 0 8px">ارفع صورة بعد التنفيذ قدام كل ملاحظة، وهيتعمل إصدار جديد على نفس رقم الطلب.</p>
       ${rsDraft.resp.length?`<ul class="nlist">${rsDraft.resp.map((x,j)=>`<li class="nitem"><span class="n">${j+1}</span><div class="txt">${esc(x.t)}${x.before?`<div class="ba" style="margin-top:6px"><figure><img src="${x.before}" alt="صورة الاستشاري" data-cap="${esc(x.t)}">صورة الاستشاري</figure></div>`:''}</div><div>${photoSlot(x.after,'rp'+j,'صورة بعد التنفيذ')}</div></li>`).join('')}</ul>`:''}
@@ -1279,6 +1287,7 @@ function renderDetail(){
   app.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=e=>{e.preventDefault();zoom(b.parentNode.querySelector('img').src);});
   app.querySelectorAll('.ba img').forEach(im=>im.onclick=()=>zoom(im.src,im.dataset.cap));
   if(canReview){
+    bindPdf(draft.rpdfs,'rv-pdfs');
     let pend=null;
     const shot=app.querySelector('.shot[data-i="0"]');
     if(shot)shot.onclick=e=>{const b=shot.getBoundingClientRect();pend={x:Math.round((e.clientX-b.left)/b.width*100),y:Math.round((e.clientY-b.top)/b.height*100)};
@@ -1298,10 +1307,12 @@ function renderDetail(){
     app.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{syncDraft();draft.notes.splice(+b.dataset.del,1);renderDetail();});
     app.querySelectorAll('[data-pick^="np"]').forEach(b=>b.onclick=()=>{const j=+b.dataset.pick.slice(2);syncDraft();pickPhoto(!!b.dataset.cam,u=>{if(!draft||!draft.notes[j])return;draft.notes[j].img=u;renderDetail();});});
     document.getElementById('send').onclick=()=>{syncDraft();if(FORMS[r.type]&&FORMS[r.type].answer){if(!draft.comment.trim()){toast('اكتب الرد الأول');return;}draft.code='A';}if(!draft.code){toast('اختار كود القرار (أ / ب / ج / د)');return;}
+      if((draft.code==='C'||draft.code==='D')&&!draft.notes.length&&!draft.comment.trim()&&draft.rpdfs.length){draft.comment=tr('التعليقات في ملف الـ PDF المرفق');}
       if((draft.code==='C'||draft.code==='D')&&!draft.notes.length&&!draft.comment.trim()){toast('كود ج / د محتاج ملاحظة واحدة على الأقل');return;}
       const c=draft.code;(async()=>{busy(true,'جاري الحفظ…');try{
         const ns=[];for(const n of draft.notes.filter(n=>n.t.trim())){ns.push({body:n.t.trim(),x:n.x==null?null:n.x,y:n.y==null?null:n.y,photo_path:n.img?await upload(n.img):null});}
-        const {error}=await sb.rpc('decide',{p_revision:R.id,p_code:c,p_comment:draft.comment,p_notes:ns});if(error)throw error;
+        const rf=[];for(const d of draft.rpdfs)rf.push(await uploadPdf(d));
+        const {error}=await sb.rpc('decide_v2',{p_revision:R.id,p_code:c,p_comment:draft.comment,p_notes:ns,p_files:rf});if(error)throw error;
         draft=null;await loadAll();cur=S.reqs.find(x=>x.id===r.id)||cur;busy(false);
         toast(c==='C'?'اتبعت للمقاول لإعادة التقديم':'اتسجل القرار');renderDetail();
       }catch(err){busy(false);toast(errMsg(err));}})();};
@@ -1363,6 +1374,7 @@ function sheetHTML(r,i){
   <table>
     ${FORMS[r.type]&&FORMS[r.type].answer?'':`<tr><td class="lbl">الكود</td><td class="opts">${Object.keys(CODES).map(k=>`<span class="o">${cb(code===k)}${CODES[k].k} — ${codeText(r.type,k)}</span>`).join('')}</td></tr>`}
     <tr><td class="lbl">${FORMS[r.type]&&FORMS[r.type].answer?'رد الاستشاري':'ملاحظات عامة'}</td><td>${comment?esc(comment):lines(2)}</td></tr>
+    ${R.rdocs&&R.rdocs.length?`<tr><td class="lbl">PDF بالتعليقات</td><td>${R.rdocs.map((d,k)=>`${k+1}. ${raw(d.name||'مستند')}`).join('<br>')}</td></tr>`:''}
     <tr><td colspan="2"><div class="sig"><div>مهندس الاستشاري:<div class="s"></div></div><div>التوقيع:<div class="s"></div></div><div>التاريخ:<div class="s">${code&&R.decAt?`<span class="mono">${fmt(R.decAt)}</span>`:''}</div></div><div>الختم:<div class="s"></div></div></div></td></tr>
     <tr><td class="lbl">التوزيع</td><td class="opts"><span class="o">${cb()}المالك</span><span class="o">${cb()}الاستشاري</span><span class="o">${cb()}المقاول</span><span class="o">${cb()}الملف</span></td></tr>
   </table>
@@ -1841,11 +1853,11 @@ async function loadAll(){
   const NM={};mb.data.forEach(m=>NM[m.user_id]=m.full_name);
   const notesBy={},noteById={},filesBy={},respBy={};
   nt.data.forEach(n=>{const o={id:n.id,t:n.body,x:n.x==null?null:+n.x,y:n.y==null?null:+n.y,img:U(n.photo_path)};noteById[n.id]=o;(notesBy[n.revision_id]=notesBy[n.revision_id]||[]).push(o);});
-  fl.data.forEach(f=>(filesBy[f.revision_id]=filesBy[f.revision_id]||[]).push({url:U(f.path),name:f.name,mime:f.mime,size:f.size}));
+  fl.data.forEach(f=>(filesBy[f.revision_id]=filesBy[f.revision_id]||[]).push({url:U(f.path),name:f.name,mime:f.mime,size:f.size,kind:f.kind||'submit'}));
   rs.data.forEach(r=>{const n=noteById[r.note_id]||{};(respBy[r.revision_id]=respBy[r.revision_id]||[]).push({t:n.t||'',before:n.img||null,after:U(r.after_path),note_id:r.note_id});});
   const revBy={};rv.data.forEach(v=>(revBy[v.request_id]=revBy[v.request_id]||[]).push(v));
   S.reqs=rq.data.map(q=>({id:q.id,type:q.type,n:q.seq,data:q.data||{},subject:q.subject,disc:q.discipline,area:q.area||'',floor:q.floor||'',item:q.boq_item||'',desc:q.description||'',
-    revs:(revBy[q.id]||[]).sort((a,b)=>a.rev-b.rev).map(v=>({id:v.id,at:v.submitted_at,by:NM[v.submitted_by]||'',att:(filesBy[v.id]||[]).filter(x=>x.url&&!isPdf(x)).map(x=>x.url),docs:(filesBy[v.id]||[]).filter(isPdf),notes:notesBy[v.id]||[],resp:respBy[v.id]||[],
+    revs:(revBy[q.id]||[]).sort((a,b)=>a.rev-b.rev).map(v=>({id:v.id,at:v.submitted_at,by:NM[v.submitted_by]||'',att:(filesBy[v.id]||[]).filter(x=>x.url&&x.kind!=='review'&&!isPdf(x)).map(x=>x.url),docs:(filesBy[v.id]||[]).filter(x=>x.kind!=='review'&&isPdf(x)),rdocs:(filesBy[v.id]||[]).filter(x=>x.kind==='review'),notes:notesBy[v.id]||[],resp:respBy[v.id]||[],
       code:v.code||undefined,comment:v.comment||'',decAt:v.decided_at,decBy:NM[v.decided_by]||''}))})).filter(r=>r.revs.length);
   S.seq={};S.reqs.forEach(r=>S.seq[r.type]=Math.max(S.seq[r.type]||0,r.n));
   const ifBy={},ifEv={};ifl.data.forEach(f=>{if(f.event_id)(ifEv[f.event_id]=ifEv[f.event_id]||[]).push(U(f.path));else (ifBy[f.instruction_id]=ifBy[f.instruction_id]||[]).push(U(f.path));});
