@@ -53,8 +53,6 @@ header.top .wrap{display:flex;flex-direction:column;gap:6px;padding-block:10px 1
 .langbtn:hover{background:rgba(255,255,255,.14)}
 .who{font:inherit;font-size:13px;font-weight:600;border:0;background:rgba(255,255,255,.16);color:inherit;border-radius:999px;padding:5px 12px;cursor:pointer;max-width:62vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .who:hover{background:rgba(255,255,255,.26)}
-.bell{position:relative;padding:5px 10px}
-.bdg{position:absolute;top:-4px;inset-inline-end:-4px;background:var(--d);color:#fff;border-radius:999px;font-size:11px;font-weight:700;min-width:18px;height:18px;line-height:18px;padding:0 4px;text-align:center;font-family:var(--mono)}
 .auth{max-width:420px;margin:24px auto 0}
 .auth h2{margin-top:0}
 .auth form{display:flex;flex-direction:column;gap:12px}
@@ -76,16 +74,6 @@ header.top .wrap{display:flex;flex-direction:column;gap:6px;padding-block:10px 1
 @media (max-width:460px){#if{grid-template-columns:1fr!important}}
 a.btn{text-decoration:none;display:inline-block}
 @media (max-width:460px){.mem{grid-template-columns:auto 1fr}.mem .acts{grid-column:1/-1;justify-content:flex-start}}
-.docs{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.doc{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:6px 10px;text-decoration:none;max-width:100%;font-size:13px}
-a.doc:hover{border-color:var(--accent)}
-.doc .di{font-family:var(--mono);font-size:10.5px;font-weight:700;background:var(--d);color:#fff;border-radius:4px;padding:1px 5px}
-.doc .dn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}
-.doc .ds{color:var(--muted);font-size:11.5px;font-family:var(--mono)}
-.doc .ndel{margin:0}
-.dkv{margin:6px 0}.dkv small{display:block;font-size:11.5px;color:var(--muted)}
-.dtab{margin:8px 0}.dtab h4{font-size:12.5px;color:var(--muted);margin:0 0 4px}
-.tsel{padding:5px 8px;font-size:13.5px;border-radius:999px;width:auto;max-width:100%}
 .invcode{font-family:var(--mono);font-size:20px;letter-spacing:3px;background:var(--bg);border:1px dashed var(--accent);border-radius:10px;padding:8px 14px;display:inline-block;direction:ltr}
 [dir=ltr] .no,[dir=ltr] [style*="text-align:right"]{text-align:left!important}
 main{padding-block:16px 96px}
@@ -118,8 +106,6 @@ nav.tabs{position:fixed;bottom:0;inset-inline:0;background:var(--surface);border
 nav.tabs .wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-block:8px}
 nav.tabs button{font:inherit;font-weight:600;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:10px;cursor:pointer}
 nav.tabs button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-nav.tabs button.sel{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
-nav.tabs button{font-size:14px;padding:10px 4px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
 form .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:460px){form .grid{grid-template-columns:1fr}}
@@ -302,10 +288,6 @@ textarea{min-height:90px;resize:vertical}
 .sheet .sig .s{border-bottom:1px solid #000;height:9mm}
 .sheet .foot{display:flex;justify-content:space-between;font-size:9.5px;color:#444;margin-top:4px}
 .sheet tr{page-break-inside:avoid;break-inside:avoid}
-.sheet .dtab h4{font-size:11.5px;margin:6px 0 2px}
-.sheet .dtab table th{background:#e9e9e9}
-.sheet .dkv{margin:3px 0}.sheet .dkv small{display:inline;font-weight:700;margin-inline-end:6px}.sheet .dkv div{display:inline}
-.sheet .lwrap{overflow:visible;border:0}
 </style>
 <style id="repcss">
 .rep{background:#fff;color:#000;max-width:210mm;margin:0 auto;padding:8mm;font-family:"IBM Plex Sans Arabic",Tahoma,sans-serif;font-size:12px;line-height:1.5;box-shadow:0 1px 6px rgba(0,0,0,.15)}
@@ -336,7 +318,7 @@ textarea{min-height:90px;resize:vertical}
     <div class="brand">
       <h1>كود - كواليتي</h1>
       <div class="hbtns"><button id="lang" class="langbtn" type="button" aria-label="Switch language">EN</button>
-      <button id="bell" class="who bell" type="button" hidden aria-label="الإشعارات">🔔<span class="bdg" hidden>0</span></button><button id="who" class="who" type="button" hidden></button></div>
+      <button id="who" class="who" type="button" hidden></button></div>
     </div>
     <div class="proj"></div>
   </div>
@@ -346,9 +328,8 @@ textarea{min-height:90px;resize:vertical}
 
 <nav class="tabs" aria-label="التنقل">
   <div class="wrap">
-    <button id="tab-dash" type="button" hidden>لوحة المتابعة</button>
+    <button id="tab-dash" type="button" class="primary" hidden>لوحة المتابعة</button>
     <button id="tab-log" type="button">سجل الطلبات</button>
-    <button id="tab-ins" type="button">الأوامر و NCR</button>
     <button id="tab-photo" type="button" hidden>التقرير المصور</button>
     <button id="tab-new" type="button" class="primary">+ طلب جديد</button>
   </div>
@@ -364,7 +345,7 @@ const TYPES={
   RFI:{name:'طلب استفسار',en:'REQUEST FOR INFORMATION - RFI'},
   RR:{name:'طلب بدء الصب',en:'POURING REQUEST - RR'}
 };
-const DISC=['إنشائي','معماري','كهرباء','ميكانيكا','صحي','مساحة','أخرى'];
+const DISC=['إنشائي','معماري','كهرباء','ميكانيكا','مساحة','أخرى'];
 const CODES={A:{k:'أ',t:'معتمد'},B:{k:'ب',t:'معتمد مع ملاحظات'},C:{k:'ج',t:'يعاد التقديم بعد الملاحظات'},D:{k:'د',t:'مرفوض'}};
 let PRJ='', PRJ_NAME='', OWNER='', CONTRACTOR='', CONSULTANT='', SLA_DAYS=2, PID=null;
 
@@ -581,339 +562,7 @@ const EN={
 "مش مسموحلك تعمل كده":"You are not allowed to do that",
 "ابعتله الرابط ده (واتساب أو إيميل):":"Send them this link (WhatsApp or email):",
 "إرسال واتساب":"Send via WhatsApp",
-"اتنسخ الرابط":"Link copied",
-"أوامر الموقع و NCR":"Site instructions & NCRs",
-"الأوامر و NCR":"Instructions & NCR",
-"أمر موقع":"Site instruction",
-"تقرير عدم مطابقة":"Non-conformance report",
-"بانتظار استلام المقاول":"Awaiting contractor receipt",
-"عند المقاول للتنفيذ":"With contractor for action",
-"بانتظار الإقفال":"Awaiting close-out",
-"مقفول":"Closed",
-"المقاول استلم":"Contractor acknowledged",
-"المقاول نفّذ":"Contractor completed",
-"اتقفل":"Closed",
-"اترفض التنفيذ — رجع للمقاول":"Rejected — returned to contractor",
-"مفتوح عند المقاول":"Open with contractor",
-"متأخر عن الموعد":"Overdue",
-"+ إصدار أمر موقع / NCR":"+ Issue SI / NCR",
-"إصدار أمر موقع / NCR":"Issue SI / NCR",
-"اتصدر":"Issued",
-"الموعد":"Due",
-"مفيش نتايج بالفلتر ده.":"No results for this filter.",
-"لسه مفيش أوامر موقع أو تقارير عدم مطابقة.":"No site instructions or NCRs yet.",
-"→ رجوع للأوامر":"← Back to instructions",
-"رجوع للأوامر":"Back to instructions",
-"الرقم":"No.",
-"مطلوب التنفيذ قبل":"Required by",
-"مثال: تعشيش في عمود C3 بالدور الأرضي":"e.g. Honeycombing in column C3, ground floor",
-"المطلوب تنفيذه":"Instruction details",
-"اكتب الأمر بالتفصيل":"Describe the instruction in detail",
-"إصدار وإرسال للمقاول":"Issue & send to contractor",
-"وصف عدم المطابقة":"Non-conformance description",
-"اكتب الموضوع الأول":"Enter the subject first",
-"جاري الإرسال…":"Sending…",
-"المقاول لسه ما أكدش الاستلام.":"The contractor has not acknowledged yet.",
-"الأمر عند المقاول للتنفيذ.":"The instruction is with the contractor for action.",
-"بانتظار إقفال":"Awaiting close-out by",
-"الأمر اتقفل.":"This instruction is closed.",
-"تاريخ الإصدار":"Issue date",
-"مطلوب قبل":"Required by",
-"سير الأمر":"History",
-"سبب عدم المطابقة:":"Root cause:",
-"الإجراء التصحيحي:":"Corrective action:",
-"تأكيد الاستلام":"Acknowledge receipt",
-"ملاحظة (اختياري)":"Note (optional)",
-"تأكيد استلام الأمر":"Confirm receipt",
-"الرد على عدم المطابقة":"Respond to NCR",
-"تنفيذ الأمر":"Complete instruction",
-"سبب عدم المطابقة":"Root cause",
-"الإجراء التصحيحي اللي اتعمل":"Corrective action taken",
-"اللي اتنفذ":"Work done",
-"صور بعد التنفيذ":"Photos after completion",
-"تم التنفيذ — إرسال للمراجعة":"Completed — send for review",
-"مراجعة التنفيذ":"Review completion",
-"تعليق (مطلوب في حالة الرفض)":"Comment (required if rejecting)",
-"إقفال الأمر":"Close instruction",
-"رفض وإعادة للمقاول":"Reject & return to contractor",
-"اكتب الإجراء التصحيحي":"Enter the corrective action",
-"اكتب اللي اتنفذ":"Describe the work done",
-"اكتب سبب الرفض":"Enter the rejection reason",
-"الرقم:":"No.:",
-"مطلوب قبل:":"Required by:",
-"أصدره:":"Issued by:",
-"استلام المقاول":"Contractor receipt",
-"الاسم:":"Name:",
-"رد المقاول والإجراء التصحيحي":"Contractor response & corrective action",
-"التنفيذ":"Completion",
-"الإجراء التصحيحي":"Corrective action",
-"صور":"Photos",
-"الإقفال":"Close-out",
-"الحالة":"Status",
-"مفتوح":"Open",
-"تعليق":"Comment",
-"→ رجوع للأمر":"← Back to instruction",
-"رجوع للأمر":"Back to instruction",
-"الإشعارات":"Notifications",
-"قرار الاستشاري على":"Consultant decision on",
-"تقرير عدم مطابقة جديد":"New NCR",
-"أمر موقع جديد":"New site instruction",
-"اترفض تنفيذ":"Rejected:",
-"مطلوب إعادة":"rework required",
-"المشروع ده مش متاح ليك":"This project is not available to you",
-"تعليم الكل كمقروء":"Mark all as read",
-"فعّل تنبيهات الجهاز عشان يوصلك تنبيه حتى لو التطبيق في الخلفية.":"Enable device notifications to get alerts even when the app is in the background.",
-"تفعيل التنبيهات":"Enable notifications",
-"مفيش إشعارات لسه.":"No notifications yet.",
-"المفتوح دلوقتي":"Currently open",
-"أوامر موقع مفتوحة":"Open site instructions",
-"تقارير عدم مطابقة مفتوحة":"Open NCRs",
-"عرض الأوامر":"View instructions",
-"الأوامر":"Instructions",
-"اللوج":"Log",
-"الطلبات":"Requests",
-"المقاول نفّذ — بانتظار الإقفال":"contractor completed — awaiting close-out",
-"الاستشاري والمالك":"Consultant & owner",
-"✅ إشعارات الموبايل شغالة على الجهاز ده — هتوصلك حتى والتطبيق مقفول.":"✅ Mobile notifications are on for this device — you will get them even when the app is closed.",
-"إيقاف على الجهاز ده":"Turn off on this device",
-"فعّل إشعارات الموبايل عشان يوصلك تنبيه حتى والتطبيق مقفول — زي الواتساب.":"Turn on mobile notifications to get alerts even when the app is closed — like WhatsApp.",
-"تفعيل الإشعارات على الجهاز ده":"Turn on notifications on this device",
-"الإشعارات مقفولة من إعدادات المتصفح للموقع ده. افتح إعدادات الموقع (علامة القفل جنب الرابط) واسمح بالإشعارات، وبعدين ارجع هنا.":"Notifications are blocked in your browser settings for this site. Open site settings (the lock icon next to the address), allow notifications, then come back here.",
-"على الآيفون: دوس زرار المشاركة في Safari ←":"On iPhone: tap the Share button in Safari →",
-"، وافتح التطبيق من الأيقونة، وبعدين ارجع هنا وفعّل الإشعارات.":", open the app from the icon, then come back here and turn on notifications.",
-"المتصفح ده مش بيدعم إشعارات الموبايل. جرّب Chrome على أندرويد، أو Safari على آيفون بعد Add to Home Screen.":"This browser does not support mobile notifications. Try Chrome on Android, or Safari on iPhone after Add to Home Screen.",
-"اتفعلت الإشعارات على الجهاز ده":"Notifications turned on for this device",
-"مسمحتش بالإشعارات":"Notifications were not allowed",
-"اتوقفت الإشعارات على الجهاز ده":"Notifications turned off for this device",
-"قائمة فحص (Checklist)":"Checklist",
-"كروكي / لوحة":"Sketch / drawing",
-"نتائج اختبارات":"Test results",
-"المادة مطابقة للمادة / العينة المعتمدة (النوع، المنشأ، المواصفة)":"Material matches the approved material / sample (type, origin, spec)",
-"شهادات المنشأ والجودة مرفقة ومطابقة للشحنة":"Origin and quality certificates attached and match the shipment",
-"سلامة العبوات وعدم وجود تلف أو كسر أو رطوبة":"Packaging intact — no damage, breakage or moisture",
-"تاريخ الصلاحية ساري ومناسب لمدة الاستخدام":"Expiry date valid for the period of use",
-"التخزين بالموقع مطابق لتعليمات المصنع":"Site storage per manufacturer instructions",
-"أخذ عينات للاختبار (إن تطلب الأمر)":"Samples taken for testing (if required)",
-"قبل الصب: استلام حديد التسليح والأشاير (IR معتمد)":"Before pour: rebar and dowels inspected (approved IR)",
-"قبل الصب: استلام الشدات (الأبعاد، الرأسية، الإحكام، السند)":"Before pour: formwork inspected (dimensions, plumb, tightness, props)",
-"قبل الصب: تنظيف وتخشين أسطح الخرسانة القديمة":"Before pour: old concrete surfaces cleaned and roughened",
-"قبل الصب: دهان مادة الربط (إن وجدت) في حدود زمن الصلاحية":"Before pour: bonding agent applied (if any) within its open time",
-"قبل الصب: وضع البسكوت وضمان الغطاء الخرساني":"Before pour: spacers placed and concrete cover ensured",
-"قبل الصب: توفر الهزازات والمعدات الاحتياطية والإنارة":"Before pour: vibrators, standby equipment and lighting available",
-"قبل الصب: استلام الأعمال الكهروميكانيكية المدفونة":"Before pour: embedded MEP works inspected",
-"أثناء الصب: مطابقة بون التوريد (المقاومة، الكمية، وقت الخروج)":"During pour: delivery ticket checked (strength, quantity, batch time)",
-"أثناء الصب: اختبار الهبوط (Slump) / الانسياب":"During pour: slump / flow test",
-"أثناء الصب: أخذ مكعبات الاختبار وترقيمها":"During pour: test cubes taken and numbered",
-"أثناء الصب: الدمك الجيد وعدم حدوث انفصال حبيبي":"During pour: proper compaction, no segregation",
-"بعد الصب: بدء المعالجة وتحديد مدتها":"After pour: curing started and duration set",
-"بعد الصب: عدم فك الشدات / السند قبل المدة المحددة":"After pour: formwork / props not removed before the set time",
-"مقبول – يسمح بالبدء في المرحلة التالية":"Accepted – proceed to next stage",
-"مقبول مع ملاحظات – تستكمل قبل المرحلة التالية":"Accepted with comments – complete before next stage",
-"غير مقبول – يعاد الفحص بعد استيفاء الملاحظات":"Not accepted – re-inspect after comments",
-"طلب استلام أعمال":"Inspection request",
-"استلامات":"Inspections",
-"يقر المقاول بأن الأعمال المذكورة قد تم تنفيذها وفحصها داخلياً ومطابقتها للرسومات والمواصفات المعتمدة وهي جاهزة للاستلام.":"The contractor confirms the works listed were executed and internally inspected per the approved drawings and specifications and are ready for inspection.",
-"تاريخ ووقت الفحص المطلوب":"Requested inspection date & time",
-"المرجع (لوحة / MS معتمد)":"Reference (drawing / approved MS)",
-"الأعمال المطلوب استلامها":"Works to be inspected",
-"البيان / وصف الأعمال":"Description of works",
-"المحور / الموقع":"Grid / location",
-"الكمية":"Qty",
-"المرحلة":"Stage",
-"قبل البدء":"Before start",
-"أثناء التنفيذ":"During works",
-"قبل الصب / التغطية":"Before pour / covering",
-"استلام نهائي":"Final inspection",
-"طلب فحص واستلام مواد بالموقع":"Material inspection request",
-"يقر المقاول بأن المواد الموردة مطابقة للمواد المعتمدة وجاهزة للفحص.":"The contractor confirms the delivered materials match the approved materials and are ready for inspection.",
-"رقم اعتماد المادة (MAT)":"Material approval no. (MAT)",
-"رقم إذن التوريد / الفاتورة":"Delivery note / invoice no.",
-"المواد الموردة":"Delivered materials",
-"وصف المادة":"Material",
-"المنشأ / المصنع":"Origin / manufacturer",
-"الوحدة":"Unit",
-"الكمية الموردة":"Qty delivered",
-"رقم التشغيلة / تاريخ الإنتاج":"Batch no. / production date",
-"تاريخ الصلاحية":"Expiry date",
-"بنود الفحص":"Inspection items",
-"طلب تصريح صب خرسانة":"Concrete pour request",
-"يقر المقاول باستكمال جميع الأعمال التحضيرية وأن الموقع جاهز للصب.":"The contractor confirms all preparatory works are complete and the site is ready for pouring.",
-"رقم طلب استلام الحديد / الشدة (IR)":"Rebar / formwork IR no.",
-"العنصر":"Element",
-"قميص عمود":"Column jacket",
-"قميص كمرة":"Beam jacket",
-"بلاطة":"Slab",
-"قاعدة":"Footing",
-"مقاومة الخرسانة fcu (ن/مم²)":"Concrete strength fcu (N/mm²)",
-"الكمية التقديرية (م³)":"Estimated qty (m³)",
-"نوع الخرسانة":"Concrete type",
-"جاهزة":"Ready-mix",
-"موقع":"Site-mixed",
-"ذاتية الدمك SCC":"Self-compacting SCC",
-"جراوت":"Grout",
-"المورد / المحطة":"Supplier / plant",
-"نوع الأسمنت":"Cement type",
-"الإضافات":"Admixtures",
-"بداية الصب المتوقعة":"Expected pour start",
-"طريقة الصب":"Placing method",
-"مضخة":"Pump",
-"يدوي":"Manual",
-"ونش":"Crane",
-"طلب إجراء اختبار":"Test request",
-"مكان الاختبار":"Test location",
-"بالموقع":"On site",
-"معمل معتمد":"Approved lab",
-"اسم المعمل":"Lab name",
-"موعد الاختبار / أخذ العينات":"Test / sampling date",
-"الاختبارات":"Tests",
-"نوع الاختبار":"Test type",
-"العنصر / المادة":"Element / material",
-"عدد العينات":"No. of samples",
-"المواصفة القياسية":"Standard",
-"القيمة المطلوبة":"Required value",
-"ملاحظات / تعليمات الاستشاري (حضور أخذ العينات)":"Consultant comments / instructions (sampling attendance)",
-"طلب اعتماد مواد":"Material submittal",
-"اعتمادات":"Submittals",
-"يقر المقاول بأنه قد تمت مراجعة المستندات المقدمة ومطابقتها للرسومات والمواصفات الفنية وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.":"The contractor confirms the submitted documents were reviewed against the drawings, specifications and contract conditions and are ready for review and approval.",
-"المواد":"Materials",
-"اسم المادة / الصنف":"Material / item",
-"المنشأ / الشركة المصنعة":"Origin / manufacturer",
-"المورد":"Supplier",
-"بند المقايسة":"BOQ item",
-"مرجع المواصفات":"Spec reference",
-"النشرة الفنية":"Technical data sheet",
-"شهادة المنشأ":"Certificate of origin",
-"شهادة المطابقة / الجودة":"Conformity / quality certificate",
-"عينة":"Sample",
-"خطاب المورد":"Supplier letter",
-"سابقة أعمال":"Track record",
-"مدى المطابقة للمواصفات / الانحرافات (إن وجدت)":"Compliance with specs / deviations (if any)",
-"طلب اعتماد عينة":"Sample submittal",
-"تحفظ العينة المعتمدة بالموقع موقعة ومختومة من الاستشاري للمطابقة عليها عند التوريد.":"The approved sample is kept on site, signed and stamped by the consultant, for comparison on delivery.",
-"رقم اعتماد المادة":"Material approval no.",
-"العينات":"Samples",
-"وصف العينة":"Sample description",
-"المقاس / اللون":"Size / colour",
-"مكان حفظ العينة":"Sample storage location",
-"ملاحظات المقاول":"Contractor notes",
-"طلب اعتماد رسومات تنفيذية":"Shop drawing submittal",
-"يقر المقاول بأنه قد تمت مراجعة الرسومات المقدمة ومطابقتها للتصميم والمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.":"The contractor confirms the submitted drawings were checked against the design, specifications and contract and are ready for review and approval.",
-"اللوحات":"Drawings",
-"رقم اللوحة":"Drawing no.",
-"عنوان اللوحة":"Drawing title",
-"مقياس الرسم":"Scale",
-"المرجع (لوحة التصميم)":"Reference (design drawing)",
-"نسخ ورقية":"Hard copies",
-"نسخة إلكترونية (PDF/DWG)":"Electronic copy (PDF/DWG)",
-"حسابات إنشائية":"Structural calculations",
-"تقرير فني":"Technical report",
-"طلب اعتماد طريقة تنفيذ":"Method statement submittal",
-"يقر المقاول بأنه قد تمت مراجعة طريقة التنفيذ ومطابقتها للرسومات والمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.":"The contractor confirms the method statement was checked against the drawings, specifications and contract and is ready for review and approval.",
-"محتويات طريقة التنفيذ":"Method statement contents",
-"نطاق العمل":"Scope of work",
-"المواد والمعدات":"Materials & equipment",
-"العمالة والإشراف":"Labour & supervision",
-"خطوات التنفيذ":"Work sequence",
-"السند المؤقت":"Temporary support",
-"خطة الفحص والاختبار ITP":"Inspection & test plan (ITP)",
-"تقييم المخاطر والسلامة":"Risk assessment & safety",
-"الجدول الزمني":"Schedule",
-"الأعمال اللي تغطيها طريقة التنفيذ":"Works covered by the method statement",
-"بيان الأعمال":"Works",
-"المرجع (لوحات / مواصفات)":"Reference (drawings / specs)",
-"ملخص خطوات التنفيذ":"Summary of work steps",
-"طلب اعتماد مستندات فنية":"Technical documents submittal",
-"يقر المقاول بأنه قد تمت مراجعة المستندات المقدمة ومطابقتها للمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.":"The contractor confirms the submitted documents were checked against the specifications and contract and are ready for review and approval.",
-"المستندات":"Documents",
-"البيان / وصف المستند":"Document description",
-"نوع المستند (SD/MS/MAT/TD/CER/TR/CAL/QS/O)":"Document type (SD/MS/MAT/TD/CER/TR/CAL/QS/O)",
-"عدد النسخ":"Copies",
-"طلب اعتماد مقاول باطن / مورد":"Subcontractor / supplier approval",
-"يقر المقاول بمسؤوليته الكاملة عن أعمال مقاول الباطن / المورد أمام المالك طبقاً لشروط التعاقد.":"The contractor accepts full responsibility to the owner for the subcontractor / supplier works per the contract.",
-"مقاول باطن":"Subcontractor",
-"مورد":"Supplier",
-"معمل اختبارات":"Testing lab",
-"اسم الشركة":"Company name",
-"العنوان / التليفون":"Address / phone",
-"نطاق الأعمال المسندة":"Scope of assigned works",
-"السجل التجاري والبطاقة الضريبية":"Commercial register & tax card",
-"شهادة الاتحاد المصري للمقاولين":"Egyptian Federation of Contractors certificate",
-"سابقة الأعمال":"Previous works",
-"شهادات الأيزو":"ISO certificates",
-"السير الذاتية للفنيين":"Staff CVs",
-"المعدات المتاحة":"Available equipment",
-"مشروعات مماثلة سابقة":"Similar previous projects",
-"الجهة المالكة":"Owner",
-"السنة":"Year",
-"القيمة":"Value",
-"طلب اعتماد حصر كميات":"Quantity survey submittal",
-"مالية":"Financial",
-"يقر المقاول بأن الكميات الموضحة تم حصرها فعلياً من الطبيعة وطبقاً للأعمال المستلمة.":"The contractor confirms the quantities were measured on site per the accepted works.",
-"رقم المستخلص":"Payment certificate no.",
-"البنود":"Items",
-"رقم البند":"Item no.",
-"وصف البند":"Item description",
-"الموقع / الدور":"Location / floor",
-"رقم IR المرجعي":"Reference IR no.",
-"كروكي حصر":"Measurement sketch",
-"طلبات الاستلام المعتمدة":"Approved inspection requests",
-"محاضر قياس":"Measurement records",
-"طلب أعمال إضافية / أمر تغيير":"Variation order request",
-"سبب التغيير":"Reason for change",
-"تعليمات الاستشاري / المالك":"Consultant / owner instruction",
-"ظروف موقع غير متوقعة":"Unforeseen site conditions",
-"تعديل تصميم":"Design change",
-"المرجع (SI / RFI)":"Reference (SI / RFI)",
-"وصف الأعمال الإضافية / التغيير":"Description of additional works / change",
-"سعر الوحدة":"Unit rate",
-"الإجمالي":"Total",
-"مصدر السعر":"Rate source",
-"إجمالي القيمة التقديرية":"Estimated total value",
-"الأثر على المدة (يوم)":"Time impact (days)",
-"توصية الاستشاري":"Consultant recommendation",
-"طلب استفسار فني":"Request for information",
-"المرجع (لوحة / بند مواصفات)":"Reference (drawing / spec clause)",
-"الرد مطلوب قبل":"Reply required by",
-"الاستفسار / وصف المشكلة":"Query / problem description",
-"الحل المقترح من المقاول (إن وجد)":"Contractor proposed solution (if any)",
-"التأثير المتوقع":"Expected impact",
-"على التكلفة":"Cost",
-"على البرنامج الزمني":"Schedule",
-"على التصميم":"Design",
-"مالية واستفسارات":"Financial & queries",
-"تم الرد":"Answered",
-"مطابق":"Compliant",
-"غير مطابق":"Non-compliant",
-"لا ينطبق":"N/A",
-"البند":"Item",
-"النتيجة":"Result",
-"مستند":"Document",
-"الملف لازم يكون PDF":"The file must be a PDF",
-"أكبر من 25 ميجا":"larger than 25 MB",
-"رد الاستشاري":"Consultant reply",
-"اكتب الرد على الاستفسار":"Write the reply to the query",
-"اكتب الرد الأول":"Write the reply first",
-"نقر بأن الأعمال المطلوب استلامها تم تنفيذها ومراجعتها طبقًا للرسومات المعتمدة والمواصفات وشروط العقد.":"We confirm the works for inspection have been executed and checked per the approved drawings, specifications and contract conditions.",
-"صحي":"Plumbing",
-"العنصر / المنطقة":"Element / area",
-"ملاحظات / وصف إضافي":"Notes / additional description",
-"بيانات النموذج":"Form details",
-"المستندات والرسومات (PDF)":"Documents & drawings (PDF)",
-"المستندات مرفقة كـ PDF فوق":"Documents are attached as PDF above",
-"رسومات ومستندات الاعتماد بصيغة PDF — حتى 25 ميجا للملف":"Submittal drawings and documents as PDF — up to 25 MB per file",
-"📄 إضافة PDF":"📄 Add PDF",
-"+ سطر":"+ Row",
-"مستندات / رسومات معدّلة (PDF)":"Revised documents / drawings (PDF)",
-"تعديل بيانات النموذج":"Edit form details",
-"مستندات PDF":"PDF documents",
-"🖼 صور":"🖼 Photos",
-"حذف":"Delete",
-"PDF بتعليقات الاستشاري (اختياري)":"Consultant marked-up PDF (optional)",
-"علّم على الرسومات أو المستندات في أي برنامج (Acrobat / Bluebeam / Edge) واحفظها، وارفعها هنا عشان توصل للمقاول مع القرار.":"Mark up the drawings or documents in any app (Acrobat / Bluebeam / Edge), save, and upload here so the contractor receives them with the decision.",
-"📎 PDF بتعليقات الاستشاري":"📎 Consultant marked-up PDF",
-"افتح الملف وشوف العلامات على الرسومات / المستندات.":"Open the file to see the mark-ups on the drawings / documents.",
-"التعليقات في ملف الـ PDF المرفق":"Comments are in the attached PDF",
-"PDF بالتعليقات":"Marked-up PDF"
+"اتنسخ الرابط":"Link copied"
 };
 let RX=null;
 function buildRx(){const ks=Object.keys(EN).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));RX=new RegExp('(?<![\\u0600-\\u06FF])('+ks.join('|')+')(?![\\u0600-\\u06FF])','g');}
@@ -922,9 +571,9 @@ const EXACT={'م':'#','ي':'d'};
 function tr(s){if(LANG!=='en'||!s||!/[؀-ۿ]/.test(s))return s;const k=s.trim();if(EXACT[k])return s.replace(k,EXACT[k]);if(!RX)buildRx();
   return s.replace(RX,m=>EN[m]).replace(/(^|[^؀-ۿ])([أبجد])(?![؀-ۿ])/g,(m,a,b)=>a+AR_CODE[b]).replace(/،/g,',');}
 const ORIG=new WeakMap(), ORIGA=new WeakMap();
-const ATTRS=['placeholder','title','aria-label','alt','label'];
+const ATTRS=['placeholder','title','aria-label','alt'];
 function trDom(root){
-  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentNode&&(/^(TEXTAREA|SCRIPT|STYLE)$/.test(n.parentNode.nodeName)||(n.parentNode.closest&&n.parentNode.closest('[data-raw]')))?2:1});
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentNode&&/^(TEXTAREA|SCRIPT|STYLE)$/.test(n.parentNode.nodeName)?2:1});
   const L=[];let n;while((n=w.nextNode()))L.push(n);
   L.forEach(n=>{const v=n.nodeValue;if(!/[؀-ۿ]/.test(v))return;const t=tr(v);if(t!==v){ORIG.set(n,v);n.nodeValue=t;}});
   (root.querySelectorAll?root.querySelectorAll('['+ATTRS.join('],[')+']'):[]).forEach(e=>ATTRS.forEach(a=>{const v=e.getAttribute(a);if(v&&/[؀-ۿ]/.test(v)){const t=tr(v);if(t!==v){const o=ORIGA.get(e)||{};o[a]=v;ORIGA.set(e,o);e.setAttribute(a,t);}}}));
@@ -994,7 +643,6 @@ function save(){}
 let role='C', view={name:'log',filter:'ALL',type:'ALL'};
 const app=document.getElementById('app');
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const raw=s=>'<span data-raw>'+esc(s)+'</span>';
 const pad=n=>String(n).padStart(4,'0');
 const rv=i=>'REV'+String(i).padStart(2,'0');
 const num=(r,rev)=>`${PRJ}-${r.type}-${pad(r.n)}-${rv(rev)}`;
@@ -1010,128 +658,6 @@ function zoom(src,cap){const b=document.createElement('div');b.className='lightb
 function shrink(file,max){return new Promise(res=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas');const sc=Math.min(1,max/Math.max(im.width,im.height));c.width=im.width*sc;c.height=im.height*sc;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.72));};im.onerror=()=>res(null);im.src=fr.result;};fr.readAsDataURL(file);});}
 async function readImgs(list,arr,box){for(const f of [...list]){const u=await shrink(f,1000);if(u)arr.push(u);}box.innerHTML=arr.map(u=>`<img src="${u}" alt="مرفق">`).join('');}
 
-/* ---------- نماذج الاعتمادات (طبقًا لنماذج QC) ---------- */
-const ATT_STD=['قائمة فحص (Checklist)','كروكي / لوحة','نتائج اختبارات','صور'];
-const MIR_CHK=['المادة مطابقة للمادة / العينة المعتمدة (النوع، المنشأ، المواصفة)','شهادات المنشأ والجودة مرفقة ومطابقة للشحنة','سلامة العبوات وعدم وجود تلف أو كسر أو رطوبة','تاريخ الصلاحية ساري ومناسب لمدة الاستخدام','التخزين بالموقع مطابق لتعليمات المصنع','أخذ عينات للاختبار (إن تطلب الأمر)'];
-const RR_CHK=['قبل الصب: استلام حديد التسليح والأشاير (IR معتمد)','قبل الصب: استلام الشدات (الأبعاد، الرأسية، الإحكام، السند)','قبل الصب: تنظيف وتخشين أسطح الخرسانة القديمة','قبل الصب: دهان مادة الربط (إن وجدت) في حدود زمن الصلاحية','قبل الصب: وضع البسكوت وضمان الغطاء الخرساني','قبل الصب: توفر الهزازات والمعدات الاحتياطية والإنارة','قبل الصب: استلام الأعمال الكهروميكانيكية المدفونة','أثناء الصب: مطابقة بون التوريد (المقاومة، الكمية، وقت الخروج)','أثناء الصب: اختبار الهبوط (Slump) / الانسياب','أثناء الصب: أخذ مكعبات الاختبار وترقيمها','أثناء الصب: الدمك الجيد وعدم حدوث انفصال حبيبي','بعد الصب: بدء المعالجة وتحديد مدتها','بعد الصب: عدم فك الشدات / السند قبل المدة المحددة'];
-const CODES_INSP={A:'مقبول – يسمح بالبدء في المرحلة التالية',B:'مقبول مع ملاحظات – تستكمل قبل المرحلة التالية',C:'غير مقبول – يعاد الفحص بعد استيفاء الملاحظات',D:'مرفوض'};
-const FORMS={
-  IR:{name:'طلب استلام أعمال',en:'INSPECTION REQUEST - IR',g:'استلامات',codes:CODES_INSP,decl:'يقر المقاول بأن الأعمال المذكورة قد تم تنفيذها وفحصها داخلياً ومطابقتها للرسومات والمواصفات المعتمدة وهي جاهزة للاستلام.',fields:[
-    {k:'when',l:'تاريخ ووقت الفحص المطلوب',t:'datetime'},{k:'ref',l:'المرجع (لوحة / MS معتمد)',t:'text'},
-    {k:'items',l:'الأعمال المطلوب استلامها',t:'table',cols:['البيان / وصف الأعمال','المحور / الموقع','الكمية','ملاحظات'],rows:2},
-    {k:'stage',l:'المرحلة',t:'radio',opts:['قبل البدء','أثناء التنفيذ','قبل الصب / التغطية','استلام نهائي']},
-    {k:'att',l:'المرفقات',t:'checks',opts:ATT_STD}]},
-  MIR:{name:'طلب فحص واستلام مواد بالموقع',en:'MATERIAL INSPECTION REQUEST - MIR',g:'استلامات',codes:CODES_INSP,decl:'يقر المقاول بأن المواد الموردة مطابقة للمواد المعتمدة وجاهزة للفحص.',fields:[
-    {k:'mat',l:'رقم اعتماد المادة (MAT)',t:'text'},{k:'when',l:'تاريخ ووقت الفحص المطلوب',t:'datetime'},{k:'inv',l:'رقم إذن التوريد / الفاتورة',t:'text'},
-    {k:'items',l:'المواد الموردة',t:'table',cols:['وصف المادة','المنشأ / المصنع','الوحدة','الكمية الموردة','رقم التشغيلة / تاريخ الإنتاج','تاريخ الصلاحية'],rows:2},
-    {k:'chk',l:'بنود الفحص',t:'checklist',items:MIR_CHK}]},
-  RR:{name:'طلب تصريح صب خرسانة',en:'POURING REQUEST - RR',g:'استلامات',codes:CODES_INSP,decl:'يقر المقاول باستكمال جميع الأعمال التحضيرية وأن الموقع جاهز للصب.',fields:[
-    {k:'ir',l:'رقم طلب استلام الحديد / الشدة (IR)',t:'text'},
-    {k:'elem',l:'العنصر',t:'radio',opts:['قميص عمود','قميص كمرة','بلاطة','قاعدة','أخرى']},
-    {k:'fcu',l:'مقاومة الخرسانة fcu (ن/مم²)',t:'number'},{k:'qty',l:'الكمية التقديرية (م³)',t:'number'},
-    {k:'ctype',l:'نوع الخرسانة',t:'radio',opts:['جاهزة','موقع','ذاتية الدمك SCC','جراوت']},{k:'supplier',l:'المورد / المحطة',t:'text'},
-    {k:'cement',l:'نوع الأسمنت',t:'text'},{k:'admix',l:'الإضافات',t:'text'},
-    {k:'start',l:'بداية الصب المتوقعة',t:'datetime'},{k:'method',l:'طريقة الصب',t:'radio',opts:['مضخة','يدوي','ونش']},
-    {k:'chk',l:'بنود الفحص',t:'checklist',items:RR_CHK}]},
-  TR:{name:'طلب إجراء اختبار',en:'TEST REQUEST - TR',g:'استلامات',decl:'',fields:[
-    {k:'place',l:'مكان الاختبار',t:'radio',opts:['بالموقع','معمل معتمد']},{k:'lab',l:'اسم المعمل',t:'text'},
-    {k:'when',l:'موعد الاختبار / أخذ العينات',t:'datetime'},
-    {k:'items',l:'الاختبارات',t:'table',cols:['نوع الاختبار','العنصر / المادة','عدد العينات','المواصفة القياسية','القيمة المطلوبة'],rows:2}],reviewLabel:'ملاحظات / تعليمات الاستشاري (حضور أخذ العينات)'},
-  MAT:{name:'طلب اعتماد مواد',en:'MATERIAL SUBMITTAL - MAT',g:'اعتمادات',decl:'يقر المقاول بأنه قد تمت مراجعة المستندات المقدمة ومطابقتها للرسومات والمواصفات الفنية وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.',fields:[
-    {k:'items',l:'المواد',t:'table',cols:['اسم المادة / الصنف','المنشأ / الشركة المصنعة','المورد','بند المقايسة','مرجع المواصفات'],rows:2},
-    {k:'att',l:'المرفقات',t:'checks',opts:['النشرة الفنية','شهادة المنشأ','شهادة المطابقة / الجودة','نتائج اختبارات','عينة','خطاب المورد','سابقة أعمال','MSDS']},
-    {k:'dev',l:'مدى المطابقة للمواصفات / الانحرافات (إن وجدت)',t:'textarea'}]},
-  SMP:{name:'طلب اعتماد عينة',en:'SAMPLE SUBMITTAL - SMP',g:'اعتمادات',decl:'تحفظ العينة المعتمدة بالموقع موقعة ومختومة من الاستشاري للمطابقة عليها عند التوريد.',fields:[
-    {k:'mat',l:'رقم اعتماد المادة',t:'text'},
-    {k:'items',l:'العينات',t:'table',cols:['وصف العينة','المنشأ / المصنع','المقاس / اللون','مكان حفظ العينة','ملاحظات'],rows:2},
-    {k:'cnotes',l:'ملاحظات المقاول',t:'textarea'}]},
-  SD:{name:'طلب اعتماد رسومات تنفيذية',en:'SHOP DRAWING SUBMITTAL - SD',g:'اعتمادات',decl:'يقر المقاول بأنه قد تمت مراجعة الرسومات المقدمة ومطابقتها للتصميم والمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.',fields:[
-    {k:'items',l:'اللوحات',t:'table',cols:['رقم اللوحة','الإصدار','عنوان اللوحة','مقياس الرسم','المرجع (لوحة التصميم)'],rows:3},
-    {k:'att',l:'المرفقات',t:'checks',opts:['نسخ ورقية','نسخة إلكترونية (PDF/DWG)','حسابات إنشائية','تقرير فني']}]},
-  MS:{name:'طلب اعتماد طريقة تنفيذ',en:'METHOD STATEMENT - MS',g:'اعتمادات',decl:'يقر المقاول بأنه قد تمت مراجعة طريقة التنفيذ ومطابقتها للرسومات والمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.',fields:[
-    {k:'cont',l:'محتويات طريقة التنفيذ',t:'checks',opts:['نطاق العمل','المواد والمعدات','العمالة والإشراف','خطوات التنفيذ','السند المؤقت','خطة الفحص والاختبار ITP','تقييم المخاطر والسلامة','الجدول الزمني']},
-    {k:'items',l:'الأعمال اللي تغطيها طريقة التنفيذ',t:'table',cols:['بيان الأعمال','المرجع (لوحات / مواصفات)','ملاحظات'],rows:2},
-    {k:'steps',l:'ملخص خطوات التنفيذ',t:'textarea'}]},
-  TOD:{name:'طلب اعتماد مستندات فنية',en:'TECHNICAL DOCUMENTS - TOD',g:'اعتمادات',decl:'يقر المقاول بأنه قد تمت مراجعة المستندات المقدمة ومطابقتها للمواصفات وشروط التعاقد، وأنها جاهزة للمراجعة والاعتماد.',fields:[
-    {k:'items',l:'المستندات',t:'table',cols:['البيان / وصف المستند','نوع المستند (SD/MS/MAT/TD/CER/TR/CAL/QS/O)','عدد النسخ','ملاحظات'],rows:3}]},
-  SUB:{name:'طلب اعتماد مقاول باطن / مورد',en:'SUBCONTRACTOR / SUPPLIER APPROVAL - SUB',g:'اعتمادات',decl:'يقر المقاول بمسؤوليته الكاملة عن أعمال مقاول الباطن / المورد أمام المالك طبقاً لشروط التعاقد.',fields:[
-    {k:'kind',l:'النوع',t:'radio',opts:['مقاول باطن','مورد','معمل اختبارات']},{k:'company',l:'اسم الشركة',t:'text'},{k:'contact',l:'العنوان / التليفون',t:'text'},
-    {k:'scope',l:'نطاق الأعمال المسندة',t:'textarea'},
-    {k:'att',l:'المرفقات',t:'checks',opts:['السجل التجاري والبطاقة الضريبية','شهادة الاتحاد المصري للمقاولين','سابقة الأعمال','شهادات الأيزو','السير الذاتية للفنيين','المعدات المتاحة']},
-    {k:'prev',l:'مشروعات مماثلة سابقة',t:'table',cols:['المشروع','الجهة المالكة','السنة','القيمة'],rows:2}]},
-  QS:{name:'طلب اعتماد حصر كميات',en:'QUANTITY SURVEY - QS',g:'مالية',decl:'يقر المقاول بأن الكميات الموضحة تم حصرها فعلياً من الطبيعة وطبقاً للأعمال المستلمة.',fields:[
-    {k:'ipc',l:'رقم المستخلص',t:'text'},
-    {k:'items',l:'البنود',t:'table',cols:['رقم البند','وصف البند','الوحدة','الموقع / الدور','الكمية','رقم IR المرجعي','ملاحظات'],rows:3},
-    {k:'att',l:'المرفقات',t:'checks',opts:['كروكي حصر','طلبات الاستلام المعتمدة','صور','محاضر قياس']}]},
-  VO:{name:'طلب أعمال إضافية / أمر تغيير',en:'VARIATION ORDER REQUEST - VO',g:'مالية',decl:'',fields:[
-    {k:'reason',l:'سبب التغيير',t:'radio',opts:['تعليمات الاستشاري / المالك','ظروف موقع غير متوقعة','تعديل تصميم','أخرى']},{k:'ref',l:'المرجع (SI / RFI)',t:'text'},
-    {k:'what',l:'وصف الأعمال الإضافية / التغيير',t:'textarea'},
-    {k:'items',l:'البنود',t:'table',cols:['وصف البند','الوحدة','الكمية','سعر الوحدة','الإجمالي','مصدر السعر'],rows:2,calc:[2,3,4]},
-    {k:'total',l:'إجمالي القيمة التقديرية',t:'number'},{k:'days',l:'الأثر على المدة (يوم)',t:'number'}],reviewLabel:'توصية الاستشاري'},
-  RFI:{name:'طلب استفسار فني',en:'REQUEST FOR INFORMATION - RFI',g:'مالية',answer:true,decl:'',fields:[
-    {k:'ref',l:'المرجع (لوحة / بند مواصفات)',t:'text'},{k:'due',l:'الرد مطلوب قبل',t:'date'},
-    {k:'q',l:'الاستفسار / وصف المشكلة',t:'textarea'},{k:'prop',l:'الحل المقترح من المقاول (إن وجد)',t:'textarea'},
-    {k:'impact',l:'التأثير المتوقع',t:'checks',opts:['لا يوجد','على التكلفة','على البرنامج الزمني','على التصميم']}]}
-};
-const FORM_GROUPS=[['استلامات',['IR','MIR','RR','TR']],['اعتمادات',['MAT','SMP','SD','MS','TOD','SUB']],['مالية واستفسارات',['QS','VO','RFI']]];
-const codeText=(type,c)=>{const F=FORMS[type];if(F&&F.answer&&c==='A')return 'تم الرد';return (F&&F.codes&&F.codes[c])||CODES[c].t;};
-
-function fieldHTML(f,v,pre){
-  const id=pre+f.k;
-  if(f.t==='text'||f.t==='number'||f.t==='date'||f.t==='datetime'){const ty=f.t==='datetime'?'datetime-local':f.t;
-    return `<label for="${id}">${f.l}<input id="${id}" data-fk="${f.k}" type="${ty}" value="${esc(v||'')}" ${ty!=='text'?'style="direction:ltr"':''}></label>`;}
-  if(f.t==='textarea')return `<label class="full" for="${id}">${f.l}<textarea id="${id}" data-fk="${f.k}" style="min-height:70px">${esc(v||'')}</textarea></label>`;
-  if(f.t==='radio')return `<div class="full"><label>${f.l}</label><div class="disc">${f.opts.map((o,i)=>`<label><input type="radio" name="${id}" data-fk="${f.k}" value="${esc(o)}" ${v===o?'checked':''}>${o}</label>`).join('')}</div></div>`;
-  if(f.t==='checks'){const a=v||[];return `<div class="full"><label>${f.l}</label><div class="disc">${f.opts.map(o=>`<label><input type="checkbox" data-fk="${f.k}" value="${esc(o)}" ${a.includes(o)?'checked':''}>${o}</label>`).join('')}</div></div>`;}
-  if(f.t==='table'){const rows=(v&&v.length?v:Array.from({length:f.rows||2},()=>[]));
-    return `<div class="full ftab" data-tk="${f.k}"><label>${f.l}</label><div class="lwrap" style="margin-top:4px"><table class="ltbl" style="min-width:${Math.max(480,f.cols.length*120)}px"><thead><tr><th>م</th>${f.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
-      <tbody>${rows.map((r,i)=>`<tr><td class="mono">${i+1}</td>${f.cols.map((c,j)=>`<td style="padding:3px"><input data-c="${j}" value="${esc(r[j]||'')}" style="padding:5px 6px;font-size:13px;min-width:70px"></td>`).join('')}</tr>`).join('')}</tbody></table></div>
-      <button type="button" class="btn sm" data-addrow="${f.k}" style="margin-top:6px">+ سطر</button></div>`;}
-  if(f.t==='checklist'){const a=v||[];return `<div class="full"><label>${f.l}</label><div class="lwrap" style="margin-top:4px"><table class="ltbl" style="min-width:560px"><thead><tr><th>م</th><th>البند</th><th>مطابق</th><th>غير مطابق</th><th>لا ينطبق</th><th>ملاحظات</th></tr></thead><tbody>
-    ${f.items.map((it,i)=>{const s=(a[i]||{}).s||'',n=(a[i]||{}).n||'';return `<tr data-ci="${i}"><td class="mono">${i+1}</td><td class="s" style="min-width:220px">${it}</td>${['M','N','X'].map(x=>`<td style="text-align:center"><input type="radio" name="${id}-${i}" value="${x}" ${s===x?'checked':''} style="width:auto"></td>`).join('')}<td style="padding:3px"><input data-cn="1" value="${esc(n)}" style="padding:5px 6px;font-size:13px"></td></tr>`;}).join('')}</tbody></table></div></div>`;}
-  return '';
-}
-function formHTML(type,data,pre){const F=FORMS[type];if(!F)return '';return F.fields.map(f=>fieldHTML(f,(data||{})[f.k],pre||'ff-')).join('');}
-function bindForm(box,type){
-  box.querySelectorAll('[data-addrow]').forEach(b=>b.onclick=()=>{const f=FORMS[type].fields.find(x=>x.k===b.dataset.addrow);const tb=b.closest('.ftab').querySelector('tbody');const n=tb.rows.length+1;
-    const tr=document.createElement('tr');tr.innerHTML=`<td class="mono">${n}</td>${f.cols.map((c,j)=>`<td style="padding:3px"><input data-c="${j}" style="padding:5px 6px;font-size:13px;min-width:70px"></td>`).join('')}`;tb.appendChild(tr);bindCalc(box,type);});
-  bindCalc(box,type);
-}
-function bindCalc(box,type){const f=FORMS[type].fields.find(x=>x.calc);if(!f)return;const [q,p,t]=f.calc;
-  box.querySelectorAll(`.ftab[data-tk="${f.k}"] tbody tr`).forEach(tr=>{const g=j=>tr.querySelector(`[data-c="${j}"]`);const upd=()=>{const a=parseFloat(g(q).value),b=parseFloat(g(p).value);if(!isNaN(a)&&!isNaN(b)){g(t).value=(a*b).toFixed(2);}
-      const tot=[...box.querySelectorAll(`.ftab[data-tk="${f.k}"] tbody tr`)].reduce((s,r)=>s+(parseFloat(r.querySelector(`[data-c="${t}"]`).value)||0),0);const ti=box.querySelector('[data-fk="total"]');if(ti&&tot)ti.value=tot.toFixed(2);};
-    g(q).oninput=g(p).oninput=upd;});}
-function collectForm(box,type){const F=FORMS[type];const d={};if(!F)return d;
-  F.fields.forEach(f=>{
-    if(f.t==='radio'){const x=box.querySelector(`input[type=radio][data-fk="${f.k}"]:checked`);if(x)d[f.k]=x.value;}
-    else if(f.t==='checks'){const a=[...box.querySelectorAll(`input[type=checkbox][data-fk="${f.k}"]:checked`)].map(x=>x.value);if(a.length)d[f.k]=a;}
-    else if(f.t==='table'){const rows=[...box.querySelectorAll(`.ftab[data-tk="${f.k}"] tbody tr`)].map(tr=>[...tr.querySelectorAll('[data-c]')].map(i=>i.value.trim())).filter(r=>r.some(Boolean));if(rows.length)d[f.k]=rows;}
-    else if(f.t==='checklist'){const a=f.items.map((_,i)=>{const tr=box.querySelector(`tr[data-ci="${i}"]`);if(!tr)return null;const s=(tr.querySelector('input[type=radio]:checked')||{}).value||'';const n=tr.querySelector('[data-cn]').value.trim();return (s||n)?{s,n}:null;});if(a.some(Boolean))d[f.k]=a;}
-    else{const x=box.querySelector(`[data-fk="${f.k}"]`);if(x&&x.value.trim())d[f.k]=x.value.trim();}
-  });return d;}
-const fmtDT=v=>v?String(v).replace('T',' '):'';
-function dataHTML(type,data,print){const F=FORMS[type];if(!F||!data)return '';const out=[];const MK={M:'مطابق',N:'غير مطابق',X:'لا ينطبق'};
-  F.fields.forEach(f=>{const v=data[f.k];if(v==null||v===''||(Array.isArray(v)&&!v.length))return;
-    if(f.t==='table')out.push(`<div class="dtab"><h4>${f.l}</h4><div class="lwrap"><table class="${print?'':'ltbl'}" style="${print?'':'min-width:420px'}"><thead><tr><th>م</th>${f.cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${v.map((r,i)=>`<tr><td>${i+1}</td>${f.cols.map((c,j)=>`<td>${raw(r[j]||'')}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`);
-    else if(f.t==='checklist')out.push(`<div class="dtab"><h4>${f.l}</h4><div class="lwrap"><table class="${print?'':'ltbl'}" style="${print?'':'min-width:420px'}"><thead><tr><th>م</th><th>البند</th><th>النتيجة</th><th>ملاحظات</th></tr></thead><tbody>${f.items.map((it,i)=>{const x=v[i]||{};return `<tr><td>${i+1}</td><td style="white-space:normal">${it}</td><td>${x.s?MK[x.s]:'—'}</td><td>${raw(x.n||'')}</td></tr>`;}).join('')}</tbody></table></div></div>`);
-    else if(f.t==='checks')out.push(`<div class="dkv"><small>${f.l}</small><div>${print?f.opts.map(o=>`<span class="o">${cb(v.includes(o))}${o}</span>`).join(''):v.map(o=>`<span class="tagb" style="margin:2px">${o}</span>`).join('')}</div></div>`);
-    else if(f.t==='radio')out.push(`<div class="dkv"><small>${f.l}</small><div>${print?f.opts.map(o=>`<span class="o">${cb(v===o)}${o}</span>`).join(''):`<b>${v}</b>`}</div></div>`);
-    else out.push(`<div class="dkv"><small>${f.l}</small><div>${f.t==='textarea'?raw(v):`<b>${raw(f.t==='datetime'?fmtDT(v):v)}</b>`}</div></div>`);
-  });return out.join('');}
-
-/* الملفات: صور + PDF */
-const isPdf=x=>x&&(x.mime==='application/pdf'||/\.pdf$/i.test(x.name||''));
-const fsize=n=>n?(n>1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB'):'';
-function docsHTML(list){return list&&list.length?`<div class="docs">${list.map(d=>`<a class="doc" href="${d.url||'#'}" target="_blank" rel="noopener"><span class="di">PDF</span><span class="dn">${raw(d.name||'مستند')}</span><span class="ds">${fsize(d.size)}</span></a>`).join('')}</div>`:'';}
-function pdfPicker(list,id){return `<label class="btn sm" style="position:relative;display:inline-flex;flex-direction:row;gap:6px;align-items:center;cursor:pointer;color:var(--ink)">📄 إضافة PDF<input type="file" accept="application/pdf" multiple data-pdf="${id}" style="position:absolute;inset:0;opacity:0;width:100%"></label>
-  <div class="docs" id="${id}">${list.map((d,i)=>`<span class="doc"><span class="di">PDF</span><span class="dn">${raw(d.name)}</span><span class="ds">${fsize(d.size)}</span><button type="button" class="ndel" data-rmpdf="${i}" aria-label="حذف">✕</button></span>`).join('')}</div>`;}
-function bindPdf(list,id){const inp=app.querySelector(`[data-pdf="${id}"]`);if(!inp)return;const draw=()=>{const box=document.getElementById(id);box.innerHTML=list.map((d,i)=>`<span class="doc"><span class="di">PDF</span><span class="dn">${raw(d.name)}</span><span class="ds">${fsize(d.size)}</span><button type="button" class="ndel" data-rmpdf="${i}" aria-label="حذف">✕</button></span>`).join('');box.querySelectorAll('[data-rmpdf]').forEach(b=>b.onclick=()=>{list.splice(+b.dataset.rmpdf,1);draw();});};
-  inp.onchange=()=>{for(const f of [...inp.files]){if(f.type!=='application/pdf'&&!/\.pdf$/i.test(f.name)){toast('الملف لازم يكون PDF');continue;}if(f.size>25*1048576){toast(f.name+' — '+tr('أكبر من 25 ميجا'));continue;}list.push({file:f,name:f.name,size:f.size});}inp.value='';draw();};draw();}
-async function uploadPdf(d){const path=`${PID}/${(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2))}.pdf`;
-  const {error}=await sb.storage.from('photos').upload(path,d.file,{contentType:'application/pdf',upsert:false});if(error)throw error;return {path,name:d.name,mime:'application/pdf',size:d.size};}
-async function uploadAll(imgs,pdfs){const out=[];for(const u of imgs){const p=await upload(u);if(p)out.push({path:p,name:'photo.jpg',mime:'image/jpeg'});}for(const d of pdfs)out.push(await uploadPdf(d));return out;}
-
-Object.keys(TYPES).forEach(k=>delete TYPES[k]);Object.keys(FORMS).forEach(k=>TYPES[k]={name:FORMS[k].name,en:FORMS[k].en});
 /* ---------- السجل ---------- */
 function renderLog(){
   const all=S.reqs;
@@ -1147,68 +673,58 @@ function renderLog(){
   <div class="demo"><span>${esc(who)}</span><button id="reset" type="button">↻ تحديث</button></div>
   <h2>سجل الطلبات</h2>
   <div class="stats">${Object.keys(cnt).map(k=>`<button class="stat" type="button" data-f="${k}" aria-pressed="${view.filter===k}"><b>${cnt[k]}</b><span>${lab[k]}</span></button>`).join('')}</div>
-  <div class="chips"><select class="tsel" id="tsel" aria-label="نوع الطلب"><option value="ALL">كل الأنواع</option>${FORM_GROUPS.map(([g,ks])=>`<optgroup label="${g}">${ks.map(k=>`<option value="${k}" ${view.type===k?'selected':''}>${k} · ${TYPES[k].name}</option>`).join('')}</optgroup>`).join('')}</select></div>
+  <div class="chips">${['ALL','IR','RFI','RR'].map(t=>`<button class="chip" type="button" data-t="${t}" aria-pressed="${view.type===t}">${t==='ALL'?'كل الأنواع':t+' · '+TYPES[t].name}</button>`).join('')}</div>
   <div class="list">${rows.length?rows.map(r=>{const L=last(r);return `
     <button class="row" type="button" data-id="${r.id}">
       <span class="type">${r.type}</span>
-      <span class="meta"><span class="no">${num(r,r.revs.length-1)}</span><span class="subj">${raw(r.subject)}</span>
-      <span class="sub">${esc(r.disc)} · ${raw(r.floor)} · قُدِّم ${fmt(L.at)}${late(r)?` · <span class="late">متأخر ${ageDays(r)} يوم</span>`:''}</span></span>
+      <span class="meta"><span class="no">${num(r,r.revs.length-1)}</span><span class="subj">${esc(r.subject)}</span>
+      <span class="sub">${esc(r.disc)} · ${esc(r.floor)} · قُدِّم ${fmt(L.at)}${late(r)?` · <span class="late">متأخر ${ageDays(r)} يوم</span>`:''}</span></span>
       ${badgeOf(L.code)}
     </button>`}).join(''):`<div class="empty">مفيش طلبات بالفلتر ده.</div>`}</div>`;
   app.querySelectorAll('.stat').forEach(b=>b.onclick=()=>{view.filter=b.dataset.f;renderLog();});
-  document.getElementById('tsel').onchange=e=>{view.type=e.target.value;renderLog();};
+  app.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{view.type=b.dataset.t;renderLog();});
   app.querySelectorAll('.row').forEach(b=>b.onclick=()=>open(b.dataset.id));
   document.getElementById('reset').onclick=()=>refresh();
 }
 
 /* ---------- طلب جديد ---------- */
 function renderNew(){
-  if(role!=='C'){go('log');return;}
-  let t=view.newType||'IR';
+  if(role!=='C'){toast('تقديم الطلبات من حساب المقاول — بدّل فوق');role='C';syncRole();}
+  const t='IR';
   app.innerHTML=`
   <button class="back" type="button" id="bk">→ رجوع للسجل</button>
   <h2>طلب جديد</h2>
   <form class="card" id="f" novalidate>
     <div class="grid">
-      <label for="f-type">نوع الطلب<select id="f-type">${FORM_GROUPS.map(([g,ks])=>`<optgroup label="${g}">${ks.map(k=>`<option value="${k}" ${k===t?'selected':''}>${k} — ${TYPES[k].name}</option>`).join('')}</optgroup>`).join('')}</select></label>
+      <label for="f-type">نوع الطلب<select id="f-type">${Object.keys(TYPES).map(k=>`<option value="${k}" ${k===t?'selected':''}>${k} — ${TYPES[k].name}</option>`).join('')}</select></label>
       <label>رقم الطلب<input id="f-no" value="${PRJ}-${t}-${pad((S.seq[t]||0)+1)}-REV00" readonly style="font-family:var(--mono);direction:ltr;text-align:right"><span class="hint">بيتولد لوحده</span></label>
       <label class="full" for="f-subj">الموضوع<input id="f-subj" required placeholder="مثال: تسليم حديد تسليح سقف الدور الأول"></label>
       <div class="full"><label>نوع الأعمال</label><div class="disc">${DISC.map((x,i)=>`<label><input type="radio" name="disc" id="f-d${i}" value="${x}" ${i===0?'checked':''}>${x}</label>`).join('')}</div></div>
-      <label for="f-floor">الموقع / الدور<input id="f-floor" placeholder="الدور الأول"></label>
-      <label for="f-area">العنصر / المنطقة<input id="f-area" placeholder="المبنى الرئيسي"></label>
-      <label for="f-item">كود البند في المقايسة<input id="f-item" placeholder="03-02-010" style="direction:ltr;text-align:right"></label>
+      <label for="f-area">المنطقة<input id="f-area" placeholder="المبنى الرئيسي"></label>
+      <label for="f-floor">الدور<input id="f-floor" placeholder="الدور الأول"></label>
+      <label for="f-item">كود البند في المقايسة<input id="f-item" placeholder="03-02-010" style="direction:ltr;text-align:right"><span class="hint">هيربط الطلب بالحصر والمستخلص في النسخة الجاية</span></label>
+      <label for="f-files">صور / رسومات<input id="f-files" type="file" accept="image/*" multiple></label>
+      <div class="full thumbs" id="f-thumbs"></div>
+      <label class="full" for="f-desc">البيان / الوصف<textarea id="f-desc" placeholder="وصف الأعمال المطلوب استلامها"></textarea></label>
     </div>
-    <div class="grid" id="f-form" style="margin-top:12px"></div>
-    <div class="grid" style="margin-top:12px">
-      <label class="full" for="f-desc">ملاحظات / وصف إضافي<textarea id="f-desc" style="min-height:60px"></textarea></label>
-      <div class="full"><label>المرفقات</label>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px"><label class="btn sm" style="position:relative;display:inline-flex;flex-direction:row;gap:6px;cursor:pointer;color:var(--ink)">🖼 صور<input id="f-files" type="file" accept="image/*" multiple style="position:absolute;inset:0;opacity:0;width:100%"></label><button type="button" class="pb" data-cam1="1">📷 تصوير</button></div>
-        <div class="thumbs" id="f-thumbs"></div>
-        <div style="margin-top:8px">${pdfPicker([],'f-pdfs')}</div>
-        <span class="hint">رسومات ومستندات الاعتماد بصيغة PDF — حتى 25 ميجا للملف</span></div>
-    </div>
-    <p class="hint" id="f-decl"></p>
+    <p class="hint">تعهد المقاول: المستندات المرفقة تمت مراجعتها وتنسيقها ومطابقتها للعقد.</p>
     <div class="btns"><button class="btn primary" type="submit">تقديم الطلب</button><button class="btn" type="button" id="cn">إلغاء</button></div>
   </form>`;
-  const files=[],pdfs=[];
-  const box=document.getElementById('f-form');
-  const drawType=()=>{box.innerHTML=`<div class="full" style="border-top:1px solid var(--line);padding-top:10px"><b>${TYPES[t].name}</b> <span class="hint">${TYPES[t].en}</span></div>`+formHTML(t,{},'ff-');bindForm(box,t);
-    document.getElementById('f-decl').textContent=tr(FORMS[t].decl||'');document.getElementById('f-no').value=`${PRJ}-${t}-${pad((S.seq[t]||0)+1)}-REV00`;};
-  drawType();bindPdf(pdfs,'f-pdfs');
-  document.getElementById('f-type').onchange=e=>{t=e.target.value;view.newType=t;drawType();};
+  const files=[];
+  document.getElementById('f-type').onchange=e=>{const k=e.target.value;document.getElementById('f-no').value=`${PRJ}-${k}-${pad((S.seq[k]||0)+1)}-REV00`;};
   document.getElementById('f-files').onchange=e=>readImgs(e.target.files,files,document.getElementById('f-thumbs'));
-  app.querySelector('[data-cam1]').onclick=()=>pickPhoto(true,u=>{files.push(u);document.getElementById('f-thumbs').innerHTML=files.map(x=>`<img src="${x}" alt="مرفق">`).join('');});
   document.getElementById('bk').onclick=document.getElementById('cn').onclick=()=>go('log');
   document.getElementById('f').onsubmit=e=>{e.preventDefault();
     const subj=document.getElementById('f-subj').value.trim();
     if(!subj){toast('اكتب موضوع الطلب الأول');document.getElementById('f-subj').focus();return;}
-    const type=t, data=collectForm(box,t);
+    const type=document.getElementById('f-type').value;
     (async()=>{busy(true,'جاري الرفع…');try{
-      const fl=await uploadAll(files,pdfs);
-      const {data:rid,error}=await sb.rpc('submit_request_v2',{p_project:PID,p_type:type,p_subject:subj,p_discipline:(document.querySelector('input[name=disc]:checked')||{}).value||'',p_area:document.getElementById('f-area').value,p_floor:document.getElementById('f-floor').value,p_boq:document.getElementById('f-item').value,p_description:document.getElementById('f-desc').value,p_data:data,p_files:fl});
+      const paths=[];for(const u of files){paths.push(await upload(u));}
+      const {data:rid,error}=await sb.rpc('submit_request',{p_project:PID,p_type:type,p_subject:subj,p_discipline:(document.querySelector('input[name=disc]:checked')||{}).value||'',p_area:document.getElementById('f-area').value,p_floor:document.getElementById('f-floor').value,p_boq:document.getElementById('f-item').value,p_description:document.getElementById('f-desc').value,p_files:paths});
       if(error)throw error; await loadAll(); busy(false); const r=S.reqs.find(x=>x.id===rid); toast(`اتقدم ${num(r,0)}`); open(rid);
     }catch(err){busy(false);toast(errMsg(err));}})();};
 }
+
 /* ---------- تفاصيل الطلب ---------- */
 let cur=null, revIdx=0, draft=null, showAll=false, rsDraft=null;
 function open(id){cur=S.reqs.find(r=>r.id===id);revIdx=cur.revs.length-1;draft=null;rsDraft=null;showAll=false;view.name='detail';renderDetail();window.scrollTo(0,0);}
@@ -1233,8 +749,8 @@ function renderDetail(){
   const r=cur, R=r.revs[revIdx], isLast=revIdx===r.revs.length-1, T=TYPES[r.type];
   const canReview=role==='K'&&isLast&&!R.code;
   const canResubmit=role==='C'&&isLast&&R.code==='C';
-  if(canReview&&!draft)draft={notes:[],code:'',comment:'',rpdfs:[]};
-  if(canResubmit&&!rsDraft)rsDraft={att:[],pdfs:[],resp:notesOf(R).map(n=>({t:n.t,before:n.img||null,after:null,note_id:n.id}))};
+  if(canReview&&!draft)draft={notes:[],code:'',comment:''};
+  if(canResubmit&&!rsDraft)rsDraft={att:[],resp:notesOf(R).map(n=>({t:n.t,before:n.img||null,after:null,note_id:n.id}))};
   const notes=canReview?draft.notes:notesOf(R);
   const pinned=notes.map((n,j)=>({n,j})).filter(o=>o.n.x!=null);
   const lib=canReview?libList(r.disc):[];
@@ -1242,21 +758,18 @@ function renderDetail(){
   app.innerHTML=`
   <div class="toprow"><button class="back" type="button" id="bk">→ رجوع للسجل</button><button class="btn sm" type="button" id="prt">🖨 طباعة النموذج</button></div>
   <div class="paper">
-    <div class="ph"><div><div class="t">${T.name}</div><div class="en">${T.en}</div></div><div>${R.code?`<span class="code c-${R.code}">${FORMS[r.type]&&FORMS[r.type].answer?'':`<span class="k">${CODES[R.code].k}</span>`}${codeText(r.type,R.code)}</span>`:badgeOf(R.code)}</div></div>
+    <div class="ph"><div><div class="t">${T.name}</div><div class="en">${T.en}</div></div><div>${badgeOf(R.code)}</div></div>
     <div class="kv"><div><small>رقم الطلب</small><strong style="font-family:var(--mono);direction:ltr;display:block;text-align:right">${num(r,revIdx)}</strong></div><div><small>الإصدار</small><strong>${revIdx}</strong></div><div><small>تاريخ التقديم</small><strong>${fmt(R.at)}</strong></div></div>
-    <div class="kv"><div><small>الموضوع</small><strong>${raw(r.subject)}</strong></div><div><small>نوع الأعمال</small><strong>${esc(r.disc)}</strong></div><div><small>المنطقة / الدور</small><strong>${raw(r.area)} · ${raw(r.floor)}</strong></div></div>
+    <div class="kv"><div><small>الموضوع</small><strong>${esc(r.subject)}</strong></div><div><small>نوع الأعمال</small><strong>${esc(r.disc)}</strong></div><div><small>المنطقة / الدور</small><strong>${esc(r.area)} · ${esc(r.floor)}</strong></div></div>
     ${r.revs.length>1?`<div class="sec"><h3>الإصدارات</h3><div class="revs">${r.revs.map((x,i)=>`<button type="button" data-rev="${i}" aria-pressed="${i===revIdx}">${rv(i)}${x.code?' · '+CODES[x.code].k:''}</button>`).join('')}</div></div>`:''}
-    ${(()=>{const dh=dataHTML(r.type,r.data);return dh?`<div class="sec"><h3>بيانات النموذج${r.item?` · كود البند <span style="font-family:var(--mono)">${esc(r.item)}</span>`:''}</h3>${dh}</div>`:'';})()}
-    ${r.desc?`<div class="sec"><h3>ملاحظات / وصف إضافي</h3><div>${raw(r.desc)}</div></div>`:''}
-    ${R.docs&&R.docs.length?`<div class="sec"><h3>المستندات والرسومات (PDF)</h3>${docsHTML(R.docs)}</div>`:''}
+    <div class="sec"><h3>البيان / الوصف${r.item?` · كود البند <span style="font-family:var(--mono)">${esc(r.item)}</span>`:''}</h3><div>${esc(r.desc)||'—'}</div></div>
     ${R.resp&&R.resp.length?`<div class="sec"><h3>معالجة ملاحظات ${rv(revIdx-1)}</h3><ul class="nlist">${R.resp.map((x,j)=>`<li class="nitem" style="grid-template-columns:auto 1fr"><span class="n" style="background:var(--a)">${j+1}</span><div class="txt"><div>${esc(x.t)}</div>
       <div class="ba" style="margin-top:6px">${x.before?`<figure><img src="${x.before}" alt="قبل" data-cap="قبل — ${esc(x.t)}">قبل</figure>`:''}${x.after?`<figure><img src="${x.after}" alt="بعد" data-cap="بعد — ${esc(x.t)}">بعد التنفيذ</figure>`:'<span class="hint">بدون صورة بعد التنفيذ</span>'}</div></div></li>`).join('')}</ul></div>`:''}
     <div class="sec"><h3>المرفقات ${canReview?'<span class="hint">— دوس على الصورة عشان تحط ملاحظة في مكانها</span>':''}</h3>
-      ${R.att.length?R.att.map((u,i)=>`<div class="shot ${canReview?'annot':''}" data-i="${i}" style="margin-top:${i?8:0}px"><img src="${u}" alt="مرفق ${i+1}">${i===0?pinned.map(o=>`<span class="pin" style="right:${100-o.n.x}%;top:${o.n.y}%">${o.j+1}</span>`).join(''):''}</div>`).join(''):(R.docs&&R.docs.length?'<div class="hint">المستندات مرفقة كـ PDF فوق</div>':'<div class="hint">لا توجد مرفقات</div>')}
+      ${R.att.length?R.att.map((u,i)=>`<div class="shot ${canReview?'annot':''}" data-i="${i}" style="margin-top:${i?8:0}px"><img src="${u}" alt="مرفق ${i+1}">${i===0?pinned.map(o=>`<span class="pin" style="right:${100-o.n.x}%;top:${o.n.y}%">${o.j+1}</span>`).join(''):''}</div>`).join(''):'<div class="hint">لا توجد مرفقات</div>'}
     </div>
     ${!canReview&&notes.length?`<div class="sec"><h3>ملاحظات الاستشاري</h3><ul class="nlist">${notes.map((n,j)=>`<li class="nitem" style="grid-template-columns:auto 1fr auto"><span class="n">${j+1}</span><div class="txt">${esc(n.t)}${n.x!=null?'<div class="tag">📍 محددة على صورة المرفق</div>':''}</div>${n.img?`<div class="nphoto has"><img src="${n.img}" alt="صورة الملاحظة"><button type="button" class="view" data-zoom="1" aria-label="تكبير"></button></div>`:''}</li>`).join('')}</ul></div>`:''}
-    ${R.code&&!canReview&&R.rdocs&&R.rdocs.length?`<div class="sec" style="background:var(--c-soft)"><h3>📎 PDF بتعليقات الاستشاري</h3>${docsHTML(R.rdocs)}<p class="hint" style="margin:6px 0 0">افتح الملف وشوف العلامات على الرسومات / المستندات.</p></div>`:''}
-    ${R.code&&!canReview?`<div class="sec"><h3>قرار الاستشاري</h3><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="stamp code c-${R.code}">${FORMS[r.type]&&FORMS[r.type].answer?'':CODES[R.code].k+' — '}${codeText(r.type,R.code)}</span><span class="hint">${fmt(R.decAt)} · ${raw(R.decBy||CONSULTANT)}</span></div>${R.comment?`<p style="margin:8px 0 0">${raw(R.comment)}</p>`:''}</div>`:''}
+    ${R.code&&!canReview?`<div class="sec"><h3>قرار الاستشاري</h3><div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="stamp code c-${R.code}">${CODES[R.code].k} — ${CODES[R.code].t}</span><span class="hint">${fmt(R.decAt)} · ${esc(R.decBy||CONSULTANT)}</span></div>${R.comment?`<p style="margin:8px 0 0">${esc(R.comment)}</p>`:''}</div>`:''}
     ${canReview?`<div class="sec"><h3>مراجعة الاستشاري — الملاحظات (${notes.length})</h3>
       <div id="pinbox" hidden class="lib" style="margin:0 0 10px"><label for="pin-t">ملاحظة رقم <span id="pin-n"></span> على الصورة<input id="pin-t" placeholder="اكتب الملاحظة أو اختار من الشائعة تحت"></label><div class="btns" style="margin-top:8px"><button class="btn primary sm" type="button" id="pin-ok">إضافة</button><button class="btn sm" type="button" id="pin-x">إلغاء</button></div></div>
       ${notes.length?`<ul class="nlist">${notes.map((n,j)=>`<li class="nitem"><span class="n">${j+1}</span><div class="txt"><input data-nt="${j}" value="${esc(tr(n.t))}" aria-label="نص الملاحظة ${j+1}">${n.x!=null?'<div class="tag">📍 محددة على صورة المرفق</div>':''}<button class="ndel" type="button" data-del="${j}">حذف الملاحظة</button></div><div>${photoSlot(n.img,'np'+j,'أضف صورة')}</div></li>`).join('')}</ul>`:'<p class="hint" style="margin:0">لسه مفيش ملاحظات. اختار من الملاحظات الشائعة، أو اكتب ملاحظة جديدة، أو دوس على صورة المرفق.</p>'}
@@ -1268,17 +781,14 @@ function renderDetail(){
         <label class="chk"><input type="checkbox" id="new-save" checked>احفظها في الملاحظات الشائعة لـ ${esc(r.disc)}</label>
       </div>
       <h3 style="margin-top:14px">الكود</h3>
-      ${FORMS[r.type]&&FORMS[r.type].answer?'':`<div class="codes">${Object.keys(CODES).map(k=>`<label><input type="radio" name="code" id="code-${k}" value="${k}" ${draft.code===k?'checked':''}><span><b class="code c-${k}" style="padding:1px 8px"><span class="k">${CODES[k].k}</span></b> ${codeText(r.type,k)}</span></label>`).join('')}</div>`}
-      <label for="cm" style="margin-top:10px">${FORMS[r.type]&&FORMS[r.type].answer?'رد الاستشاري':(FORMS[r.type]&&FORMS[r.type].reviewLabel)||'ملاحظات عامة'}<textarea id="cm" placeholder="${FORMS[r.type]&&FORMS[r.type].answer?'اكتب الرد على الاستفسار':'ملاحظات عامة على الطلب'}" ${FORMS[r.type]&&FORMS[r.type].answer?'style="min-height:120px"':''}>${esc(draft.comment)}</textarea></label>
-      <div style="margin-top:10px"><label>PDF بتعليقات الاستشاري (اختياري)</label>${pdfPicker(draft.rpdfs,'rv-pdfs')}<span class="hint">علّم على الرسومات أو المستندات في أي برنامج (Acrobat / Bluebeam / Edge) واحفظها، وارفعها هنا عشان توصل للمقاول مع القرار.</span></div>
+      <div class="codes">${Object.keys(CODES).map(k=>`<label><input type="radio" name="code" id="code-${k}" value="${k}" ${draft.code===k?'checked':''}><span><b class="code c-${k}" style="padding:1px 8px"><span class="k">${CODES[k].k}</span></b> ${CODES[k].t}</span></label>`).join('')}</div>
+      <label for="cm" style="margin-top:10px">ملاحظات عامة<textarea id="cm" placeholder="ملاحظات عامة على الطلب">${esc(draft.comment)}</textarea></label>
       <div class="btns"><button class="btn primary" type="button" id="send">اعتماد القرار وإرسال للمقاول</button></div></div>`:''}
     ${canResubmit?`<div class="sec"><h3>إعادة التقديم — ${rv(r.revs.length)}</h3><p class="hint" style="margin:0 0 8px">ارفع صورة بعد التنفيذ قدام كل ملاحظة، وهيتعمل إصدار جديد على نفس رقم الطلب.</p>
       ${rsDraft.resp.length?`<ul class="nlist">${rsDraft.resp.map((x,j)=>`<li class="nitem"><span class="n">${j+1}</span><div class="txt">${esc(x.t)}${x.before?`<div class="ba" style="margin-top:6px"><figure><img src="${x.before}" alt="صورة الاستشاري" data-cap="${esc(x.t)}">صورة الاستشاري</figure></div>`:''}</div><div>${photoSlot(x.after,'rp'+j,'صورة بعد التنفيذ')}</div></li>`).join('')}</ul>`:''}
       <label for="rs-files" style="margin-top:10px">صور عامة إضافية (اختياري)<input id="rs-files" type="file" accept="image/*" multiple></label><div class="thumbs" id="rs-thumbs">${rsDraft.att.map(u=>`<img src="${u}" alt="مرفق">`).join('')}</div>
-      <div style="margin-top:10px"><label>مستندات / رسومات معدّلة (PDF)</label>${pdfPicker(rsDraft.pdfs,'rs-pdfs')}</div>
-      ${FORMS[r.type]?`<details style="margin-top:10px"><summary style="cursor:pointer;font-weight:600">تعديل بيانات النموذج</summary><div class="grid" id="rs-form" style="margin-top:8px">${formHTML(r.type,r.data,'rf-')}</div></details>`:''}
       <div class="btns"><button class="btn primary" type="button" id="resub">إعادة التقديم</button></div></div>`:''}
-    <div class="sec" style="border-bottom:0"><h3>سجل الطلب</h3><div class="timeline">${r.revs.map((x,i)=>`<div><span>تقديم ${rv(i)}${x.by?' · '+esc(x.by):''}</span><span>${fmt(x.at)}</span></div>${x.code?`<div><span>قرار الاستشاري: ${FORMS[r.type]&&FORMS[r.type].answer?'':CODES[x.code].k+' '}${codeText(r.type,x.code)}${x.decBy?' · '+esc(x.decBy):''}</span><span>${fmt(x.decAt)}</span></div>`:''}`).join('')}</div></div>
+    <div class="sec" style="border-bottom:0"><h3>سجل الطلب</h3><div class="timeline">${r.revs.map((x,i)=>`<div><span>تقديم ${rv(i)}${x.by?' · '+esc(x.by):''}</span><span>${fmt(x.at)}</span></div>${x.code?`<div><span>قرار الاستشاري: ${CODES[x.code].k} ${CODES[x.code].t}${x.decBy?' · '+esc(x.decBy):''}</span><span>${fmt(x.decAt)}</span></div>`:''}`).join('')}</div></div>
   </div>
   ${role==='C'&&isLast&&!R.code?'<p class="hint">الطلب عند الاستشاري. بدّل لـ "الاستشاري" فوق عشان تجرب المراجعة.</p>':''}`;
   document.getElementById('bk').onclick=()=>go('log');
@@ -1287,7 +797,6 @@ function renderDetail(){
   app.querySelectorAll('[data-zoom]').forEach(b=>b.onclick=e=>{e.preventDefault();zoom(b.parentNode.querySelector('img').src);});
   app.querySelectorAll('.ba img').forEach(im=>im.onclick=()=>zoom(im.src,im.dataset.cap));
   if(canReview){
-    bindPdf(draft.rpdfs,'rv-pdfs');
     let pend=null;
     const shot=app.querySelector('.shot[data-i="0"]');
     if(shot)shot.onclick=e=>{const b=shot.getBoundingClientRect();pend={x:Math.round((e.clientX-b.left)/b.width*100),y:Math.round((e.clientY-b.top)/b.height*100)};
@@ -1306,28 +815,24 @@ function renderDetail(){
       renderDetail();};
     app.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{syncDraft();draft.notes.splice(+b.dataset.del,1);renderDetail();});
     app.querySelectorAll('[data-pick^="np"]').forEach(b=>b.onclick=()=>{const j=+b.dataset.pick.slice(2);syncDraft();pickPhoto(!!b.dataset.cam,u=>{if(!draft||!draft.notes[j])return;draft.notes[j].img=u;renderDetail();});});
-    document.getElementById('send').onclick=()=>{syncDraft();if(FORMS[r.type]&&FORMS[r.type].answer){if(!draft.comment.trim()){toast('اكتب الرد الأول');return;}draft.code='A';}if(!draft.code){toast('اختار كود القرار (أ / ب / ج / د)');return;}
-      if((draft.code==='C'||draft.code==='D')&&!draft.notes.length&&!draft.comment.trim()&&draft.rpdfs.length){draft.comment=tr('التعليقات في ملف الـ PDF المرفق');}
+    document.getElementById('send').onclick=()=>{syncDraft();if(!draft.code){toast('اختار كود القرار (أ / ب / ج / د)');return;}
       if((draft.code==='C'||draft.code==='D')&&!draft.notes.length&&!draft.comment.trim()){toast('كود ج / د محتاج ملاحظة واحدة على الأقل');return;}
       const c=draft.code;(async()=>{busy(true,'جاري الحفظ…');try{
         const ns=[];for(const n of draft.notes.filter(n=>n.t.trim())){ns.push({body:n.t.trim(),x:n.x==null?null:n.x,y:n.y==null?null:n.y,photo_path:n.img?await upload(n.img):null});}
-        const rf=[];for(const d of draft.rpdfs)rf.push(await uploadPdf(d));
-        const {error}=await sb.rpc('decide_v2',{p_revision:R.id,p_code:c,p_comment:draft.comment,p_notes:ns,p_files:rf});if(error)throw error;
+        const {error}=await sb.rpc('decide',{p_revision:R.id,p_code:c,p_comment:draft.comment,p_notes:ns});if(error)throw error;
         draft=null;await loadAll();cur=S.reqs.find(x=>x.id===r.id)||cur;busy(false);
         toast(c==='C'?'اتبعت للمقاول لإعادة التقديم':'اتسجل القرار');renderDetail();
       }catch(err){busy(false);toast(errMsg(err));}})();};
   }
   if(canResubmit){
     document.getElementById('rs-files').onchange=e=>readImgs(e.target.files,rsDraft.att,document.getElementById('rs-thumbs'));
-    bindPdf(rsDraft.pdfs,'rs-pdfs');const rsf=document.getElementById('rs-form');if(rsf)bindForm(rsf,r.type);
     app.querySelectorAll('[data-pick^="rp"]').forEach(b=>b.onclick=()=>{const j=+b.dataset.pick.slice(2);pickPhoto(!!b.dataset.cam,u=>{if(!rsDraft||!rsDraft.resp[j])return;rsDraft.resp[j].after=u;renderDetail();});});
     document.getElementById('resub').onclick=()=>{
       const missing=rsDraft.resp.filter(x=>!x.after).length;
       (async()=>{busy(true,'جاري الرفع…');try{
-        const fl=await uploadAll(rsDraft.att,rsDraft.pdfs);
+        const paths=[];for(const u of rsDraft.att){paths.push(await upload(u));}
         const resp=[];for(const x of rsDraft.resp){resp.push({note_id:x.note_id,after_path:x.after?await upload(x.after):null});}
-        const rsf=document.getElementById('rs-form');const nd=rsf&&rsf.closest('details').open?collectForm(rsf,r.type):null;
-        const {error}=await sb.rpc('resubmit_v2',{p_request:r.id,p_files:fl,p_responses:resp,p_data:nd});if(error)throw error;
+        const {error}=await sb.rpc('resubmit',{p_request:r.id,p_files:paths,p_responses:resp});if(error)throw error;
         rsDraft=null;await loadAll();cur=S.reqs.find(x=>x.id===r.id)||cur;revIdx=cur.revs.length-1;busy(false);
         toast(`اتقدم ${num(cur,revIdx)}${missing?` — ${missing} ملاحظة من غير صورة`:''}`);renderDetail();
       }catch(err){busy(false);toast(errMsg(err));}})();};
@@ -1350,19 +855,17 @@ function sheetHTML(r,i){
   const lines=k=>Array.from({length:k},()=>'<div class="line"></div>').join('');
   return `<div class="sheet">
   <table class="hd"><tr>
-    <td style="width:34%"><b>المشروع:</b> ${raw(PRJ_NAME)}<br><b>المالك:</b> ${raw(OWNER)}<br><b>الاستشاري:</b> ${raw(CONSULTANT)}<br><b>المقاول:</b> ${raw(CONTRACTOR)}</td>
+    <td style="width:34%"><b>المشروع:</b> ${esc(PRJ_NAME)}<br><b>المالك:</b> ${esc(OWNER)}<br><b>الاستشاري:</b> ${esc(CONSULTANT)}<br><b>المقاول:</b> ${esc(CONTRACTOR)}</td>
     <td class="ttl">${T.name}<small>${T.en}</small></td>
     <td style="width:30%"><b>رقم الطلب:</b><br><span class="mono">${num(r,i)}</span><br><b>الإصدار:</b> ${i} &nbsp; <b>التاريخ:</b> <span class="mono">${fmt(R.at)}</span></td>
   </tr></table>
   <table>
-    <tr><td class="lbl">الموضوع</td><td colspan="5">${raw(r.subject)}</td></tr>
+    <tr><td class="lbl">الموضوع</td><td colspan="5">${esc(r.subject)}</td></tr>
     <tr><td class="lbl">المنطقة</td><td>${esc(r.area)||'&nbsp;'}</td><td class="lbl">الدور</td><td>${esc(r.floor)||'&nbsp;'}</td><td class="lbl">كود البند</td><td class="mono">${esc(r.item)||'&nbsp;'}</td></tr>
     <tr><td class="lbl">نوع الأعمال</td><td colspan="5" class="opts">${DISC.map(x=>`<span class="o">${cb(x===r.disc)}${x}</span>`).join('')}</td></tr>
-    ${(()=>{const dh=dataHTML(r.type,r.data,true);return dh?`<tr><td colspan="6">${dh}</td></tr>`:'';})()}
-    ${r.desc?`<tr><td class="lbl">ملاحظات</td><td colspan="5">${raw(r.desc)}</td></tr>`:''}
-    ${R.docs&&R.docs.length?`<tr><td class="lbl">مستندات PDF</td><td colspan="5">${R.docs.map((d,k)=>`${k+1}. ${raw(d.name||'مستند')}`).join('<br>')}</td></tr>`:''}
+    <tr><td class="lbl">البيان</td><td colspan="5"><div class="big">${esc(r.desc)}</div></td></tr>
     <tr><td class="lbl">المرفقات</td><td colspan="5">${R.att.length?`${R.att.length} صورة / رسم<br>`+R.att.slice(0,2).map((u,k)=>`<span class="ph"><img src="${u}" alt="">${k===0?pinned.map(o=>`<span class="p" style="right:${100-o.n.x}%;top:${o.n.y}%">${o.j+1}</span>`).join(''):''}</span>`).join(''):'لا يوجد'}</td></tr>
-    <tr><td colspan="6"><b>تعهد المقاول:</b> ${(FORMS[r.type]&&FORMS[r.type].decl)||'نقر بأن الأعمال المطلوب استلامها تم تنفيذها ومراجعتها طبقًا للرسومات المعتمدة والمواصفات وشروط العقد.'}
+    <tr><td colspan="6"><b>تعهد المقاول:</b> نقر بأن الأعمال المطلوب استلامها تم تنفيذها ومراجعتها طبقًا للرسومات المعتمدة والمواصفات وشروط العقد.
       <div class="sig"><div>مهندس المقاول:<div class="s"></div></div><div>التوقيع:<div class="s"></div></div><div>التاريخ:<div class="s"></div></div></div></td></tr>
   </table>
   ${R.resp&&R.resp.length?`<table><tr><th style="width:6%">م</th><th>معالجة ملاحظات ${rv(i-1)}</th><th style="width:36mm">قبل</th><th style="width:36mm">بعد التنفيذ</th></tr>
@@ -1372,9 +875,8 @@ function sheetHTML(r,i){
       :[1,2,3,4].map(j=>`<tr><td>${j}</td><td><div class="line" style="border:0"></div></td><td></td></tr>`).join('')}
   </table>
   <table>
-    ${FORMS[r.type]&&FORMS[r.type].answer?'':`<tr><td class="lbl">الكود</td><td class="opts">${Object.keys(CODES).map(k=>`<span class="o">${cb(code===k)}${CODES[k].k} — ${codeText(r.type,k)}</span>`).join('')}</td></tr>`}
-    <tr><td class="lbl">${FORMS[r.type]&&FORMS[r.type].answer?'رد الاستشاري':'ملاحظات عامة'}</td><td>${comment?esc(comment):lines(2)}</td></tr>
-    ${R.rdocs&&R.rdocs.length?`<tr><td class="lbl">PDF بالتعليقات</td><td>${R.rdocs.map((d,k)=>`${k+1}. ${raw(d.name||'مستند')}`).join('<br>')}</td></tr>`:''}
+    <tr><td class="lbl">الكود</td><td class="opts">${Object.keys(CODES).map(k=>`<span class="o">${cb(code===k)}${CODES[k].k} — ${CODES[k].t}</span>`).join('')}</td></tr>
+    <tr><td class="lbl">ملاحظات عامة</td><td>${comment?esc(comment):lines(2)}</td></tr>
     <tr><td colspan="2"><div class="sig"><div>مهندس الاستشاري:<div class="s"></div></div><div>التوقيع:<div class="s"></div></div><div>التاريخ:<div class="s">${code&&R.decAt?`<span class="mono">${fmt(R.decAt)}</span>`:''}</div></div><div>الختم:<div class="s"></div></div></div></td></tr>
     <tr><td class="lbl">التوزيع</td><td class="opts"><span class="o">${cb()}المالك</span><span class="o">${cb()}الاستشاري</span><span class="o">${cb()}المقاول</span><span class="o">${cb()}الملف</span></td></tr>
   </table>
@@ -1446,10 +948,6 @@ function renderDash(){
     <div class="kpi"><span>متأخر عند الاستشاري</span><b style="color:${m.late.length?'var(--d)':'inherit'}">${m.late.length}</b><small>أكتر من ${SLA_DAYS} يوم</small></div>
   </div>
   <div class="dgrid">
-    ${(()=>{const I=S.ins||[];const op=k=>I.filter(i=>i.kind===k&&i.status!=='CLOSED').length;return `<section class="panel"><h3>أوامر الموقع و NCR</h3><span class="sub">المفتوح دلوقتي</span>
-      <table class="tbl"><tbody><tr><td>أوامر موقع مفتوحة</td><td class="n2">${op('SI')}</td></tr><tr><td>تقارير عدم مطابقة مفتوحة</td><td class="n2" style="${op('NCR')?'color:var(--d)':''}">${op('NCR')}</td></tr>
-      <tr><td>بانتظار الإقفال</td><td class="n2">${I.filter(i=>i.status==='DONE').length}</td></tr><tr><td>متأخر عن الموعد</td><td class="n2" style="${I.filter(insLate).length?'color:var(--d)':''}">${I.filter(insLate).length}</td></tr></tbody></table>
-      <div class="btns" style="margin-top:8px"><button class="btn sm" type="button" id="d-ins">عرض الأوامر</button></div></section>`;})()}
     <section class="panel"><h3>حالة الطلبات</h3><span class="sub">آخر إصدار لكل طلب</span>
       <div class="stack" role="img" aria-label="${seg.map(s=>s[2]+' '+s[1]).join('، ')}">${seg.filter(s=>s[1]).map(s=>`<i style="flex:${s[1]};background:${CODE_COL[s[0]]}" title="${s[2]}: ${s[1]}"></i>`).join('')}</div>
       <div class="legend">${seg.map(s=>`<span><i style="background:${CODE_COL[s[0]]}"></i>${s[2]} <b>${s[1]}</b></span>`).join('')}</div></section>
@@ -1472,10 +970,9 @@ function renderDash(){
       ${Object.entries(m.byFloor).map(([f,v])=>`<tr><td>${esc(f)}</td><td class="n2">${v.n}</td><td class="n2">${v.ok}</td><td class="n2">${v.open}</td><td class="n2">${v.c}</td></tr>`).join('')}</tbody></table></section>
   </div>
   <section class="panel" style="margin-top:10px"><h3>الطلبات المتأخرة عند الاستشاري</h3><span class="sub">دوس على أي طلب لفتحه</span>
-    ${m.late.length?`<table class="tbl"><thead><tr><th>رقم الطلب</th><th>الموضوع</th><th class="n2">أيام التأخير</th></tr></thead><tbody>${m.late.sort((a,b)=>ageDays(b)-ageDays(a)).map(r=>`<tr class="click" data-id="${r.id}"><td class="no" style="display:table-cell">${num(r,r.revs.length-1)}</td><td>${raw(r.subject)}</td><td class="n2" style="color:var(--d)">${ageDays(r)}</td></tr>`).join('')}</tbody></table>`:'<p class="hint">مفيش طلبات متأخرة 👌</p>'}</section>
-  <p class="hint">التقرير اتعمل ${new Date().toLocaleDateString('en-GB')} · ${raw(PRJ_NAME)}</p>`;
+    ${m.late.length?`<table class="tbl"><thead><tr><th>رقم الطلب</th><th>الموضوع</th><th class="n2">أيام التأخير</th></tr></thead><tbody>${m.late.sort((a,b)=>ageDays(b)-ageDays(a)).map(r=>`<tr class="click" data-id="${r.id}"><td class="no" style="display:table-cell">${num(r,r.revs.length-1)}</td><td>${esc(r.subject)}</td><td class="n2" style="color:var(--d)">${ageDays(r)}</td></tr>`).join('')}</tbody></table>`:'<p class="hint">مفيش طلبات متأخرة 👌</p>'}</section>
+  <p class="hint">التقرير اتعمل ${new Date().toLocaleDateString('en-GB')} · ${esc(PRJ_NAME)}</p>`;
   app.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{view.period=b.dataset.p;renderDash();});
-  document.getElementById('d-ins').onclick=()=>go('ins');
   app.querySelectorAll('tr.click').forEach(t=>t.onclick=()=>open(t.dataset.id));
   document.getElementById('reset').onclick=()=>refresh();
   document.getElementById('rprint').onclick=()=>{try{window.print();}catch(e){toast('الطباعة مش متاحة هنا');}};
@@ -1505,7 +1002,7 @@ function renderALog(){
   app.innerHTML=`
   <div class="noprint">
     <h2>لوج الاعتمادات</h2>
-    <div class="chips" style="margin-top:0"><select class="tsel" id="tsel" aria-label="نوع الطلب"><option value="ALL">كل الأنواع</option>${FORM_GROUPS.map(([g,ks])=>`<optgroup label="${g}">${ks.map(k=>`<option value="${k}" ${f.t===k?'selected':''}>${k} · ${TYPES[k].name}</option>`).join('')}</optgroup>`).join('')}</select></div>
+    <div class="chips" style="margin-top:0">${['ALL','IR','RFI','RR'].map(t=>`<button class="chip" type="button" data-t="${t}" aria-pressed="${f.t===t}">${t==='ALL'?'كل الأنواع':t+' · '+TYPES[t].name}</button>`).join('')}</div>
     <div class="lfil" style="margin-top:8px">
       <label>نوع الأعمال<select id="lf-d"><option value="ALL">الكل</option>${DISC.map(x=>`<option ${f.d===x?'selected':''}>${x}</option>`).join('')}</select></label>
       <label>الكود<select id="lf-c"><option value="ALL">الكل</option>${Object.keys(CODES).map(k=>`<option value="${k}" ${f.c===k?'selected':''}>${CODES[k].k} — ${CODES[k].t}</option>`).join('')}<option value="P" ${f.c==='P'?'selected':''}>بانتظار الرد</option></select></label>
@@ -1519,15 +1016,15 @@ function renderALog(){
   </div>`;
   const body=()=>{
     const rows=logRows();const cnt={A:0,B:0,C:0,D:0,P:0};rows.forEach(o=>cnt[o.c]++);
-    document.getElementById('lsum').innerHTML=`<span><b>${raw(PRJ_NAME)}</b> · لوج الاعتمادات · ${new Date().toLocaleDateString('en-GB')}</span><span>${rows.length} إصدار</span>`+Object.keys(cnt).map(k=>`<span>${k==='P'?'بانتظار الرد':CODES[k].k+' '+CODES[k].t}: <b>${cnt[k]}</b></span>`).join('');
+    document.getElementById('lsum').innerHTML=`<span><b>${esc(PRJ_NAME)}</b> · لوج الاعتمادات · ${new Date().toLocaleDateString('en-GB')}</span><span>${rows.length} إصدار</span>`+Object.keys(cnt).map(k=>`<span>${k==='P'?'بانتظار الرد':CODES[k].k+' '+CODES[k].t}: <b>${cnt[k]}</b></span>`).join('');
     let m=0;
     document.getElementById('lbody').innerHTML=rows.length?rows.map(o=>{const {r,i,x}=o;if(o.first)m++;
       const dur=x.decAt?Math.max(0,Math.round(days(x.at,x.decAt))):(x.code?'':Math.floor(days(x.at,Date.now())));
-      return `<tr class="${o.first?'first':''}" data-id="${r.id}" data-rev="${i}"><td class="mono">${o.first?m:''}</td><td class="mono">${num(r,i)}</td><td class="s">${raw(r.subject)}</td><td>${esc(r.disc)}</td><td>${raw(r.floor)}</td><td class="mono">${fmt(x.at)}</td><td class="mono">${fmt(x.decAt)||'—'}</td><td class="mono" ${!x.code&&late(r)&&i===r.revs.length-1?'style="color:var(--d)"':''}>${dur}${dur!==''?(LANG==='en'?' d':' ي'):''}</td><td>${badgeOf(x.code)}</td><td class="mono">${notesOf(x).length||''}</td></tr>`;}).join(''):`<tr><td colspan="10" class="empty">مفيش نتائج.</td></tr>`;
+      return `<tr class="${o.first?'first':''}" data-id="${r.id}" data-rev="${i}"><td class="mono">${o.first?m:''}</td><td class="mono">${num(r,i)}</td><td class="s">${esc(r.subject)}</td><td>${esc(r.disc)}</td><td>${esc(r.floor)}</td><td class="mono">${fmt(x.at)}</td><td class="mono">${fmt(x.decAt)||'—'}</td><td class="mono" ${!x.code&&late(r)&&i===r.revs.length-1?'style="color:var(--d)"':''}>${dur}${dur!==''?(LANG==='en'?' d':' ي'):''}</td><td>${badgeOf(x.code)}</td><td class="mono">${notesOf(x).length||''}</td></tr>`;}).join(''):`<tr><td colspan="10" class="empty">مفيش نتائج.</td></tr>`;
     app.querySelectorAll('#lbody tr[data-id]').forEach(t=>t.onclick=()=>{open(t.dataset.id);revIdx=+t.dataset.rev;renderDetail();});
     return rows;};
   body();
-  document.getElementById('tsel').onchange=e=>{f.t=e.target.value;renderALog();};
+  app.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{f.t=b.dataset.t;renderALog();});
   document.getElementById('lf-d').onchange=e=>{f.d=e.target.value;body();};
   document.getElementById('lf-c').onchange=e=>{f.c=e.target.value;body();};
   document.getElementById('lf-q').oninput=e=>{f.q=e.target.value.trim();body();};
@@ -1553,14 +1050,14 @@ function repHTML(pk){
   const floors=Object.keys(byFloor).sort((a,b)=>{const ia=FLOOR_ORDER.indexOf(a),ib=FLOOR_ORDER.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib);});
   const byDisc={};items.forEach(o=>byDisc[o.r.disc]=(byDisc[o.r.disc]||0)+1);
   return `<div class="rep">
-    <div class="top"><div><h1>تقرير مصور — تقدم الأعمال</h1><div>${raw(PRJ_NAME)} · المالك: ${raw(OWNER)}</div><div>المقاول: ${raw(CONTRACTOR)} · الاستشاري: ${raw(CONSULTANT)}</div></div>
+    <div class="top"><div><h1>تقرير مصور — تقدم الأعمال</h1><div>${esc(PRJ_NAME)} · المالك: ${esc(OWNER)}</div><div>المقاول: ${esc(CONTRACTOR)} · الاستشاري: ${esc(CONSULTANT)}</div></div>
       <div style="text-align:end"><div>الفترة: ${P[0]}</div><div class="mono">${fmt(from.toISOString())} — ${new Date().toLocaleDateString('en-GB')}</div></div></div>
     <div class="sum"><div><b>${items.length}</b>أعمال اتعتمدت</div><div><b>${submitted}</b>طلبات اتقدمت</div><div><b>${open.filter(r=>status(r)==='P').length}</b>تحت المراجعة</div><div><b>${open.filter(r=>status(r)==='C').length}</b>مطلوب إعادة تقديم</div></div>
     ${Object.keys(byDisc).length?`<div class="disc">الأعمال المعتمدة حسب النوع: ${Object.entries(byDisc).map(([k,v])=>`${k} ${v}`).join(' · ')}</div>`:''}
-    ${floors.length?floors.map(fl=>`<h2>${raw(fl)} <span style="font-weight:400;font-size:12px">— ${byFloor[fl].length} بند</span></h2><div class="g">${byFloor[fl].sort((a,b)=>new Date(a.x.decAt)-new Date(b.x.decAt)).map(o=>`
-      <div class="it">${o.img?`<img src="${o.img}" alt="${esc(o.r.subject)}">`:''}<div class="cap"><b>${raw(o.r.subject)}</b><span class="cd">${CODES[o.x.code].k}</span>${CODES[o.x.code].t} · ${esc(o.r.disc)}<br><span class="mono">${num(o.r,o.i)}</span> · اتعتمد <span class="mono">${fmt(o.x.decAt)}</span></div></div>`).join('')}</div>`).join('')
+    ${floors.length?floors.map(fl=>`<h2>${esc(fl)} <span style="font-weight:400;font-size:12px">— ${byFloor[fl].length} بند</span></h2><div class="g">${byFloor[fl].sort((a,b)=>new Date(a.x.decAt)-new Date(b.x.decAt)).map(o=>`
+      <div class="it">${o.img?`<img src="${o.img}" alt="${esc(o.r.subject)}">`:''}<div class="cap"><b>${esc(o.r.subject)}</b><span class="cd">${CODES[o.x.code].k}</span>${CODES[o.x.code].t} · ${esc(o.r.disc)}<br><span class="mono">${num(o.r,o.i)}</span> · اتعتمد <span class="mono">${fmt(o.x.decAt)}</span></div></div>`).join('')}</div>`).join('')
       :'<p>مفيش أعمال اتعتمدت في الفترة دي.</p>'}
-    ${open.length?`<h2>أعمال لسه مفتوحة</h2><table class="open"><tr><th>رقم الطلب</th><th>الموضوع</th><th>الدور</th><th>الموقف</th></tr>${open.map(r=>`<tr><td class="mono">${num(r,r.revs.length-1)}</td><td>${raw(r.subject)}</td><td>${raw(r.floor)}</td><td>${status(r)==='P'?'تحت مراجعة الاستشاري'+(late(r)?` (متأخر ${ageDays(r)} يوم)`:''):'مطلوب إعادة تقديم'}</td></tr>`).join('')}</table>`:''}
+    ${open.length?`<h2>أعمال لسه مفتوحة</h2><table class="open"><tr><th>رقم الطلب</th><th>الموضوع</th><th>الدور</th><th>الموقف</th></tr>${open.map(r=>`<tr><td class="mono">${num(r,r.revs.length-1)}</td><td>${esc(r.subject)}</td><td>${esc(r.floor)}</td><td>${status(r)==='P'?'تحت مراجعة الاستشاري'+(late(r)?` (متأخر ${ageDays(r)} يوم)`:''):'مطلوب إعادة تقديم'}</td></tr>`).join('')}</table>`:''}
     <div class="ft"><span>الصور من طلبات الاستلام المعتمدة (أ / ب)</span><span>اتعمل ${new Date().toLocaleDateString('en-GB')}</span></div>
   </div>`;
 }
@@ -1577,239 +1074,6 @@ function renderPhoto(){
   getDownloads().then(dn=>{if(!dn)return;dl.hidden=false;dl.onclick=async()=>{
     const doc=`<!doctype html><html dir="${LANG==='en'?'ltr':'rtl'}" lang="${LANG}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${tr('تقرير مصور')} ${PRJ}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap"><style>body{margin:0;background:#ddd}@page{size:A4;margin:8mm}.bar{text-align:center;padding:10px}.bar button{font-size:16px;padding:8px 20px}@media print{.bar{display:none}body{background:#fff}.rep{box-shadow:none!important;padding:0!important}}${document.getElementById('repcss').textContent}</style></head><body><div class="bar"><button onclick="print()">${tr('طباعة')}</button></div>${trHTML(html)}</body></html>`;
     try{await dn.save({filename:`${PRJ}-PHOTO-REPORT-${new Date().toISOString().slice(0,10)}.html`,data:doc});toast('اتنزل التقرير');}catch(e){if(e&&e.code!=='declined')toast('التنزيل مش متاح هنا');}};});
-}
-
-/* ---------- أوامر الموقع (SI) وتقارير عدم المطابقة (NCR) ---------- */
-const KINDS={SI:{name:'أمر موقع',en:'SITE INSTRUCTION - SI'},NCR:{name:'تقرير عدم مطابقة',en:'NON-CONFORMANCE REPORT - NCR'}};
-const IST={ISSUED:{t:'بانتظار استلام المقاول',c:'P'},ACK:{t:'عند المقاول للتنفيذ',c:'C'},DONE:{t:'بانتظار الإقفال',c:'B'},CLOSED:{t:'مقفول',c:'A'}};
-const ACT={ACK:'المقاول استلم',DONE:'المقاول نفّذ',CLOSE:'اتقفل',REOPEN:'اترفض التنفيذ — رجع للمقاول'};
-const insNum=i=>`${PRJ}-${i.kind}-${pad(i.n)}`;
-const today=()=>new Date().toISOString().slice(0,10);
-const insLate=i=>i.status!=='CLOSED'&&i.due&&i.due<today();
-const insBadge=i=>`<span class="code c-${IST[i.status].c}">${IST[i.status].t}</span>`;
-let curIns=null, insDraft=null;
-
-function renderIns(){
-  const f=view.insf||(view.insf={s:'ALL',k:'ALL'});
-  const all=S.ins||[];
-  const cnt={ALL:all.length,OPEN:all.filter(i=>i.status==='ISSUED'||i.status==='ACK').length,DONE:all.filter(i=>i.status==='DONE').length,LATE:all.filter(insLate).length};
-  const lab={ALL:'الكل',OPEN:'مفتوح عند المقاول',DONE:'بانتظار الإقفال',LATE:'متأخر عن الموعد'};
-  let rows=all.slice().reverse();
-  if(f.k!=='ALL')rows=rows.filter(i=>i.kind===f.k);
-  if(f.s==='OPEN')rows=rows.filter(i=>i.status==='ISSUED'||i.status==='ACK');
-  if(f.s==='DONE')rows=rows.filter(i=>i.status==='DONE');
-  if(f.s==='LATE')rows=rows.filter(insLate);
-  const canIssue=role==='K'||role==='O';
-  app.innerHTML=`
-  <div class="toprow"><h2 style="margin:8px 0">أوامر الموقع و NCR</h2>${canIssue?'<button class="btn primary sm" type="button" id="ins-new">+ إصدار أمر موقع / NCR</button>':''}</div>
-  <div class="stats">${Object.keys(cnt).map(k=>`<button class="stat" type="button" data-s="${k}" aria-pressed="${f.s===k}"><b>${cnt[k]}</b><span>${lab[k]}</span></button>`).join('')}</div>
-  <div class="chips">${['ALL','SI','NCR'].map(k=>`<button class="chip" type="button" data-k="${k}" aria-pressed="${f.k===k}">${k==='ALL'?'كل الأنواع':k+' · '+KINDS[k].name}</button>`).join('')}</div>
-  <div class="list">${rows.length?rows.map(i=>`
-    <button class="row" type="button" data-ins="${i.id}">
-      <span class="type" ${i.kind==='NCR'?'style="background:var(--d-soft);color:var(--d)"':''}>${i.kind}</span>
-      <span class="meta"><span class="no">${insNum(i)}</span><span class="subj">${raw(i.subject)}</span>
-      <span class="sub">${esc(i.disc)}${i.floor?' · '+esc(i.floor):''} · اتصدر ${fmt(i.at)}${i.due?` · الموعد ${fmt(i.due)}`:''}${insLate(i)?' · <span class="late">متأخر</span>':''}</span></span>
-      ${insBadge(i)}
-    </button>`).join(''):`<div class="empty">${all.length?'مفيش نتايج بالفلتر ده.':'لسه مفيش أوامر موقع أو تقارير عدم مطابقة.'}</div>`}</div>`;
-  const nb=document.getElementById('ins-new');if(nb)nb.onclick=()=>go('issue');
-  app.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{f.s=b.dataset.s;renderIns();});
-  app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{f.k=b.dataset.k;renderIns();});
-  app.querySelectorAll('[data-ins]').forEach(b=>b.onclick=()=>openIns(b.dataset.ins));
-}
-
-function photoPicker(arr,boxId){
-  return `<div class="pbtns" style="margin-top:6px"><button type="button" class="pb" data-pp="${boxId}" data-cam="1">📷 تصوير</button><button type="button" class="pb" data-pp="${boxId}">🖼 الصور</button></div>
-    <div class="thumbs" id="${boxId}">${arr.map((u,j)=>`<img src="${u}" alt="صورة ${j+1}">`).join('')}</div>`;
-}
-function bindPicker(arr,boxId){app.querySelectorAll(`[data-pp="${boxId}"]`).forEach(b=>b.onclick=()=>pickPhoto(!!b.dataset.cam,u=>{arr.push(u);const box=document.getElementById(boxId);if(box)box.innerHTML=arr.map((x,j)=>`<img src="${x}" alt="صورة ${j+1}">`).join('');}));}
-
-function renderIssue(){
-  if(!(role==='K'||role==='O')){go('ins');return;}
-  const files=[];const nextNo=k=>`${PRJ}-${k}-${pad(((S.ins||[]).filter(i=>i.kind===k).reduce((a,i)=>Math.max(a,i.n),0))+1)}`;
-  app.innerHTML=`
-  <button class="back" type="button" id="bk">→ رجوع للأوامر</button>
-  <h2>إصدار أمر موقع / NCR</h2>
-  <form class="card" id="isf" novalidate>
-    <div class="grid">
-      <div class="full"><label>النوع</label><div class="disc">${['SI','NCR'].map((k,i)=>`<label><input type="radio" name="kind" value="${k}" ${i===0?'checked':''}>${KINDS[k].name} (${k})</label>`).join('')}</div></div>
-      <label>الرقم<input id="is-no" value="${nextNo('SI')}" readonly style="font-family:var(--mono);direction:ltr;text-align:right"><span class="hint">بيتولد لوحده</span></label>
-      <label for="is-due">مطلوب التنفيذ قبل<input id="is-due" type="date" style="direction:ltr"></label>
-      <label class="full" for="is-subj">الموضوع<input id="is-subj" placeholder="مثال: تعشيش في عمود C3 بالدور الأرضي"></label>
-      <div class="full"><label>نوع الأعمال</label><div class="disc">${DISC.map((x,i)=>`<label><input type="radio" name="idisc" value="${x}" ${i===0?'checked':''}>${x}</label>`).join('')}</div></div>
-      <label for="is-area">المنطقة<input id="is-area" placeholder="المبنى الرئيسي"></label>
-      <label for="is-floor">الدور<input id="is-floor" placeholder="الدور الأرضي"></label>
-      <label class="full" for="is-desc"><span id="is-desc-l">المطلوب تنفيذه</span><textarea id="is-desc" placeholder="اكتب الأمر بالتفصيل"></textarea></label>
-      <div class="full"><label>صور / رسومات</label>${photoPicker(files,'is-th')}</div>
-    </div>
-    <div class="err" id="is-err" role="alert"></div>
-    <div class="btns"><button class="btn primary" type="submit">إصدار وإرسال للمقاول</button><button class="btn" type="button" id="cn">إلغاء</button></div>
-  </form>`;
-  bindPicker(files,'is-th');
-  app.querySelectorAll('input[name=kind]').forEach(r=>r.onchange=()=>{const k=r.value;document.getElementById('is-no').value=nextNo(k);
-    document.getElementById('is-desc-l').textContent=tr(k==='NCR'?'وصف عدم المطابقة':'المطلوب تنفيذه');});
-  document.getElementById('bk').onclick=document.getElementById('cn').onclick=()=>go('ins');
-  document.getElementById('isf').onsubmit=async e=>{e.preventDefault();const er=document.getElementById('is-err');er.textContent='';
-    const g=id=>document.getElementById(id).value.trim();const kind=(document.querySelector('input[name=kind]:checked')||{}).value||'SI';
-    if(!g('is-subj')){er.textContent=tr('اكتب الموضوع الأول');return;}
-    busy(true,'جاري الإرسال…');try{
-      const paths=[];for(const u of files)paths.push(await upload(u));
-      const {data:iid,error}=await sb.rpc('issue_instruction',{p_project:PID,p_kind:kind,p_subject:g('is-subj'),p_discipline:(document.querySelector('input[name=idisc]:checked')||{}).value||'',p_area:g('is-area'),p_floor:g('is-floor'),p_description:g('is-desc'),p_due:g('is-due')||null,p_files:paths});
-      if(error)throw error;await loadAll();busy(false);const i=S.ins.find(x=>x.id===iid);toast(`اتصدر ${i?insNum(i):''}`);openIns(iid);
-    }catch(err){busy(false);er.textContent=errMsg(err);}};
-}
-
-function openIns(id){curIns=(S.ins||[]).find(i=>i.id===id);if(!curIns){go('ins');return;}insDraft=null;view.name='insdetail';renderInsDetail();window.scrollTo(0,0);}
-function photosHTML(arr){return arr.length?`<div class="ba" style="margin-top:6px">${arr.map((u,j)=>`<figure><img src="${u}" alt="صورة ${j+1}" data-cap=""></figure>`).join('')}</div>`:'';}
-function renderInsDetail(){
-  const i=curIns, K=KINDS[i.kind], isNCR=i.kind==='NCR';
-  const canAck=role==='C'&&i.status==='ISSUED', canDo=role==='C'&&i.status==='ACK', canClose=role===i.issuerTeam&&i.status==='DONE';
-  if((canAck||canDo||canClose)&&!insDraft)insDraft={files:[],body:'',cause:'',corr:''};
-  const waiting={ISSUED:'المقاول لسه ما أكدش الاستلام.',ACK:'الأمر عند المقاول للتنفيذ.',DONE:`بانتظار إقفال ${TEAM[i.issuerTeam]}.`,CLOSED:'الأمر اتقفل.'}[i.status];
-  app.innerHTML=`
-  <div class="toprow"><button class="back" type="button" id="bk">→ رجوع للأوامر</button><button class="btn sm" type="button" id="iprt">🖨 طباعة</button></div>
-  <div class="paper">
-    <div class="ph"><div><div class="t">${K.name}</div><div class="en">${K.en}</div></div><div>${insBadge(i)}</div></div>
-    <div class="kv"><div><small>الرقم</small><strong style="font-family:var(--mono);direction:ltr;display:block;text-align:right">${insNum(i)}</strong></div><div><small>تاريخ الإصدار</small><strong>${fmt(i.at)}</strong></div><div><small>مطلوب قبل</small><strong ${insLate(i)?'class="late"':''}>${i.due?fmt(i.due):'—'}</strong></div></div>
-    <div class="kv"><div><small>الموضوع</small><strong>${raw(i.subject)}</strong></div><div><small>نوع الأعمال</small><strong>${esc(i.disc)}</strong></div><div><small>المنطقة / الدور</small><strong>${raw(i.area)}${i.area&&i.floor?' · ':''}${raw(i.floor)}</strong></div></div>
-    <div class="sec"><h3>${isNCR?'وصف عدم المطابقة':'المطلوب تنفيذه'} · <span class="hint">${raw(i.by)} — ${TEAM[i.issuerTeam]}</span></h3><div>${esc(i.desc)||'—'}</div>${photosHTML(i.att)}</div>
-    ${i.events.length?`<div class="sec"><h3>سير الأمر</h3><ul class="nlist">${i.events.map(e=>`<li class="nitem" style="grid-template-columns:auto 1fr"><span class="n" style="background:${e.action==='REOPEN'?'var(--d)':e.action==='CLOSE'?'var(--a)':'var(--accent)'}">${e.action==='ACK'?'✓':e.action==='DONE'?'⚒':e.action==='CLOSE'?'■':'↺'}</span>
-      <div class="txt"><b>${ACT[e.action]}</b> <span class="hint">· ${raw(e.by)} · ${fmt(e.at)}</span>
-      ${e.cause?`<div><span class="hint">سبب عدم المطابقة:</span> ${raw(e.cause)}</div>`:''}${e.corrective?`<div><span class="hint">الإجراء التصحيحي:</span> ${raw(e.corrective)}</div>`:''}${e.body?`<div>${raw(e.body)}</div>`:''}${photosHTML(e.files)}</div></li>`).join('')}</ul></div>`:''}
-    ${canAck?`<div class="sec"><h3>تأكيد الاستلام</h3><label for="ia-b">ملاحظة (اختياري)<textarea id="ia-b" style="min-height:60px"></textarea></label><div class="btns"><button class="btn primary" type="button" id="ia-go">تأكيد استلام الأمر</button></div></div>`:''}
-    ${canDo?`<div class="sec"><h3>${isNCR?'الرد على عدم المطابقة':'تنفيذ الأمر'}</h3>
-      ${isNCR?`<label for="id-c">سبب عدم المطابقة<textarea id="id-c" style="min-height:60px">${esc(insDraft.cause)}</textarea></label><label for="id-r" style="margin-top:8px">الإجراء التصحيحي اللي اتعمل<textarea id="id-r" style="min-height:60px">${esc(insDraft.corr)}</textarea></label>`
-        :`<label for="id-b">اللي اتنفذ<textarea id="id-b" style="min-height:70px">${esc(insDraft.body)}</textarea></label>`}
-      <label style="margin-top:8px">صور بعد التنفيذ</label>${photoPicker(insDraft.files,'id-th')}
-      <div class="btns"><button class="btn primary" type="button" id="id-go">تم التنفيذ — إرسال للمراجعة</button></div></div>`:''}
-    ${canClose?`<div class="sec"><h3>مراجعة التنفيذ</h3><label for="ic-b">تعليق (مطلوب في حالة الرفض)<textarea id="ic-b" style="min-height:60px"></textarea></label>
-      <div class="btns"><button class="btn primary" type="button" id="ic-ok">إقفال الأمر</button><button class="btn" type="button" id="ic-no" style="color:var(--d)">رفض وإعادة للمقاول</button></div></div>`:''}
-    ${!(canAck||canDo||canClose)?`<div class="sec" style="border-bottom:0"><p class="hint" style="margin:0">${waiting}</p></div>`:''}
-  </div>`;
-  document.getElementById('bk').onclick=()=>go('ins');
-  document.getElementById('iprt').onclick=()=>renderInsPrint();
-  app.querySelectorAll('.ba img').forEach(im=>im.onclick=()=>zoom(im.src));
-  const act=async(action,extra,files)=>{busy(true,'جاري الحفظ…');try{
-      const paths=[];for(const u of (files||[]))paths.push(await upload(u));
-      const {error}=await sb.rpc('instruction_action',Object.assign({p_id:i.id,p_action:action,p_body:null,p_cause:null,p_corrective:null,p_files:paths},extra));if(error)throw error;
-      insDraft=null;await loadAll();curIns=S.ins.find(x=>x.id===i.id)||curIns;busy(false);toast(ACT[action]);renderInsDetail();
-    }catch(err){busy(false);toast(errMsg(err));}};
-  if(canAck)document.getElementById('ia-go').onclick=()=>act('ACK',{p_body:document.getElementById('ia-b').value});
-  if(canDo){bindPicker(insDraft.files,'id-th');
-    const keep=()=>{if(isNCR){insDraft.cause=document.getElementById('id-c').value;insDraft.corr=document.getElementById('id-r').value;}else insDraft.body=document.getElementById('id-b').value;};
-    app.querySelectorAll('#id-c,#id-r,#id-b').forEach(t=>t.oninput=keep);
-    document.getElementById('id-go').onclick=()=>{keep();if(!(insDraft.body.trim()||insDraft.corr.trim())){toast(isNCR?'اكتب الإجراء التصحيحي':'اكتب اللي اتنفذ');return;}
-      if(!insDraft.files.length&&!confirm(LANG==='en'?'Send without photos?':'تبعت من غير صور؟'))return;
-      act('DONE',{p_body:insDraft.body,p_cause:insDraft.cause,p_corrective:insDraft.corr},insDraft.files);};}
-  if(canClose){document.getElementById('ic-ok').onclick=()=>act('CLOSE',{p_body:document.getElementById('ic-b').value});
-    document.getElementById('ic-no').onclick=()=>{const b=document.getElementById('ic-b').value.trim();if(!b){toast('اكتب سبب الرفض');document.getElementById('ic-b').focus();return;}act('REOPEN',{p_body:b});};}
-}
-function insSheetHTML(i){
-  const K=KINDS[i.kind],isNCR=i.kind==='NCR';const done=i.events.filter(e=>e.action==='DONE').pop();const ack=i.events.find(e=>e.action==='ACK');const cl=i.events.filter(e=>e.action==='CLOSE').pop();
-  return `<div class="sheet">
-  <table class="hd"><tr><td style="width:34%"><b>المشروع:</b> ${raw(PRJ_NAME)}<br><b>المالك:</b> ${raw(OWNER)}<br><b>الاستشاري:</b> ${raw(CONSULTANT)}<br><b>المقاول:</b> ${raw(CONTRACTOR)}</td>
-    <td class="ttl">${K.name}<small>${K.en}</small></td>
-    <td style="width:30%"><b>الرقم:</b><br><span class="mono">${insNum(i)}</span><br><b>التاريخ:</b> <span class="mono">${fmt(i.at)}</span><br><b>مطلوب قبل:</b> <span class="mono">${i.due?fmt(i.due):'—'}</span></td></tr></table>
-  <table><tr><td class="lbl">الموضوع</td><td colspan="3">${raw(i.subject)}</td></tr>
-    <tr><td class="lbl">المنطقة</td><td>${esc(i.area)||'&nbsp;'}</td><td class="lbl">الدور</td><td>${esc(i.floor)||'&nbsp;'}</td></tr>
-    <tr><td class="lbl">نوع الأعمال</td><td colspan="3" class="opts">${DISC.map(x=>`<span class="o">${cb(x===i.disc)}${x}</span>`).join('')}</td></tr>
-    <tr><td class="lbl">${isNCR?'وصف عدم المطابقة':'المطلوب تنفيذه'}</td><td colspan="3"><div class="big">${raw(i.desc)}</div>${i.att.slice(0,3).map(u=>`<img class="nimg" style="display:inline-block;margin:2px" src="${u}" alt="">`).join('')}</td></tr>
-    <tr><td colspan="4"><div class="sig"><div>أصدره: ${raw(i.by)} (${TEAM[i.issuerTeam]})<div class="s"></div></div><div>التوقيع:<div class="s"></div></div><div>الختم:<div class="s"></div></div></div></td></tr></table>
-  <table><tr><th colspan="4">استلام المقاول</th></tr><tr><td colspan="4"><div class="sig"><div>الاسم: ${ack?esc(ack.by):''}<div class="s"></div></div><div>التاريخ: ${ack?`<span class="mono">${fmt(ack.at)}</span>`:''}<div class="s"></div></div><div>التوقيع:<div class="s"></div></div></div></td></tr></table>
-  <table><tr><th colspan="2">${isNCR?'رد المقاول والإجراء التصحيحي':'التنفيذ'}</th></tr>
-    ${isNCR?`<tr><td class="lbl">سبب عدم المطابقة</td><td>${done&&done.cause?esc(done.cause):'<div class="line"></div><div class="line"></div>'}</td></tr><tr><td class="lbl">الإجراء التصحيحي</td><td>${done&&done.corrective?esc(done.corrective):'<div class="line"></div><div class="line"></div>'}</td></tr>`
-      :`<tr><td class="lbl">اللي اتنفذ</td><td>${done&&done.body?esc(done.body):'<div class="line"></div><div class="line"></div>'}</td></tr>`}
-    ${done&&done.files.length?`<tr><td class="lbl">صور</td><td>${done.files.slice(0,3).map(u=>`<img class="nimg" style="display:inline-block;margin:2px" src="${u}" alt="">`).join('')}</td></tr>`:''}</table>
-  <table><tr><th colspan="2">الإقفال</th></tr><tr><td class="lbl">الحالة</td><td class="opts"><span class="o">${cb(i.status==='CLOSED')}مقفول</span><span class="o">${cb(i.status!=='CLOSED')}مفتوح</span></td></tr>
-    <tr><td class="lbl">تعليق</td><td>${cl&&cl.body?esc(cl.body):'<div class="line"></div>'}</td></tr>
-    <tr><td colspan="2"><div class="sig"><div>الاسم: ${cl?esc(cl.by):''}<div class="s"></div></div><div>التاريخ: ${cl?`<span class="mono">${fmt(cl.at)}</span>`:''}<div class="s"></div></div><div>التوقيع:<div class="s"></div></div></div></td></tr>
-    <tr><td class="lbl">التوزيع</td><td class="opts"><span class="o">${cb()}المالك</span><span class="o">${cb()}الاستشاري</span><span class="o">${cb()}المقاول</span><span class="o">${cb()}الملف</span></td></tr></table>
-  <div class="foot"><span class="mono">${insNum(i)}</span><span>طُبع ${new Date().toLocaleDateString('en-GB')}</span></div></div>`;
-}
-function renderInsPrint(){
-  const i=curIns,html=insSheetHTML(i);view.name='insprint';
-  app.innerHTML=`<div class="noprint"><button class="back" type="button" id="bk">→ رجوع للأمر</button><h2 style="margin-top:4px">طباعة ${insNum(i)}</h2>
-    <div class="pbar"><button class="btn primary" type="button" id="p-print">🖨 طباعة</button><button class="btn" type="button" id="p-dl" hidden>⬇ تنزيل كملف للطباعة</button></div></div>
-  <div class="pwrap">${html}</div>`;
-  document.getElementById('bk').onclick=()=>{view.name='insdetail';renderInsDetail();window.scrollTo(0,0);};
-  document.getElementById('p-print').onclick=()=>{try{window.print();}catch(e){}};
-  const dl=document.getElementById('p-dl');getDownloads().then(dn=>{if(!dn)return;dl.hidden=false;dl.onclick=async()=>{
-    const doc=`<!doctype html><html dir="${LANG==='en'?'ltr':'rtl'}" lang="${LANG}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${insNum(i)}</title><style>body{margin:0;background:#ddd}@page{size:A4;margin:8mm}.bar{text-align:center;padding:10px}@media print{.bar{display:none}body{background:#fff}.sheet{box-shadow:none!important;padding:0!important;width:auto!important}}${document.getElementById('sheetcss').textContent}</style></head><body><div class="bar"><button onclick="print()">${tr('طباعة')}</button></div>${trHTML(html)}</body></html>`;
-    try{await dn.save({filename:insNum(i)+'.html',data:doc});}catch(e){}};});
-  window.scrollTo(0,0);
-}
-
-/* ---------- إشعارات الموبايل والتطبيق مقفول (Web Push) ---------- */
-const VAPID_PUBLIC='BPOrRVholQurCP3jK-iCMn2a3th_QH-v0B33rRHsK09UBK8IQMhknThCvb1Gt7WKaKq2UC8DKpoQ9Z-eiIRlWn4';
-let SWREG=null, PENDING_OPEN=null;
-const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
-const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
-function b64u(s){const p='='.repeat((4-s.length%4)%4);const b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from([...b].map(c=>c.charCodeAt(0)));}
-async function getSW(){if(SWREG)return SWREG;if(!('serviceWorker' in navigator))return null;try{SWREG=await navigator.serviceWorker.register('sw.js');await navigator.serviceWorker.ready;}catch(e){SWREG=null;}return SWREG;}
-async function pushState(){
-  if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window))return isIOS&&!isStandalone()?'ios-install':'unsupported';
-  if(Notification.permission==='denied')return 'denied';
-  const r=await getSW();if(!r)return 'unsupported';
-  const s=await r.pushManager.getSubscription();return s&&Notification.permission==='granted'?'on':'off';
-}
-async function saveSub(s){const j=s.toJSON();const {error}=await sb.rpc('save_push_sub',{p_endpoint:j.endpoint,p_p256dh:j.keys.p256dh,p_auth:j.keys.auth,p_lang:LANG});if(error)throw error;}
-async function enablePush(){
-  const r=await getSW();if(!r)throw new Error('unsupported');
-  const perm=await Notification.requestPermission();if(perm!=='granted')throw new Error('denied');
-  let s=await r.pushManager.getSubscription();
-  if(!s)s=await r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUBLIC)});
-  await saveSub(s);
-}
-async function disablePush(){const r=await getSW();const s=r&&await r.pushManager.getSubscription();if(s){try{await sb.rpc('delete_push_sub',{p_endpoint:s.endpoint});}catch(e){}try{await s.unsubscribe();}catch(e){}}}
-async function syncPush(){try{if('Notification' in window&&Notification.permission==='granted'){const r=await getSW();const s=r&&await r.pushManager.getSubscription();if(s)await saveSub(s);}}catch(e){}}
-function parseOpen(url){try{const u=new URL(url,location.href);const o=u.searchParams.get('open');if(!o)return null;const [t,id]=o.split(':');return {ref_type:t,ref_id:id,project_id:u.searchParams.get('p'),read_at:1};}catch(e){return null;}}
-if('serviceWorker' in navigator){navigator.serviceWorker.addEventListener('message',ev=>{if(ev.data&&ev.data.type==='open'){const o=parseOpen(ev.data.url);if(o&&ME)openNotif(o);}});}
-
-/* ---------- الإشعارات ---------- */
-let UNREAD=0, NCHAN=null;
-function notifText(n){const nb=n.number||'';
-  return ({REQ_NEW:`طلب جديد ${nb}`,REQ_RESUB:`إعادة تقديم ${nb}`,REQ_DECIDED:`قرار الاستشاري على ${nb}: ${n.code&&CODES[n.code]?CODES[n.code].k+' — '+CODES[n.code].t:''}`,
-    INS_NEW:`${n.code==='NCR'?'تقرير عدم مطابقة جديد':'أمر موقع جديد'} ${nb}`,INS_ACK:`المقاول استلم ${nb}`,INS_DONE:`المقاول نفّذ ${nb} — بانتظار الإقفال`,INS_CLOSE:`اتقفل ${nb}`,INS_REOPEN:`اترفض تنفيذ ${nb} — مطلوب إعادة`})[n.kind]||nb;}
-function setBell(){const b=document.getElementById('bell');if(!b)return;b.hidden=!ME;b.querySelector('.bdg').textContent=UNREAD>99?'99+':String(UNREAD);b.querySelector('.bdg').hidden=!UNREAD;}
-async function loadUnread(){const {count}=await sb.from('notifications').select('id',{count:'exact',head:true}).is('read_at',null);UNREAD=count||0;setBell();}
-function subscribeNotifs(){
-  if(NCHAN||!USER)return;
-  NCHAN=sb.channel('notif-'+USER.id).on('postgres_changes',{event:'INSERT',schema:'public',table:'notifications',filter:'user_id=eq.'+USER.id},p=>{
-    const n=p.new;UNREAD++;setBell();const msg=tr(notifText(n));toast('🔔 '+msg);
-    try{if(document.hidden&&'Notification' in window&&Notification.permission==='granted'){const x=new Notification(tr('كود - كواليتي'),{body:msg+(n.subject?' — '+n.subject:''),icon:'icon-192.png',tag:n.id});x.onclick=()=>{window.focus();openNotif(n);};}}catch(e){}
-    if(n.project_id===PID)refresh(true);
-    if(view.name==='notifs')renderNotifs();
-  }).subscribe();
-}
-function unsubscribeNotifs(){if(NCHAN){sb.removeChannel(NCHAN);NCHAN=null;}UNREAD=0;setBell();}
-async function openNotif(n){
-  if(!n.read_at){sb.from('notifications').update({read_at:new Date().toISOString()}).eq('id',n.id).then(()=>loadUnread());}
-  if(n.project_id!==PID){const m=MEMBERSHIPS.find(x=>x.project_id===n.project_id);if(!m){toast('المشروع ده مش متاح ليك');return;}setProject(m);busy(true);try{await loadAll();}catch(e){}busy(false);syncRole();}
-  if(n.ref_type==='request'){if(S.reqs.find(r=>r.id===n.ref_id))open(n.ref_id);else go('log');}
-  else{if((S.ins||[]).find(i=>i.id===n.ref_id))openIns(n.ref_id);else go('ins');}
-}
-async function renderNotifs(){
-  view.name='notifs';
-  const {data,error}=await sb.from('notifications').select('*').order('created_at',{ascending:false}).limit(60);
-  if(view.name!=='notifs')return;
-  const list=data||[];const PN={};MEMBERSHIPS.forEach(m=>PN[m.project_id]=m.projects.name);
-  const ps=await pushState().catch(()=>'unsupported');if(view.name!=='notifs')return;
-  app.innerHTML=`
-  <div class="toprow"><h2 style="margin:8px 0">الإشعارات</h2><button class="btn sm" type="button" id="n-all" ${UNREAD?'':'disabled'}>تعليم الكل كمقروء</button></div>
-  <div class="lib" style="margin-bottom:10px">${ps==='on'?`<p style="margin:0 0 8px">✅ إشعارات الموبايل شغالة على الجهاز ده — هتوصلك حتى والتطبيق مقفول.</p><button class="btn sm" type="button" id="n-off">إيقاف على الجهاز ده</button>`
-    :ps==='off'?`<p style="margin:0 0 8px">فعّل إشعارات الموبايل عشان يوصلك تنبيه حتى والتطبيق مقفول — زي الواتساب.</p><button class="btn primary sm" type="button" id="n-on">تفعيل الإشعارات على الجهاز ده</button>`
-    :ps==='denied'?`<p style="margin:0">الإشعارات مقفولة من إعدادات المتصفح للموقع ده. افتح إعدادات الموقع (علامة القفل جنب الرابط) واسمح بالإشعارات، وبعدين ارجع هنا.</p>`
-    :ps==='ios-install'?`<p style="margin:0">على الآيفون: دوس زرار المشاركة في Safari ← <b>Add to Home Screen</b>، وافتح التطبيق من الأيقونة، وبعدين ارجع هنا وفعّل الإشعارات.</p>`
-    :`<p style="margin:0">المتصفح ده مش بيدعم إشعارات الموبايل. جرّب Chrome على أندرويد، أو Safari على آيفون بعد Add to Home Screen.</p>`}</div>
-  ${error?`<p class="err">${esc(errMsg(error))}</p>`:''}
-  <div class="list">${list.length?list.map(n=>`<button class="row" type="button" data-n="${n.id}" style="grid-template-columns:auto 1fr auto;${n.read_at?'opacity:.65':'border-color:var(--accent)'}">
-    <span class="type">${n.ref_type==='request'?(n.number||'').split('-')[1]||'IR':(n.code||'SI')}</span>
-    <span class="meta"><span class="subj">${esc(notifText(n))}</span><span class="sub">${raw(n.subject||'')}${n.actor?' · '+esc(n.actor):''}${MEMBERSHIPS.length>1?' · '+esc(PN[n.project_id]||''):''}</span></span>
-    <span class="hint" style="font-family:var(--mono);direction:ltr">${fmt(n.created_at)}</span></button>`).join(''):'<div class="empty">مفيش إشعارات لسه.</div>'}</div>`;
-  app.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>openNotif(list.find(x=>x.id===b.dataset.n)));
-  const pon=document.getElementById('n-on');if(pon)pon.onclick=async()=>{busy(true);try{await enablePush();toast('اتفعلت الإشعارات على الجهاز ده');}catch(e){toast(e.message==='denied'?'مسمحتش بالإشعارات':errMsg(e));}busy(false);renderNotifs();};
-  const poff=document.getElementById('n-off');if(poff)poff.onclick=async()=>{busy(true);await disablePush();busy(false);toast('اتوقفت الإشعارات على الجهاز ده');renderNotifs();};
-  document.getElementById('n-all').onclick=async()=>{await sb.from('notifications').update({read_at:new Date().toISOString()}).is('read_at',null);await loadUnread();renderNotifs();};
-  syncRole();
 }
 
 /* ---------- الاتصال بالسيرفر (Supabase) ---------- */
@@ -1835,48 +1099,40 @@ async function upload(dataUrl){if(!dataUrl||!dataUrl.startsWith('data:'))return 
 
 /* تحميل بيانات المشروع كلها وتحويلها لنفس شكل النموذج */
 async function loadAll(){
-  const [rq,rv,fl,nt,rs,mb,lb,ins,iev,ifl]=await Promise.all([
+  const [rq,rv,fl,nt,rs,mb,lb]=await Promise.all([
     sb.from('requests').select('*').eq('project_id',PID).order('created_at'),
     sb.from('revisions').select('*, requests!inner(project_id)').eq('requests.project_id',PID),
     sb.from('files').select('*, revisions!inner(request_id, requests!inner(project_id))').eq('revisions.requests.project_id',PID),
     sb.from('notes').select('*, revisions!inner(request_id, requests!inner(project_id))').eq('revisions.requests.project_id',PID).order('idx'),
     sb.from('responses').select('*, revisions!inner(request_id, requests!inner(project_id))').eq('revisions.requests.project_id',PID),
     sb.from('members').select('*').eq('project_id',PID).order('created_at'),
-    sb.from('note_library').select('*').eq('project_id',PID).order('created_at',{ascending:false}),
-    sb.from('instructions').select('*').eq('project_id',PID).order('created_at'),
-    sb.from('instruction_events').select('*, instructions!inner(project_id)').eq('instructions.project_id',PID).order('at'),
-    sb.from('instruction_files').select('*, instructions!inner(project_id)').eq('instructions.project_id',PID)]);
-  for(const x of [rq,rv,fl,nt,rs,mb,lb,ins,iev,ifl])if(x.error)throw x.error;
-  const need=[...new Set([...fl.data.map(f=>f.path),...nt.data.map(n=>n.photo_path),...rs.data.map(r=>r.after_path),...ifl.data.map(f=>f.path)].filter(p=>p&&!URLS[p]))];
+    sb.from('note_library').select('*').eq('project_id',PID).order('created_at',{ascending:false})]);
+  for(const x of [rq,rv,fl,nt,rs,mb,lb])if(x.error)throw x.error;
+  const need=[...new Set([...fl.data.map(f=>f.path),...nt.data.map(n=>n.photo_path),...rs.data.map(r=>r.after_path)].filter(p=>p&&!URLS[p]))];
   for(let i=0;i<need.length;i+=100){const {data,error}=await sb.storage.from('photos').createSignedUrls(need.slice(i,i+100),60*60*6);if(!error)(data||[]).forEach(d=>{if(d.signedUrl)URLS[d.path]=d.signedUrl;});}
   const U=p=>p?URLS[p]||null:null;
   const NM={};mb.data.forEach(m=>NM[m.user_id]=m.full_name);
   const notesBy={},noteById={},filesBy={},respBy={};
   nt.data.forEach(n=>{const o={id:n.id,t:n.body,x:n.x==null?null:+n.x,y:n.y==null?null:+n.y,img:U(n.photo_path)};noteById[n.id]=o;(notesBy[n.revision_id]=notesBy[n.revision_id]||[]).push(o);});
-  fl.data.forEach(f=>(filesBy[f.revision_id]=filesBy[f.revision_id]||[]).push({url:U(f.path),name:f.name,mime:f.mime,size:f.size,kind:f.kind||'submit'}));
+  fl.data.forEach(f=>(filesBy[f.revision_id]=filesBy[f.revision_id]||[]).push(U(f.path)));
   rs.data.forEach(r=>{const n=noteById[r.note_id]||{};(respBy[r.revision_id]=respBy[r.revision_id]||[]).push({t:n.t||'',before:n.img||null,after:U(r.after_path),note_id:r.note_id});});
   const revBy={};rv.data.forEach(v=>(revBy[v.request_id]=revBy[v.request_id]||[]).push(v));
-  S.reqs=rq.data.map(q=>({id:q.id,type:q.type,n:q.seq,data:q.data||{},subject:q.subject,disc:q.discipline,area:q.area||'',floor:q.floor||'',item:q.boq_item||'',desc:q.description||'',
-    revs:(revBy[q.id]||[]).sort((a,b)=>a.rev-b.rev).map(v=>({id:v.id,at:v.submitted_at,by:NM[v.submitted_by]||'',att:(filesBy[v.id]||[]).filter(x=>x.url&&x.kind!=='review'&&!isPdf(x)).map(x=>x.url),docs:(filesBy[v.id]||[]).filter(x=>x.kind!=='review'&&isPdf(x)),rdocs:(filesBy[v.id]||[]).filter(x=>x.kind==='review'),notes:notesBy[v.id]||[],resp:respBy[v.id]||[],
+  S.reqs=rq.data.map(q=>({id:q.id,type:q.type,n:q.seq,subject:q.subject,disc:q.discipline,area:q.area||'',floor:q.floor||'',item:q.boq_item||'',desc:q.description||'',
+    revs:(revBy[q.id]||[]).sort((a,b)=>a.rev-b.rev).map(v=>({id:v.id,at:v.submitted_at,by:NM[v.submitted_by]||'',att:(filesBy[v.id]||[]).filter(Boolean),notes:notesBy[v.id]||[],resp:respBy[v.id]||[],
       code:v.code||undefined,comment:v.comment||'',decAt:v.decided_at,decBy:NM[v.decided_by]||''}))})).filter(r=>r.revs.length);
-  S.seq={};S.reqs.forEach(r=>S.seq[r.type]=Math.max(S.seq[r.type]||0,r.n));
-  const ifBy={},ifEv={};ifl.data.forEach(f=>{if(f.event_id)(ifEv[f.event_id]=ifEv[f.event_id]||[]).push(U(f.path));else (ifBy[f.instruction_id]=ifBy[f.instruction_id]||[]).push(U(f.path));});
-  const evBy={};iev.data.forEach(e=>(evBy[e.instruction_id]=evBy[e.instruction_id]||[]).push({action:e.action,body:e.body||'',cause:e.cause||'',corrective:e.corrective||'',by:NM[e.by_user]||'',at:e.at,files:(ifEv[e.id]||[]).filter(Boolean)}));
-  S.ins=ins.data.map(i=>({id:i.id,kind:i.kind,n:i.seq,subject:i.subject,disc:i.discipline,area:i.area||'',floor:i.floor||'',desc:i.description||'',due:i.due_date,status:i.status,issuerTeam:i.issuer_team,by:NM[i.issued_by]||'',at:i.created_at,closedAt:i.closed_at,att:(ifBy[i.id]||[]).filter(Boolean),events:evBy[i.id]||[]}));
+  S.seq={IR:0,RFI:0,RR:0};S.reqs.forEach(r=>S.seq[r.type]=Math.max(S.seq[r.type]||0,r.n));
   S.users=mb.data;S.mine={};lb.data.forEach(l=>(S.mine[l.discipline]=S.mine[l.discipline]||[]).push(l.body));
   const meRow=mb.data.find(m=>m.user_id===USER.id);
   if(!meRow||!meRow.active){ME=null;throw new Error('REMOVED');}
   ME={id:meRow.user_id,name:meRow.full_name,email:meRow.email,team:meRow.team,admin:meRow.is_admin};role=ME.team;
 }
 async function refresh(silent){if(!ME||BUSY)return;try{await loadAll();}catch(e){if(e.message==='REMOVED'){await sb.auth.signOut();renderLogin(tr('الحساب ده اتشال من الفريق. كلّم أدمن فريقك'));return;}if(!silent)toast(errMsg(e));return;}
-  if(view.name==='insdetail'){if(insDraft&&(insDraft.files.length||insDraft.body||insDraft.cause||insDraft.corr))return;const c=curIns&&S.ins.find(x=>x.id===curIns.id);if(c){curIns=c;insDraft=null;renderInsDetail();}else go('ins');if(!silent)toast('اتحدّث');return;}
-  if(view.name==='issue'||view.name==='insprint'){syncRole();return;}
   if(view.name==='detail'){if(draft||rsDraft)return;const c=cur&&S.reqs.find(x=>x.id===cur.id);if(c){cur=c;revIdx=Math.min(revIdx,c.revs.length-1);renderDetail();}else go('log');}
   else if(view.name!=='print'&&view.name!=='new'&&view.name!=='acct')go(view.name);else syncRole();
   if(!silent)toast('اتحدّث');}
 function setProject(m){const p=m.projects;PID=p.id;PRJ=p.code;PRJ_NAME=p.name;OWNER=p.owner_org||'';CONTRACTOR=p.contractor_org||'';CONSULTANT=p.consultant_org||'';SLA_DAYS=p.sla_days||2;IS_CREATOR=p.created_by===USER.id;
   try{localStorage.setItem('cq-project',PID)}catch(e){}
-  document.querySelector('.proj').innerHTML=`${raw(PRJ_NAME)} · المالك: ${raw(OWNER)} · المقاول: ${raw(CONTRACTOR)} · الاستشاري: ${raw(CONSULTANT)}`;}
+  document.querySelector('.proj').textContent=`${PRJ_NAME} · ${tr('المالك')}: ${OWNER} · ${tr('المقاول')}: ${CONTRACTOR} · ${tr('الاستشاري')}: ${CONSULTANT}`;}
 
 /* بعد الدخول: نشوف المشاريع اللي هو عضو فيها */
 async function afterAuth(){
@@ -1893,10 +1149,8 @@ async function afterAuth(){
   app.innerHTML=`<p class="empty">${tr('جاري التحميل…')}</p>`;
   try{await loadAll();}catch(e){if(e.message==='REMOVED'){renderLogin(tr('الحساب ده اتشال من الفريق. كلّم أدمن فريقك'));return;}renderLogin(errMsg(e));return;}
   draft=null;rsDraft=null;view={name:'log',filter:'ALL',type:'ALL'};syncRole();go(role==='O'?'dash':'log');
-  loadUnread().catch(()=>{});subscribeNotifs();syncPush();
-  if(PENDING_OPEN){const o=PENDING_OPEN;PENDING_OPEN=null;openNotif(o);}
 }
-async function signOut(){unsubscribeNotifs();await disablePush().catch(()=>{});await sb.auth.signOut();ME=null;USER=null;PID=null;S.reqs=[];draft=null;rsDraft=null;syncRole();renderLogin();}
+async function signOut(){await sb.auth.signOut();ME=null;USER=null;PID=null;S.reqs=[];draft=null;rsDraft=null;syncRole();renderLogin();}
 
 function renderLogin(msg){
   ME=null;view.name='login';syncRole();
@@ -1974,7 +1228,7 @@ async function renderJoin(token){
   const inv=data&&data[0];
   if(error||!inv){renderLogin(tr('الدعوة دي مش موجودة أو اتقبلت قبل كده'));history.replaceState(null,'',APP_URL);return;}
   app.innerHTML=`<div class="auth"><div class="card"><h2>قبول دعوة</h2>
-    <p style="margin-top:0">${tr('دعوة للانضمام لفريق')} <b>${tr(TEAM[inv.team])}</b> — ${raw(inv.org||'')}<br>${tr('في')} <b>${raw(inv.project_name)}</b></p>
+    <p style="margin-top:0">${tr('دعوة للانضمام لفريق')} <b>${tr(TEAM[inv.team])}</b> — ${esc(inv.org||'')}<br>${tr('في')} <b>${esc(inv.project_name)}</b></p>
     <form id="jf" novalidate style="display:flex;flex-direction:column;gap:10px">
       <label>البريد الإلكتروني<input value="${esc(inv.email)}" readonly style="direction:ltr"></label>
       <label for="j-name">الاسم<input id="j-name" value="${esc(inv.full_name||'')}" autocomplete="name"></label>
@@ -2015,8 +1269,8 @@ async function renderAcct(){
   const link=t=>`${APP_URL}?invite=${t}`;
   app.innerHTML=`
   <h2>حسابي</h2>
-  <div class="card"><div style="display:flex;gap:12px;align-items:center"><span class="av">${esc(ini(ME.name))}</span><div><b>${raw(ME.name)}</b>${ME.admin?'<span class="tagb">أدمن</span>':''}${IS_CREATOR?'<span class="tagb">صاحب المشروع</span>':''}<span class="em hint" style="display:block;direction:ltr;unicode-bidi:plaintext;text-align:start">${esc(ME.email)}</span><span class="hint">${TEAM[ME.team]} — ${raw(TEAM_ORG()[ME.team])}</span></div></div>
-    ${MEMBERSHIPS.length>1?`<label for="a-prj" style="margin-top:12px">المشروع<select id="a-prj">${MEMBERSHIPS.map(m=>`<option value="${m.project_id}" ${m.project_id===PID?'selected':''}>${raw(m.projects.name)} (${esc(m.projects.code)})</option>`).join('')}</select></label>`:''}
+  <div class="card"><div style="display:flex;gap:12px;align-items:center"><span class="av">${esc(ini(ME.name))}</span><div><b>${esc(ME.name)}</b>${ME.admin?'<span class="tagb">أدمن</span>':''}${IS_CREATOR?'<span class="tagb">صاحب المشروع</span>':''}<span class="em hint" style="display:block;direction:ltr;unicode-bidi:plaintext;text-align:start">${esc(ME.email)}</span><span class="hint">${TEAM[ME.team]} — ${esc(TEAM_ORG()[ME.team])}</span></div></div>
+    ${MEMBERSHIPS.length>1?`<label for="a-prj" style="margin-top:12px">المشروع<select id="a-prj">${MEMBERSHIPS.map(m=>`<option value="${m.project_id}" ${m.project_id===PID?'selected':''}>${esc(m.projects.name)} (${esc(m.projects.code)})</option>`).join('')}</select></label>`:''}
     <div class="btns"><button class="btn" type="button" id="a-ref">↻ تحديث البيانات</button><button class="btn" type="button" id="a-out">تسجيل الخروج</button></div></div>
   <h2>تغيير كلمة المرور</h2>
   <form class="card" id="pf" novalidate style="display:flex;flex-direction:column;gap:10px">
@@ -2029,7 +1283,7 @@ async function renderAcct(){
   <h2>${IS_CREATOR?'فرق المشروع':'فريق '+TEAM[ME.team]+' — '+esc(TEAM_ORG()[ME.team])}</h2>
   <div class="card">
     ${(ME.admin||IS_CREATOR)?'':'<p class="hint" style="margin-top:0">أدمن الفريق بس هو اللي يقدر يضيف أو يشيل أعضاء.</p>'}
-    <div class="members">${shown.map(u=>`<div class="mem"><span class="av">${esc(ini(u.full_name))}</span><div style="min-width:0"><span class="nm">${raw(u.full_name)}</span>${IS_CREATOR?`<span class="tagb">${TEAM[u.team]}</span>`:''}${u.is_admin?'<span class="tagb">أدمن</span>':''}${!u.active?'<span class="tagb off">اتشال</span>':''}${u.user_id===ME.id?' <span class="hint">(إنت)</span>':''}<span class="em">${esc(u.email)}</span></div>
+    <div class="members">${shown.map(u=>`<div class="mem"><span class="av">${esc(ini(u.full_name))}</span><div style="min-width:0"><span class="nm">${esc(u.full_name)}</span>${IS_CREATOR?`<span class="tagb">${TEAM[u.team]}</span>`:''}${u.is_admin?'<span class="tagb">أدمن</span>':''}${!u.active?'<span class="tagb off">اتشال</span>':''}${u.user_id===ME.id?' <span class="hint">(إنت)</span>':''}<span class="em">${esc(u.email)}</span></div>
       <div class="acts">${manage(u.team)&&u.user_id!==ME.id?(u.active?`<button class="btn sm" type="button" data-adm="${u.user_id}">${u.is_admin?'إلغاء الأدمن':'خليه أدمن'}</button><button class="btn sm" type="button" data-rm="${u.user_id}" style="color:var(--d)">شيل من الفريق</button>`:`<button class="btn sm" type="button" data-back="${u.user_id}">رجّعه</button>`):''}</div></div>`).join('')}</div>
     ${(ME.admin||IS_CREATOR)?`
     <h3 style="margin:16px 0 8px;font-size:14px">دعوة عضو جديد</h3>
@@ -2041,7 +1295,7 @@ async function renderAcct(){
       <button class="btn primary" type="submit" style="grid-column:1/-1">إنشاء الدعوة</button>
     </form><div class="err" id="i-err" role="alert"></div>
     <div id="i-out"></div>
-    ${invs.length?`<h3 style="margin:16px 0 8px;font-size:14px">دعوات لسه متقبلتش</h3><div class="members">${invs.map(x=>`<div class="mem"><span class="av">✉</span><div style="min-width:0"><span class="nm">${raw(x.full_name||x.email)}</span><span class="tagb">${TEAM[x.team]}</span>${x.is_admin?'<span class="tagb">أدمن</span>':''}<span class="em">${esc(x.email)}</span></div><div class="acts"><button class="btn sm" type="button" data-copy="${x.token}">نسخ الرابط</button><a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(tr('دعوة للانضمام لمشروع')+' '+PRJ_NAME+' — '+link(x.token))}">واتساب</a><button class="btn sm" type="button" data-cx="${x.id}">إلغاء</button></div></div>`).join('')}</div>`:''}`:''}
+    ${invs.length?`<h3 style="margin:16px 0 8px;font-size:14px">دعوات لسه متقبلتش</h3><div class="members">${invs.map(x=>`<div class="mem"><span class="av">✉</span><div style="min-width:0"><span class="nm">${esc(x.full_name||x.email)}</span><span class="tagb">${TEAM[x.team]}</span>${x.is_admin?'<span class="tagb">أدمن</span>':''}<span class="em">${esc(x.email)}</span></div><div class="acts"><button class="btn sm" type="button" data-copy="${x.token}">نسخ الرابط</button><a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(tr('دعوة للانضمام لمشروع')+' '+PRJ_NAME+' — '+link(x.token))}">واتساب</a><button class="btn sm" type="button" data-cx="${x.id}">إلغاء</button></div></div>`).join('')}</div>`:''}`:''}
   </div>`;
   document.getElementById('a-out').onclick=signOut;
   document.getElementById('a-ref').onclick=()=>refresh();
@@ -2078,36 +1332,28 @@ async function copyText(t){try{await navigator.clipboard.writeText(t);toast('ا�
 function go(n){
   if(!ME){renderLogin();return;}
   if(n==='new'&&role!=='C')n='log'; if((n==='dash'||n==='photo')&&role!=='O')n='log';
-  view.name=n;if(n==='log')(role==='O'?renderALog:renderLog)();else if(n==='new')renderNew();else if(n==='dash')renderDash();else if(n==='photo')renderPhoto();else if(n==='acct')renderAcct();else if(n==='ins')renderIns();else if(n==='issue')renderIssue();else if(n==='notifs')renderNotifs();syncRole();window.scrollTo(0,0);}
+  view.name=n;if(n==='log')(role==='O'?renderALog:renderLog)();else if(n==='new')renderNew();else if(n==='dash')renderDash();else if(n==='photo')renderPhoto();else if(n==='acct')renderAcct();syncRole();window.scrollTo(0,0);}
 function syncRole(){
   const who=document.getElementById('who'),nav=document.querySelector('nav.tabs');
   who.hidden=!ME;nav.hidden=!ME;
-  if(ME){who.innerHTML='👤 '+raw(ME.name)+' · <span>'+TEAM[ME.team]+'</span>';who.setAttribute('aria-label',(LANG==='en'?'My account':'حسابي'));}
-  setBell();
+  if(ME){who.textContent='👤 '+ME.name+' · '+TEAM[ME.team];who.setAttribute('aria-label',(LANG==='en'?'My account':'حسابي'));}
   document.getElementById('tab-new').hidden=role!=='C';document.getElementById('tab-dash').hidden=role!=='O';document.getElementById('tab-photo').hidden=role!=='O';
-  document.getElementById('tab-log').textContent=role==='O'?'اللوج':'الطلبات';
-  document.getElementById('tab-dash').textContent='المتابعة';
-  document.getElementById('tab-ins').textContent=role==='O'?'الأوامر':'الأوامر و NCR';
-  document.getElementById('tab-photo').textContent=role==='O'?'الصور':'التقرير المصور';
-  document.querySelector('nav.tabs .wrap').style.gridTemplateColumns=role==='O'?'1fr 1fr 1fr 1fr':role==='C'?'1fr 1fr 1fr':'1fr 1fr';
-  const vn=view.name==='detail'||view.name==='print'?'log':view.name==='insdetail'||view.name==='issue'||view.name==='insprint'?'ins':view.name;
-  [['tab-dash','dash'],['tab-log','log'],['tab-ins','ins'],['tab-photo','photo']].forEach(([id,v])=>document.getElementById(id).classList.toggle('sel',vn===v));
-  if(lastLang!==LANG){lastLang=LANG;}}
-let lastLang=LANG;
+  document.getElementById('tab-log').textContent=role==='O'?'لوج الاعتمادات':'سجل الطلبات';
+  document.getElementById('tab-dash').textContent=role==='O'?'المتابعة':'لوحة المتابعة';
+  document.querySelector('nav.tabs .wrap').style.gridTemplateColumns=role==='K'?'1fr':role==='O'?'1fr 1fr 1fr':'1fr 1fr';
+  [['tab-dash','dash'],['tab-log','log'],['tab-photo','photo']].forEach(([id,v])=>{if(role==='O')document.getElementById(id).classList.toggle('primary',view.name===v);});
+  if(role!=='O'){document.getElementById('tab-log').classList.remove('primary');}}
 function rerender(){if(view.name==='detail'||view.name==='print'){view.name='detail';renderDetail();}else if(view.name==='login')renderLogin();else if(view.name==='signup')renderSignup();else if(view.name==='noproj')renderNoProject();else if(view.name==='newpw')renderNewPw();else if(view.name==='join'){}else go(view.name);}
 document.getElementById('who').onclick=()=>go('acct');
 document.getElementById('tab-log').onclick=()=>go('log');
 document.getElementById('tab-new').onclick=()=>go('new');
 document.getElementById('tab-dash').onclick=()=>go('dash');
 document.getElementById('tab-photo').onclick=()=>go('photo');
-document.getElementById('tab-ins').onclick=()=>go('ins');
-document.getElementById('bell').onclick=()=>go('notifs');
 document.getElementById('lang').onclick=()=>{
   LANG=LANG==='en'?'ar':'en';try{localStorage.setItem('site-lang',LANG)}catch(e){}
-  if(ME)syncPush();
   if(view.name==='detail'&&draft&&typeof syncDraft==='function')syncDraft();
   applyLang();
-  if(view.name==='print')renderPrint();else if(view.name==='insdetail')renderInsDetail();else if(view.name==='insprint')renderInsPrint();else rerender();
+  if(view.name==='print')renderPrint();else rerender();
 };
 obs.observe(document.body,{childList:true,subtree:true,characterData:true});
 let RECOVERY=false;
@@ -2115,8 +1361,7 @@ sb.auth.onAuthStateChange((ev)=>{if(ev==='PASSWORD_RECOVERY'){RECOVERY=true;rend
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&ME)refresh(true);});
 (async function start(){
   syncRole();applyLang();app.innerHTML=`<p class="empty">${tr('جاري التحميل…')}</p>`;
-  getSW();const qs=new URLSearchParams(location.search);const inv=qs.get('invite');
-  if(qs.get('open')){PENDING_OPEN=parseOpen(location.href);history.replaceState(null,'',APP_URL);}
+  const qs=new URLSearchParams(location.search);const inv=qs.get('invite');
   if(inv){await sb.auth.signOut().catch(()=>{});renderJoin(inv);return;}
   const {data:{session}}=await sb.auth.getSession();
   if(RECOVERY||/type=recovery/.test(location.hash))return;
