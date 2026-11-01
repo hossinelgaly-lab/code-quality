@@ -44,7 +44,12 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background
 header.top .wrap{display:flex;flex-direction:column;gap:6px;padding-block:10px 12px}
 .brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .brand h1{font-family:var(--display);font-size:20px;margin:0;letter-spacing:.2px}
-.proj{font-size:12.5px;opacity:.9}
+.proj{font-size:12.5px;opacity:.9;background:none;border:0;color:inherit;font:inherit;font-size:12.5px;text-align:start;padding:0;cursor:pointer;display:block;width:100%}
+.proj .sw{display:inline-block;background:rgba(255,255,255,.18);border-radius:999px;padding:1px 10px;margin-inline-start:6px;font-weight:600;opacity:1}
+.plist{display:flex;flex-direction:column;gap:10px}
+.pcard{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;text-align:start;font:inherit;color:inherit;width:100%}
+.pcard.cur{outline:2px solid var(--accent);outline-offset:-2px}
+.pcard .pn{font-weight:700;font-size:15px;display:block}.pcard .pm{font-size:12.5px;color:var(--muted)}
 .roles{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:3px}
 .roles button{border:0;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px;cursor:pointer}
 .roles button[aria-pressed="true"]{background:var(--surface);color:var(--accent)}
@@ -57,6 +62,9 @@ header.top .wrap{display:flex;flex-direction:column;gap:6px;padding-block:10px 1
 .bdg{position:absolute;top:-4px;inset-inline-end:-4px;background:var(--d);color:#fff;border-radius:999px;font-size:11px;font-weight:700;min-width:18px;height:18px;line-height:18px;padding:0 4px;text-align:center;font-family:var(--mono)}
 .auth{max-width:420px;margin:24px auto 0}
 .auth h2{margin-top:0}
+.inst{background:#fff7ec;border:1px solid #f0c48a;border-radius:14px;padding:12px 14px;margin:0 0 14px}
+.inst b{display:block;margin-bottom:4px}.inst ol{margin:6px 0 0;padding-inline-start:20px}.inst li{margin:3px 0}
+.inst .btns{margin-top:8px}
 .auth form{display:flex;flex-direction:column;gap:12px}
 .demoacc{margin-top:14px;font-size:13px}
 .demoacc table{width:100%;border-collapse:collapse}
@@ -342,7 +350,7 @@ html,body{overflow-x:hidden}
       <div class="hbtns"><button id="lang" class="langbtn" type="button" aria-label="Switch language">EN</button>
       <button id="bell" class="who bell" type="button" hidden aria-label="الإشعارات">🔔<span class="bdg" hidden>0</span></button><button id="who" class="who" type="button" hidden></button></div>
     </div>
-    <div class="proj"></div>
+    <button class="proj" id="proj-btn" type="button"></button>
   </div>
 </header>
 
@@ -560,6 +568,15 @@ const EN={
 "افتحها ودوس على الرابط، وبعدين ادخل من هنا.":"Open it and tap the link, then sign in here.",
 "افتحها ودوس على الرابط، وبعدين ادخل من هنا":"Open it and tap the link, then sign in here",
 "مشروع جديد":"New project",
+"➕ مشروع جديد":"➕ New project",
+"مشاريعي":"My projects",
+"المشاريع":"Projects",
+"مفتوح دلوقتي":"Open now",
+"رجوع لمشاريعي":"Back to my projects",
+"اتفتح مشروع":"Opened project",
+"كل مشروع له طلباته وفرقه وإشعاراته. اختار المشروع اللي عايز تشتغل عليه.":"Each project has its own requests, teams and notifications. Pick the one you want to work on.",
+"لو اتبعتلك دعوة لمشروع تاني، افتح اللينك بتاعها وهيتضاف هنا تلقائيًا بنفس حسابك.":"If you get an invite to another project, open its link and it will be added here with the same account.",
+"المشروع الجديد هيتضاف لمشاريعك، وتقدر تبدّل بينهم من اسم المشروع فوق.":"The new project will be added to your projects; switch between them from the project name at the top.",
 "إنت مش عضو في أي مشروع لسه. لو حد بعتلك دعوة افتح الرابط بتاعها. أو أنشئ مشروع جديد وإنت هتبقى صاحبه وتدعي باقي الفرق":"You are not a member of any project yet. If someone invited you, open their link. Or create a new project — you will own it and invite the other teams",
 "اسم المشروع":"Project name",
 "كود المشروع (للترقيم)":"Project code (for numbering)",
@@ -1745,6 +1762,43 @@ function renderInsPrint(){
 /* ---------- إشعارات الموبايل والتطبيق مقفول (Web Push) ---------- */
 const VAPID_PUBLIC='BPOrRVholQurCP3jK-iCMn2a3th_QH-v0B33rRHsK09UBK8IQMhknThCvb1Gt7WKaKq2UC8DKpoQ9Z-eiIRlWn4';
 let SWREG=null, PENDING_OPEN=null;
+/* ---------- تثبيت التطبيق ---------- */
+let INSTALL_EVT=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();INSTALL_EVT=e;const b=document.getElementById('inst-go');if(b)b.hidden=false;});
+window.addEventListener('appinstalled',()=>{INSTALL_EVT=null;const c=document.getElementById('inst-card');if(c)c.remove();});
+function envInfo(){const u=navigator.userAgent||'';
+  const ios=/iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1);
+  const android=/Android/.test(u);
+  const inapp=/FBAN|FBAV|FB_IAB|Instagram|WhatsApp|Line\/|Snapchat|TikTok|Telegram|; wv\)/.test(u);
+  const iosSafari=ios&&/Safari/.test(u)&&!/CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(u)&&!inapp;
+  const standalone=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}catch(e){return false;}})();
+  return {ios,android,inapp,iosSafari,standalone};}
+function installCard(){
+  const E=envInfo(); if(E.standalone)return '';
+  const url=location.href;
+  if(E.android&&E.inapp){
+    const intent='intent://'+url.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end';
+    return `<div class="inst" id="inst-card"><b>📲 عشان تثبّت التطبيق افتحه من Chrome</b>إنت فاتح اللينك من جوه برنامج تاني (زي واتساب)، ومن هنا التثبيت مش هيظهر.
+      <div class="btns"><a class="btn primary sm" href="${intent}">افتح في Chrome</a><button class="btn sm" type="button" data-copy-app>نسخ اللينك</button></div>
+      <ol><li>أو دوس على التلات نقط فوق واختار <b style="display:inline">افتح في Chrome</b></li></ol></div>`;}
+  if(E.ios&&!E.iosSafari){
+    return `<div class="inst" id="inst-card"><b>📲 عشان تثبّت التطبيق على الآيفون لازم Safari</b>انسخ اللينك وافتحه في Safari.
+      <div class="btns"><button class="btn primary sm" type="button" data-copy-app>نسخ اللينك</button></div>
+      <ol><li>لو فاتحه من واتساب: دوس على أيقونة البوصلة أو «فتح في Safari» تحت</li></ol></div>`;}
+  if(E.iosSafari){
+    return `<div class="inst" id="inst-card"><b>📲 ثبّت التطبيق على الآيفون</b><ol>
+      <li>دوس على زرار المشاركة <span aria-hidden="true">⬆️</span> تحت في Safari</li>
+      <li>انزل واختار <b style="display:inline">Add to Home Screen</b> (إضافة إلى الشاشة الرئيسية)</li>
+      <li>دوس <b style="display:inline">Add</b>، وهتلاقي أيقونة كود كواليتي على الشاشة</li></ol></div>`;}
+  return `<div class="inst" id="inst-card"><b>📲 ثبّت التطبيق على موبايلك</b>
+    <div class="btns"><button class="btn primary sm" type="button" id="inst-go" ${INSTALL_EVT?'':'hidden'}>تثبيت التطبيق</button></div>
+    <ol><li>لو الزرار مش ظاهر: من Chrome دوس على التلات نقط فوق</li><li>اختار <b style="display:inline">Install app</b> أو <b style="display:inline">Add to Home screen</b></li></ol></div>`;
+}
+function bindInstall(){
+  const g=document.getElementById('inst-go');
+  if(g)g.onclick=async()=>{if(!INSTALL_EVT)return;INSTALL_EVT.prompt();try{await INSTALL_EVT.userChoice;}catch(e){}INSTALL_EVT=null;g.hidden=true;};
+  document.querySelectorAll('[data-copy-app]').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(location.href);toast('اتنسخ اللينك');}catch(e){prompt('',location.href);}});
+}
 const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
 const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
 function b64u(s){const p='='.repeat((4-s.length%4)%4);const b=atob((s+p).replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from([...b].map(c=>c.charCodeAt(0)));}
@@ -1880,7 +1934,24 @@ async function refresh(silent){if(!ME||BUSY)return;try{await loadAll();}catch(e)
   if(!silent)toast('اتحدّث');}
 function setProject(m){const p=m.projects;PID=p.id;PRJ=p.code;PRJ_NAME=p.name;OWNER=p.owner_org||'';CONTRACTOR=p.contractor_org||'';CONSULTANT=p.consultant_org||'';SLA_DAYS=p.sla_days||2;IS_CREATOR=p.created_by===USER.id;
   try{localStorage.setItem('cq-project',PID)}catch(e){}
-  document.querySelector('.proj').innerHTML=`${raw(PRJ_NAME)} · المالك: ${raw(OWNER)} · المقاول: ${raw(CONTRACTOR)} · الاستشاري: ${raw(CONSULTANT)}`;}
+  document.querySelector('.proj').innerHTML=`<b>${raw(PRJ_NAME)}</b> · المالك: ${raw(OWNER)} · المقاول: ${raw(CONTRACTOR)} · الاستشاري: ${raw(CONSULTANT)}<span class="sw">⇄ ${tr('المشاريع')}${MEMBERSHIPS.length>1?' ('+MEMBERSHIPS.length+')':''}</span>`;}
+/* ---------- المشاريع: التبديل وإنشاء مشروع جديد ---------- */
+let NEW_CODE=null;
+function renderProjects(){
+  view.name='projects';
+  app.innerHTML=`<h2>مشاريعي</h2>
+  <p class="hint" style="margin-top:-4px">كل مشروع له طلباته وفرقه وإشعاراته. اختار المشروع اللي عايز تشتغل عليه.</p>
+  <div class="plist">${MEMBERSHIPS.map(m=>`<button class="pcard ${m.project_id===PID?'cur':''}" type="button" data-p="${m.project_id}">
+     <span><span class="pn">${raw(m.projects.name)}</span><span class="pm">${esc(m.projects.code)} · ${TEAM[m.team]}${m.is_admin?' · أدمن':''}</span></span>
+     <span>${m.project_id===PID?'<span class="tagb">مفتوح دلوقتي</span>':'←'}</span></button>`).join('')}</div>
+  <div class="btns" style="margin-top:14px"><button class="btn primary" type="button" id="pr-new">➕ مشروع جديد</button></div>
+  <p class="hint">لو اتبعتلك دعوة لمشروع تاني، افتح اللينك بتاعها وهيتضاف هنا تلقائيًا بنفس حسابك.</p>`;
+  app.querySelectorAll('[data-p]').forEach(b=>b.onclick=async()=>{const m=MEMBERSHIPS.find(x=>x.project_id===b.dataset.p);if(!m)return;
+    if(m.project_id!==PID){setProject(m);busy(true);try{await loadAll();}catch(e){toast(errMsg(e));}busy(false);toast(tr('اتفتح مشروع')+' '+m.projects.name);}
+    view={name:'log',filter:'ALL',type:'ALL'};syncRole();go(role==='O'?'dash':'log');});
+  document.getElementById('pr-new').onclick=()=>renderNoProject(true);
+  syncRole();window.scrollTo(0,0);
+}
 
 /* بعد الدخول: نشوف المشاريع اللي هو عضو فيها */
 /* ---------- عداد الاستخدام (بدون بيانات شخصية) ---------- */
@@ -1901,7 +1972,8 @@ async function afterAuth(){
   MEMBERSHIPS=data||[];
   if(!MEMBERSHIPS.length){renderNoProject();return;}
   let saved=null;try{saved=localStorage.getItem('cq-project')}catch(e){}
-  setProject(MEMBERSHIPS.find(m=>m.project_id===saved)||MEMBERSHIPS[0]);
+  const nw=NEW_CODE?MEMBERSHIPS.find(m=>m.projects&&m.projects.code===NEW_CODE):null;NEW_CODE=null;
+  setProject(nw||MEMBERSHIPS.find(m=>m.project_id===saved)||MEMBERSHIPS[0]);
   app.innerHTML=`<p class="empty">${tr('جاري التحميل…')}</p>`;
   try{await loadAll();}catch(e){if(e.message==='REMOVED'){renderLogin(tr('الحساب ده اتشال من الفريق. كلّم أدمن فريقك'));return;}renderLogin(errMsg(e));return;}
   draft=null;rsDraft=null;view={name:'log',filter:'ALL',type:'ALL'};syncRole();go(role==='O'?'dash':'log');
@@ -1912,7 +1984,7 @@ async function signOut(){unsubscribeNotifs();await disablePush().catch(()=>{});a
 
 function renderLogin(msg){
   ME=null;view.name='login';syncRole();
-  app.innerHTML=`<div class="auth">
+  app.innerHTML=`<div class="auth">${installCard()}
     <div class="card"><h2>تسجيل الدخول</h2>
     <form id="lf" novalidate>
       <label for="l-em">البريد الإلكتروني<input id="l-em" type="email" autocomplete="username" inputmode="email" style="direction:ltr" required></label>
@@ -1924,6 +1996,7 @@ function renderLogin(msg){
     <p class="hint" style="margin:6px 0 0">وصلتك دعوة؟ افتح الرابط اللي اتبعتلك وهيدخلك على طول.</p></div>
     <p class="hint" style="text-align:center">مش عضو في أي مشروع؟ <button class="linkbtn" type="button" id="l-new">إنشاء حساب ومشروع جديد</button></p>
   </div>`;
+  bindInstall();
   document.getElementById('l-new').onclick=()=>renderSignup();
   document.getElementById('l-forgot').onclick=async()=>{const em=document.getElementById('l-em').value.trim();const er=document.getElementById('l-err');
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){er.textContent=tr('اكتب الإيميل بتاعك فوق الأول');return;}
@@ -1955,11 +2028,11 @@ function renderSignup(){
     if(!data.session){app.innerHTML=`<div class="auth"><div class="card"><h2>${tr('أكّد الإيميل')}</h2><p>${tr('بعتنالك رسالة على')} <b dir="ltr">${esc(em)}</b>. ${tr('افتحها ودوس على الرابط، وبعدين ادخل من هنا.')}</p><button class="btn" type="button" id="bk2">${tr('تسجيل الدخول')}</button></div></div>`;document.getElementById('bk2').onclick=()=>renderLogin();return;}
     await afterAuth();};
 }
-function renderNoProject(){
-  view.name='noproj';ME=null;syncRole();
+function renderNoProject(extra){
+  view.name='noproj';view.extra=!!extra;if(!extra){ME=null;}syncRole();
   let nm='';try{nm=localStorage.getItem('cq-name')||''}catch(e){}
   app.innerHTML=`<div class="auth"><div class="card"><h2>مشروع جديد</h2>
-    <p class="hint" style="margin-top:0">إنت مش عضو في أي مشروع لسه. لو حد بعتلك دعوة افتح الرابط بتاعها. أو أنشئ مشروع جديد وإنت هتبقى صاحبه وتدعي باقي الفرق.</p>
+    <p class="hint" style="margin-top:0">${extra?tr('المشروع الجديد هيتضاف لمشاريعك، وتقدر تبدّل بينهم من اسم المشروع فوق.'):tr('إنت مش عضو في أي مشروع لسه. لو حد بعتلك دعوة افتح الرابط بتاعها. أو أنشئ مشروع جديد وإنت هتبقى صاحبه وتدعي باقي الفرق.')}</p>
     <form id="pf2" novalidate style="display:flex;flex-direction:column;gap:10px">
       <label for="p-name">اسم المشروع<input id="p-name" placeholder="مشروع فيلا التجمع"></label>
       <label for="p-code">كود المشروع (للترقيم)<input id="p-code" maxlength="8" placeholder="VLA" style="direction:ltr;text-transform:uppercase;font-family:var(--mono)"><span class="hint">حروف إنجليزي أو أرقام، من 2 لـ 8 — بيظهر في رقم كل طلب</span></label>
@@ -1971,13 +2044,13 @@ function renderNoProject(){
       <div class="err" id="p-err" role="alert"></div>
       <button class="btn primary" type="submit">إنشاء المشروع</button>
     </form>
-    <div class="btns"><button class="btn" type="button" id="p-out">تسجيل الخروج</button></div></div></div>`;
-  document.getElementById('p-out').onclick=signOut;
+    <div class="btns">${extra?'<button class="btn" type="button" id="p-back">رجوع لمشاريعي</button>':'<button class="btn" type="button" id="p-out">تسجيل الخروج</button>'}</div></div></div>`;
+  if(extra)document.getElementById('p-back').onclick=()=>renderProjects();else document.getElementById('p-out').onclick=signOut;
   document.getElementById('pf2').onsubmit=async e=>{e.preventDefault();const er=document.getElementById('p-err');er.textContent='';
     const g=id=>document.getElementById(id).value.trim();const code=g('p-code').toUpperCase();
     if(!g('p-name')){er.textContent=tr('اكتب اسم المشروع');return;} if(!/^[A-Z0-9]{2,8}$/.test(code)){er.textContent=tr('كود المشروع لازم يبقى من 2 لـ 8 حروف إنجليزي أو أرقام');return;}
     busy(true);const {error}=await sb.rpc('create_project',{p_code:code,p_name:g('p-name'),p_owner:g('p-own'),p_contractor:g('p-con'),p_consultant:g('p-cns'),p_team:(document.querySelector('input[name=myteam]:checked')||{}).value||'K',p_full_name:g('p-me')});busy(false);
-    if(error){er.textContent=errMsg(error);return;} toast('اتعمل المشروع');await afterAuth();};
+    if(error){er.textContent=errMsg(error);return;} NEW_CODE=code;toast('اتعمل المشروع');await afterAuth();};
 }
 async function renderJoin(token){
   view.name='join';syncRole();
@@ -1985,7 +2058,7 @@ async function renderJoin(token){
   const {data,error}=await sb.rpc('invite_info',{p_token:token});
   const inv=data&&data[0];
   if(error||!inv){renderLogin(tr('الدعوة دي مش موجودة أو اتقبلت قبل كده'));history.replaceState(null,'',APP_URL);return;}
-  app.innerHTML=`<div class="auth"><div class="card"><h2>قبول دعوة</h2>
+  app.innerHTML=`<div class="auth">${installCard()}<div class="card"><h2>قبول دعوة</h2>
     <p style="margin-top:0">${tr('دعوة للانضمام لفريق')} <b>${tr(TEAM[inv.team])}</b> — ${raw(inv.org||'')}<br>${tr('في')} <b>${raw(inv.project_name)}</b></p>
     <form id="jf" novalidate style="display:flex;flex-direction:column;gap:10px">
       <label>البريد الإلكتروني<input value="${esc(inv.email)}" readonly style="direction:ltr"></label>
@@ -1994,6 +2067,7 @@ async function renderJoin(token){
       <div class="err" id="j-err" role="alert"></div>
       <button class="btn primary" type="submit">انضم للمشروع</button>
     </form></div></div>`;
+  bindInstall();
   document.getElementById('jf').onsubmit=async e=>{e.preventDefault();const er=document.getElementById('j-err');er.textContent='';
     const nm=document.getElementById('j-name').value.trim(),pw=document.getElementById('j-pw').value;
     if(!nm){er.textContent=tr('اكتب اسمك');return;} if(pw.length<8){er.textContent=tr('كلمة المرور لازم تبقى 8 حروف على الأقل');return;}
@@ -2025,7 +2099,7 @@ async function renderAcct(){
   let invs=[];if(ME.admin||IS_CREATOR){const {data}=await sb.from('invites').select('*').eq('project_id',PID).is('accepted_at',null).order('created_at');invs=data||[];}
   const shown=IS_CREATOR?S.users:S.users.filter(u=>u.team===ME.team);
   const link=t=>`${APP_URL}?invite=${t}`;
-  app.innerHTML=`
+  app.innerHTML=`${installCard()}
   <h2>حسابي</h2>
   <div class="card"><div style="display:flex;gap:12px;align-items:center"><span class="av">${esc(ini(ME.name))}</span><div><b>${raw(ME.name)}</b>${ME.admin?'<span class="tagb">أدمن</span>':''}${IS_CREATOR?'<span class="tagb">صاحب المشروع</span>':''}<span class="em hint" style="display:block;direction:ltr;unicode-bidi:plaintext;text-align:start">${esc(ME.email)}</span><span class="hint">${TEAM[ME.team]} — ${raw(TEAM_ORG()[ME.team])}</span></div></div>
     ${MEMBERSHIPS.length>1?`<label for="a-prj" style="margin-top:12px">المشروع<select id="a-prj">${MEMBERSHIPS.map(m=>`<option value="${m.project_id}" ${m.project_id===PID?'selected':''}>${raw(m.projects.name)} (${esc(m.projects.code)})</option>`).join('')}</select></label>`:''}
@@ -2055,6 +2129,7 @@ async function renderAcct(){
     <div id="i-out"></div>
     ${invs.length?`<h3 style="margin:16px 0 8px;font-size:14px">دعوات لسه متقبلتش</h3><div class="members">${invs.map(x=>`<div class="mem"><span class="av">✉</span><div style="min-width:0"><span class="nm">${raw(x.full_name||x.email)}</span><span class="tagb">${TEAM[x.team]}</span>${x.is_admin?'<span class="tagb">أدمن</span>':''}<span class="em">${esc(x.email)}</span></div><div class="acts"><button class="btn sm" type="button" data-copy="${x.token}">نسخ الرابط</button><a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(tr('دعوة للانضمام لمشروع')+' '+PRJ_NAME+' — '+link(x.token))}">واتساب</a><button class="btn sm" type="button" data-cx="${x.id}">إلغاء</button></div></div>`).join('')}</div>`:''}`:''}
   </div>`;
+  bindInstall();
   document.getElementById('a-out').onclick=signOut;
   {const b=document.getElementById('a-stats');if(b)b.onclick=()=>go('stats');}
   document.getElementById('a-ref').onclick=()=>refresh();
@@ -2134,8 +2209,9 @@ function syncRole(){
   [['tab-dash','dash'],['tab-log','log'],['tab-ins','ins'],['tab-photo','photo']].forEach(([id,v])=>document.getElementById(id).classList.toggle('sel',vn===v));
   if(lastLang!==LANG){lastLang=LANG;}}
 let lastLang=LANG;
-function rerender(){if(view.name==='detail'||view.name==='print'){view.name='detail';renderDetail();}else if(view.name==='login')renderLogin();else if(view.name==='signup')renderSignup();else if(view.name==='noproj')renderNoProject();else if(view.name==='newpw')renderNewPw();else if(view.name==='join'){}else go(view.name);}
+function rerender(){if(view.name==='detail'||view.name==='print'){view.name='detail';renderDetail();}else if(view.name==='login')renderLogin();else if(view.name==='signup')renderSignup();else if(view.name==='noproj')renderNoProject(view.extra);else if(view.name==='projects')renderProjects();else if(view.name==='newpw')renderNewPw();else if(view.name==='join'){}else go(view.name);}
 document.getElementById('who').onclick=()=>go('acct');
+document.getElementById('proj-btn').onclick=()=>{if(ME)renderProjects();};
 document.getElementById('tab-log').onclick=()=>go('log');
 document.getElementById('tab-new').onclick=()=>go('new');
 document.getElementById('tab-dash').onclick=()=>go('dash');
