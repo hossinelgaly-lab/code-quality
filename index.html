@@ -570,6 +570,17 @@ const EN={
 "مشروع جديد":"New project",
 "➕ مشروع جديد":"➕ New project",
 "مشاريعي":"My projects",
+"حذف الحساب":"Delete account",
+"حذف الحساب بيشيلك من كل مشاريعك ويمسح بياناتك الشخصية وإشعاراتك نهائيًا. الطلبات والاعتمادات اللي اتسجلت في المشاريع بتفضل عند باقي الفرق لأنها جزء من سجل المشروع.":"Deleting your account removes you from all your projects and permanently erases your personal data and notifications. Requests and approvals already recorded stay with the other teams as part of the project record.",
+"اكتب إيميلك للتأكيد":"Type your email to confirm",
+"حذف حسابي نهائيًا":"Permanently delete my account",
+"اكتب نفس الإيميل اللي داخل بيه":"Type the same email you are signed in with",
+"متأكد؟ الحذف نهائي ومش هينفع يترجع.":"Are you sure? This is permanent and cannot be undone.",
+"اتمسح الحساب":"Account deleted",
+"سياسة الخصوصية":"Privacy policy",
+"شروط الاستخدام":"Terms of use",
+"بإنشاء الحساب إنت موافق على":"By creating an account you agree to the",
+"و":"and",
 "المشاريع":"Projects",
 "مفتوح دلوقتي":"Open now",
 "رجوع لمشاريعي":"Back to my projects",
@@ -2016,6 +2027,7 @@ function renderSignup(){
       <label for="s-pw">كلمة المرور<input id="s-pw" type="password" autocomplete="new-password"><span class="hint">8 حروف على الأقل</span></label>
       <div class="err" id="s-err" role="alert"></div>
       <button class="btn primary" type="submit">إنشاء الحساب</button>
+      <p class="hint" style="margin:10px 0 0">بإنشاء الحساب إنت موافق على <a href="terms.html" target="_blank" rel="noopener">شروط الاستخدام</a> و<a href="privacy.html" target="_blank" rel="noopener">سياسة الخصوصية</a>.</p>
     </form>
     <p class="hint" style="margin:12px 0 0"><button class="linkbtn" type="button" id="s-back">رجوع لتسجيل الدخول</button></p></div></div>`;
   document.getElementById('s-back').onclick=()=>renderLogin();
@@ -2128,8 +2140,24 @@ async function renderAcct(){
     </form><div class="err" id="i-err" role="alert"></div>
     <div id="i-out"></div>
     ${invs.length?`<h3 style="margin:16px 0 8px;font-size:14px">دعوات لسه متقبلتش</h3><div class="members">${invs.map(x=>`<div class="mem"><span class="av">✉</span><div style="min-width:0"><span class="nm">${raw(x.full_name||x.email)}</span><span class="tagb">${TEAM[x.team]}</span>${x.is_admin?'<span class="tagb">أدمن</span>':''}<span class="em">${esc(x.email)}</span></div><div class="acts"><button class="btn sm" type="button" data-copy="${x.token}">نسخ الرابط</button><a class="btn sm" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(tr('دعوة للانضمام لمشروع')+' '+PRJ_NAME+' — '+link(x.token))}">واتساب</a><button class="btn sm" type="button" data-cx="${x.id}">إلغاء</button></div></div>`).join('')}</div>`:''}`:''}
-  </div>`;
+  </div>
+  <h2>حذف الحساب</h2>
+  <div class="card" style="border-color:#e3b4ad">
+    <p class="hint" style="margin-top:0">حذف الحساب بيشيلك من كل مشاريعك ويمسح بياناتك الشخصية وإشعاراتك نهائيًا. الطلبات والاعتمادات اللي اتسجلت في المشاريع بتفضل عند باقي الفرق لأنها جزء من سجل المشروع.</p>
+    <label for="del-em">اكتب إيميلك للتأكيد<input id="del-em" type="email" autocomplete="off" dir="ltr"></label>
+    <div class="err" id="del-err" role="alert"></div>
+    <div class="btns"><button class="btn" type="button" id="del-go" style="color:#b3261e;border-color:#e3b4ad">حذف حسابي نهائيًا</button></div>
+  </div>
+  <p class="hint" style="text-align:center"><a href="privacy.html" target="_blank" rel="noopener">سياسة الخصوصية</a> · <a href="terms.html" target="_blank" rel="noopener">شروط الاستخدام</a></p>`;
   bindInstall();
+  document.getElementById('del-go').onclick=async()=>{
+    const er=document.getElementById('del-err');er.textContent='';
+    const v=(document.getElementById('del-em').value||'').trim().toLowerCase();
+    if(v!==(USER&&USER.email||'').toLowerCase()){er.textContent=tr('اكتب نفس الإيميل اللي داخل بيه');return;}
+    if(!confirm(tr('متأكد؟ الحذف نهائي ومش هينفع يترجع.')))return;
+    busy(true);try{await disablePush();}catch(e){}const {error}=await sb.rpc('delete_my_account');busy(false);
+    if(error){er.textContent=errMsg(error);return;}
+    await sb.auth.signOut().catch(()=>{});ME=null;USER=null;PID=null;S.reqs=[];syncRole();renderLogin();toast(tr('اتمسح الحساب'));};
   document.getElementById('a-out').onclick=signOut;
   {const b=document.getElementById('a-stats');if(b)b.onclick=()=>go('stats');}
   document.getElementById('a-ref').onclick=()=>refresh();
